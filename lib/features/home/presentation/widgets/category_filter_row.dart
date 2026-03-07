@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 
+import '../../../../app/localization/app_localizations.dart';
 import '../../../../core/models/game_module.dart';
 
 class CategoryFilterRow extends StatelessWidget {
@@ -17,6 +18,7 @@ class CategoryFilterRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = context.l10n;
 
     return Wrap(
       spacing: 12,
@@ -26,7 +28,7 @@ class CategoryFilterRow extends StatelessWidget {
 
         return FilterChip(
           selected: selected,
-          label: Text(category.label),
+          label: Text(l10n.gameCategoryLabel(category)),
           showCheckmark: false,
           selectedColor: theme.colorScheme.primary,
           labelStyle: TextStyle(
@@ -39,4 +41,3 @@ class CategoryFilterRow extends StatelessWidget {
     );
   }
 }
-

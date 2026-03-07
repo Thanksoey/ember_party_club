@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 
+import '../../../../app/localization/app_localizations.dart';
 import '../../../../core/models/game_module.dart';
 
 class FeaturedBanner extends StatelessWidget {
@@ -13,7 +14,8 @@ class FeaturedBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final labels = modules.take(3).map((module) => module.name).join('  ·  ');
+    final l10n = context.l10n;
+    final labels = modules.take(3).map(l10n.moduleName).join('  ·  ');
 
     return Container(
       width: double.infinity,
@@ -23,11 +25,19 @@ class FeaturedBanner extends StatelessWidget {
         gradient: LinearGradient(
           colors: [
             theme.colorScheme.primary,
+            theme.colorScheme.secondary,
             theme.colorScheme.tertiary,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: theme.colorScheme.primary.withValues(alpha: 0.18),
+            blurRadius: 28,
+            offset: const Offset(0, 14),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,9 +48,9 @@ class FeaturedBanner extends StatelessWidget {
               color: Colors.white.withValues(alpha: 0.18),
               borderRadius: BorderRadius.circular(999),
             ),
-            child: const Text(
-              'Launch Strategy',
-              style: TextStyle(
+            child: Text(
+              l10n.launchStrategy,
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
               ),
@@ -48,12 +58,12 @@ class FeaturedBanner extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            '先打透房间层，再把游戏做成独立模块。',
+            l10n.launchBannerTitle,
             style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white),
           ),
           const SizedBox(height: 10),
           Text(
-            '统一账号、好友、组队、语音、实时同步和结算系统后，后续每增加一个新游戏，研发成本会明显下降。',
+            l10n.launchBannerBody,
             style: theme.textTheme.bodyLarge?.copyWith(color: Colors.white.withValues(alpha: 0.92)),
           ),
           const SizedBox(height: 18),
@@ -69,4 +79,3 @@ class FeaturedBanner extends StatelessWidget {
     );
   }
 }
-

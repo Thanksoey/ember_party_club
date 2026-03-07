@@ -1,6 +1,5 @@
 ﻿import 'app/app.dart';
 
-void main() {
-  PartyForgeApp.bootstrap();
+Future<void> main() async {
+  await PartyForgeApp.bootstrap();
 }
-

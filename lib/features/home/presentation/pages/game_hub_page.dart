@@ -1,5 +1,9 @@
 ﻿import 'package:flutter/material.dart';
 
+import '../../../../app/localization/app_localizations.dart';
+import '../../../../core/models/game_module.dart';
+import '../../../modules/signal_deck/application/signal_deck_controller.dart';
+import '../../../modules/signal_deck/presentation/pages/signal_deck_page.dart';
 import '../../application/game_hub_controller.dart';
 import '../widgets/category_filter_row.dart';
 import '../widgets/featured_banner.dart';
@@ -20,10 +24,12 @@ class GameHubPage extends StatelessWidget {
       animation: controller,
       builder: (context, _) {
         final theme = Theme.of(context);
+        final l10n = context.l10n;
         final featured = controller.featuredModules;
         final visible = controller.visibleModules;
 
         return Scaffold(
+          backgroundColor: Colors.transparent,
           body: SafeArea(
             child: CustomScrollView(
               slivers: [
@@ -33,29 +39,74 @@ class GameHubPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Ember Party Club',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            color: theme.colorScheme.secondary,
-                            letterSpacing: 0.6,
+                        Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                            padding: const EdgeInsets.all(24),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  theme.colorScheme.primary.withValues(alpha: 0.94),
+                                  theme.colorScheme.secondary.withValues(alpha: 0.88),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.14),
+                                    borderRadius: BorderRadius.circular(999),
+                                  ),
+                                  child: Text(
+                                    l10n.discoverTab,
+                                    style: theme.textTheme.titleMedium?.copyWith(color: Colors.white),
+                                  ),
+                                ),
+                                const SizedBox(height: 14),
+                                Text(
+                                  l10n.homeHeroTitle,
+                                  style: theme.textTheme.displaySmall?.copyWith(color: Colors.white),
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  l10n.homeHeroBody,
+                                  style: theme.textTheme.bodyLarge?.copyWith(color: Colors.white.withValues(alpha: 0.9)),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 12),
-                        Text(
-                          '给朋友局而不是单机局设计的移动游戏中心',
-                          style: theme.textTheme.displaySmall,
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          '核心方向是低延迟房间、可插拔游戏模块、稳定语音互动，以及能长期演进的企业级代码结构。',
-                          style: theme.textTheme.bodyLarge,
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _InsightCard(
+                                label: l10n.modulesLabel,
+                                value: '${controller.totalModuleCount}',
+                                color: theme.colorScheme.primary,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: _InsightCard(
+                                label: l10n.featuredLabel,
+                                value: '${controller.featuredCount}',
+                                color: theme.colorScheme.secondary,
+                              ),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 24),
                         FeaturedBanner(modules: featured),
                         const SizedBox(height: 28),
-                        const SectionTitle(
-                          title: '模块筛选',
-                          subtitle: '先用统一房间层承接，再逐步扩展到卡牌、推理和派对小游戏。',
+                        SectionTitle(
+                          title: l10n.moduleFilterTitle,
+                          subtitle: l10n.moduleFilterSubtitle,
                         ),
                         const SizedBox(height: 16),
                         CategoryFilterRow(
@@ -65,8 +116,8 @@ class GameHubPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 28),
                         SectionTitle(
-                          title: '候选游戏',
-                          subtitle: '当前展示 ${visible.length} 个适合首期版本立项的模块。',
+                          title: l10n.candidateGamesTitle(visible.length),
+                          subtitle: l10n.candidateGamesSubtitle(visible.length),
                         ),
                       ],
                     ),
@@ -77,7 +128,12 @@ class GameHubPage extends StatelessWidget {
                   sliver: SliverList.separated(
                     itemCount: visible.length,
                     itemBuilder: (context, index) {
-                      return GameModuleCard(module: visible[index]);
+                      final module = visible[index];
+                      return GameModuleCard(
+                        module: module,
+                        isPlayable: module.id == 'signal-deck',
+                        onOpen: () => _openModule(context, module),
+                      );
                     },
                     separatorBuilder: (context, index) => const SizedBox(height: 16),
                   ),
@@ -89,5 +145,57 @@ class GameHubPage extends StatelessWidget {
       },
     );
   }
+
+  void _openModule(BuildContext context, GameModule module) {
+    if (module.id == 'signal-deck') {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => SignalDeckPage(controller: SignalDeckController()),
+        ),
+      );
+      return;
+    }
+
+    final l10n = context.l10n;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(l10n.planningQueue(l10n.moduleName(module)))),
+    );
+  }
 }
 
+class _InsightCard extends StatelessWidget {
+  const _InsightCard({
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
+  final String label;
+  final String value;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.9),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.5)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: theme.textTheme.bodyMedium),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: theme.textTheme.headlineSmall?.copyWith(color: color),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -1,22 +1,14 @@
 ﻿enum GameCategory {
-  card('Card'),
-  party('Party'),
-  bluff('Bluff'),
-  strategy('Strategy');
-
-  const GameCategory(this.label);
-
-  final String label;
+  card,
+  party,
+  bluff,
+  strategy,
 }
 
 enum MatchTempo {
-  quick('15 min'),
-  standard('30 min'),
-  deep('45+ min');
-
-  const MatchTempo(this.label);
-
-  final String label;
+  quick,
+  standard,
+  deep,
 }
 
 class GameModule {
@@ -44,4 +36,3 @@ class GameModule {
   final double readiness;
   final bool isFeatured;
 }
-
