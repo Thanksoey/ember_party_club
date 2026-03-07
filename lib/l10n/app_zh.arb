@@ -1,0 +1,468 @@
+﻿{
+    "@@locale":  "zh",
+    "appTitle":  "余烬派对社",
+    "discoverTab":  "发现",
+    "roomsTab":  "房间",
+    "reset":  "重置",
+    "play":  "出牌",
+    "playAgain":  "再来一局",
+    "viewPlan":  "查看规划",
+    "playPrototype":  "试玩原型",
+    "homeHeroTitle":  "给朋友局而不是单机局设计的移动游戏中心",
+    "homeHeroBody":  "核心方向是低延迟房间、可插拔游戏模块、稳定语音互动，以及能长期演进的企业级代码结构。",
+    "modulesLabel":  "模块数",
+    "featuredLabel":  "精选",
+    "launchStrategy":  "首发策略",
+    "launchBannerTitle":  "先打透房间层，再把游戏做成独立模块。",
+    "launchBannerBody":  "统一账号、好友、组队、语音、实时同步和结算系统后，后续每增加一个新游戏，研发成本会明显下降。",
+    "moduleFilterTitle":  "模块筛选",
+    "moduleFilterSubtitle":  "先用统一房间层承接，再逐步扩展到卡牌、推理和派对小游戏。",
+    "candidateGamesTitle":  "候选游戏",
+    "@candidateGamesTitle":  {
+                                 "placeholders":  {
+                                                      "count":  {
+                                                                    "type":  "int"
+                                                                }
+                                                  }
+                             },
+    "candidateGamesSubtitle":  "当前展示 {count} 个适合首期版本立项的模块。",
+    "@candidateGamesSubtitle":  {
+                                    "placeholders":  {
+                                                         "count":  {
+                                                                       "type":  "int"
+                                                                   }
+                                                     }
+                                },
+    "planningQueue":  "{moduleName} 还在排期开发中。",
+    "@planningQueue":  {
+                           "placeholders":  {
+                                                "moduleName":  {
+
+                                                               }
+                                            }
+                       },
+    "roomLoungeTitle":  "房间大厅",
+    "roomLoungeHero":  "把建房、邀请、组队和语音放在统一房间层里。",
+    "roomLoungeBody":  "这样新游戏只需要接入规则与渲染，不需要重复建设多人基础设施。",
+    "activeRoomsMetric":  "活跃房间",
+    "onlinePlayersMetric":  "在线玩家",
+    "quickMatch":  "快速匹配",
+    "quickMatchBody":  "自动找房 + 智能补位",
+    "createRoom":  "创建房间",
+    "createRoomBody":  "先选模块，再定人数和语音策略",
+    "hottestRoom":  "热度最高房间",
+    "activeRoomList":  "活跃房间",
+    "hostLabel":  "房主 {nickname}",
+    "@hostLabel":  {
+                       "placeholders":  {
+                                            "nickname":  {
+
+                                                         }
+                                        }
+                   },
+    "playersLabel":  "{current}/{capacity} 人",
+    "@playersLabel":  {
+                          "placeholders":  {
+                                               "current":  {
+                                                               "type":  "int"
+                                                           },
+                                               "capacity":  {
+                                                                "type":  "int"
+                                                            }
+                                           }
+                      },
+    "voiceOn":  "语音开启",
+    "ranked":  "排位",
+    "casual":  "休闲",
+    "signalDeckTitle":  "信号牌局",
+    "signalDeckSubtitle":  "首个可玩的卡牌对战原型",
+    "signalDeckIntro":  "这一版已经具备技能牌、固定回合赛制和结算复玩循环，后续可直接接到多人房间。",
+    "yourHand":  "你的手牌",
+    "roundLog":  "回合记录",
+    "noRoundsPlayed":  "还没有进行任何回合。",
+    "signalRoundLabel":  "第 {round} 回合",
+    "@signalRoundLabel":  {
+                              "placeholders":  {
+                                                   "round":  {
+                                                                 "type":  "int"
+                                                             }
+                                               }
+                          },
+    "signalPowerCheck":  "强度校验：你 {playerPower} / 对手 {rivalPower}",
+    "@signalPowerCheck":  {
+                              "placeholders":  {
+                                                   "playerPower":  {
+                                                                       "type":  "int"
+                                                                   },
+                                                   "rivalPower":  {
+                                                                      "type":  "int"
+                                                                  }
+                                               }
+                          },
+    "youLabel":  "你",
+    "rivalLabel":  "脉冲 AI",
+    "roundsWon":  "胜回合",
+    "matchLabel":  "赛程",
+    "youNotPlayed":  "你还没有出牌。",
+    "youPlayed":  "你打出了 {title}",
+    "@youPlayed":  {
+                       "placeholders":  {
+                                            "title":  {
+
+                                                      }
+                                        }
+                   },
+    "rivalWaiting":  "脉冲 AI 正在等待。",
+    "rivalPlayed":  "脉冲 AI 打出了 {title}",
+    "@rivalPlayed":  {
+                         "placeholders":  {
+                                              "title":  {
+
+                                                        }
+                                          }
+                     },
+    "drawGame":  "平局",
+    "winnerTakesMatch":  "{winner} 赢下了本局",
+    "@winnerTakesMatch":  {
+                              "placeholders":  {
+                                                   "winner":  {
+
+                                                              }
+                                               }
+                          },
+    "matchOver":  "本局已经结束。",
+    "signalPowerLabel":  "强度",
+    "signalPoints":  "{score} 分",
+    "@signalPoints":  {
+                          "placeholders":  {
+                                               "score":  {
+                                                             "type":  "int"
+                                                         }
+                                           }
+                      },
+    "signalStatus":  "请选择一张牌，开始第 {round} / 共 {maxRounds} 回合。",
+    "@signalStatus":  {
+                          "placeholders":  {
+                                               "round":  {
+                                                             "type":  "int"
+                                                         },
+                                               "maxRounds":  {
+                                                                 "type":  "int"
+                                                             }
+                                           }
+                      },
+    "signalFinishReason":  "共进行了 {rounds} 回合。比分 {playerScore}-{rivalScore}，胜回合 {playerRoundsWon}-{rivalRoundsWon}。",
+    "@signalFinishReason":  {
+                                "placeholders":  {
+                                                     "rounds":  {
+                                                                    "type":  "int"
+                                                                },
+                                                     "playerScore":  {
+                                                                         "type":  "int"
+                                                                     },
+                                                     "rivalScore":  {
+                                                                        "type":  "int"
+                                                                    },
+                                                     "playerRoundsWon":  {
+                                                                             "type":  "int"
+                                                                         },
+                                                     "rivalRoundsWon":  {
+                                                                            "type":  "int"
+                                                                        }
+                                                 }
+                            },
+    "signalRoundPlayerWinConnector":  "压过了 {rivalCardTitle} ({rivalPower})，你获得 3 分。",
+    "@signalRoundPlayerWinConnector":  {
+                                           "placeholders":  {
+                                                                "rivalCardTitle":  {
+
+                                                                                   },
+                                                                "rivalPower":  {
+                                                                                   "type":  "int"
+                                                                               }
+                                                            }
+                                       },
+    "signalRoundRivalWinConnector":  "压过了 {playerCardTitle} ({playerPower})，脉冲 AI 获得 3 分。",
+    "@signalRoundRivalWinConnector":  {
+                                          "placeholders":  {
+                                                               "playerCardTitle":  {
+
+                                                                                   },
+                                                               "playerPower":  {
+                                                                                   "type":  "int"
+                                                                               }
+                                                           }
+                                      },
+    "signalRoundDrawSummary":  "{playerCardTitle} 与 {rivalCardTitle} 同为 {power} 点，双方各得 1 分。",
+    "@signalRoundDrawSummary":  {
+                                    "placeholders":  {
+                                                         "playerCardTitle":  {
+
+                                                                             },
+                                                         "rivalCardTitle":  {
+
+                                                                            },
+                                                         "power":  {
+                                                                       "type":  "int"
+                                                                   }
+                                                     }
+                                },
+    "moduleNameSignalDeck":  "信号牌局",
+    "moduleNameMidnightVote":  "午夜投票",
+    "moduleNameOrbitMerchant":  "轨道商旅",
+    "moduleNameChaosMixer":  "混沌派对",
+    "moduleTaglineSignalDeck":  "快节奏卡牌配合",
+    "moduleTaglineMidnightVote":  "轻推理阵营博弈",
+    "moduleTaglineOrbitMerchant":  "中度策略交易",
+    "moduleTaglineChaosMixer":  "派对小游戏合集",
+    "moduleSummarySignalDeck":  "围绕手牌联动和团队默契的回合制卡牌游戏，适合聚会开局热场。",
+    "moduleSummaryMidnightVote":  "每局十分钟的隐藏身份玩法，重点在语音互动和投票节奏控制。",
+    "moduleSummaryOrbitMerchant":  "资源交换和卡牌构筑结合，适合熟人长期房间和赛季排行。",
+    "moduleSummaryChaosMixer":  "把抢答、表演、你画我猜和惩罚轮盘整合进一个聚会房间。",
+    "roomTitleSignalRanked":  "信号牌局 冲分房",
+    "roomTitleChaosFriday":  "混沌派对 周五局",
+    "roomTitleVoteFriends":  "午夜投票 熟人局",
+    "gameCategoryCard":  "卡牌",
+    "gameCategoryParty":  "派对",
+    "gameCategoryBluff":  "博弈",
+    "gameCategoryStrategy":  "策略",
+    "matchTempoQuick":  "15 分钟",
+    "matchTempoStandard":  "30 分钟",
+    "matchTempoDeep":  "45 分钟以上",
+    "roomStatusWaiting":  "等待中",
+    "roomStatusInGame":  "进行中",
+    "roomStatusSettling":  "结算中",
+    "signalSuitEmber":  "余烬",
+    "signalSuitTide":  "潮汐",
+    "signalSuitSpark":  "电火",
+    "signalAbilityChain":  "连携",
+    "signalAbilityCounter":  "克制",
+    "signalAbilitySurge":  "追击",
+    "signalAbilityAnchor":  "压阵",
+    "signalCardTitleE1":  "余烬连线",
+    "signalCardTitleE2":  "灰烬脉冲",
+    "signalCardTitleE3":  "日耀召令",
+    "signalCardTitleE4":  "绯红同步",
+    "signalCardTitleT1":  "涟漪标记",
+    "signalCardTitleT2":  "深流护壁",
+    "signalCardTitleT3":  "蔚蓝回声",
+    "signalCardTitleT4":  "迷雾帷幕",
+    "signalCardTitleS1":  "伏特点触",
+    "signalCardTitleS2":  "疾速回路",
+    "signalCardTitleS3":  "静冠脉冲",
+    "signalCardTitleS4":  "信号针刺",
+    "signalCardNoteE1":  "连携：上一张若同为余烬系，则强度 +2。",
+    "signalCardNoteE2":  "追击：分数落后或后期回合时强度 +1。",
+    "signalCardNoteE3":  "连携：余烬连段中的高压终结牌。",
+    "signalCardNoteE4":  "压阵：对上高强度重牌时强度 +2。",
+    "signalCardNoteT1":  "克制：对余烬系卡牌强度 +2。",
+    "signalCardNoteT2":  "压阵：吸收更强来牌时强度 +2。",
+    "signalCardNoteT3":  "克制：在余烬节奏线里更容易抢回主动。",
+    "signalCardNoteT4":  "追击：分数落后或后期回合时强度 +1。",
+    "signalCardNoteS1":  "追击：分数落后或后期回合时强度 +1。",
+    "signalCardNoteS2":  "连携：上一张若同为电火系，则强度 +2。",
+    "signalCardNoteS3":  "追击：后段回合逆转能力更强。",
+    "signalCardNoteS4":  "压阵：对上高强度重牌时强度 +2。",
+    "roomDetailBody":  "这里是房间配置和正式游戏之间的桥接层。先接通信号牌局，后面其他游戏直接复用。",
+    "roomCapacityFieldLabel":  "座位数量",
+    "roomVoiceToggle":  "开启语音",
+    "roomCreateAndEnter":  "创建并进入",
+    "roomInfoSection":  "房间信息",
+    "roomUnsupportedBody":  "这个模块已经进入房间层，但可玩的游戏会话还没有接上。",
+    "roomDetailTitle":  "房间详情",
+    "roomSelectModuleLabel":  "游戏模块",
+    "roomModuleLabel":  "模块",
+    "roomCreateDefaultName":  "{moduleName} 房间",
+    "roomSettingsSection":  "房间设置",
+    "roomStartGame":  "开始游戏",
+    "roomVoiceOff":  "语音关闭",
+    "roomNotFound":  "房间不存在。",
+    "roomCreateSheetBody":  "先选择模块和座位数，再直接进入房间流程，后面可以继续接实时同步。",
+    "roomCodeLabel":  "房间编号",
+    "roomRankedToggle":  "排位房间",
+    "roomStartGameBody":  "信号牌局已经接成可玩的本地原型。现在开始会把房间标记为进行中，并直接进入对局。",
+    "roomNameFieldLabel":  "房间名称",
+    "roomCreateSheetTitle":  "创建房间",
+    "quickMatchEmpty":  "当前还没有可快速进入的房间。",
+    "roomHostNameLabel":  "房主",
+    "@roomCreateDefaultName":  {
+                                   "placeholders":  {
+                                                        "moduleName":  {
+
+                                                                       }
+                                                    }
+                               },
+    "gameSessionParticipantsLabel":  "当前席位",
+    "gameSessionLocalPlayerName":  "你",
+    "gameSessionLocalTag":  "本地",
+    "gameSessionPhaseBriefing":  "准备阶段",
+    "gameSessionSyncMultiplayerReady":  "可接入多人同步",
+    "gameSessionSyncRoomBound":  "已绑定房间",
+    "roomSessionTitle":  "{roomTitle} · {moduleName}",
+    "gameSessionPhaseFinished":  "本局结束",
+    "gameSessionRoomLabel":  "房间会话",
+    "gameSessionPhasePlaying":  "对局进行中",
+    "gameSessionSyncLocalPreview":  "本地预演",
+    "gameSessionGuestSeatName":  "{seat} 号位",
+    "gameSessionHostTag":  "房主",
+    "gameSessionParticipantLabel":  "{name} · {seat} 号位",
+    "signalDeckRoomSubtitle":  "带房间上下文的卡牌会话",
+    "gameSessionSyncLabel":  "同步",
+    "@roomSessionTitle":  {
+                              "placeholders":  {
+                                                   "roomTitle":  {
+
+                                                                 },
+                                                   "moduleName":  {
+
+                                                                  }
+                                               }
+                          },
+    "@gameSessionParticipantLabel":  {
+                                         "placeholders":  {
+                                                              "seat":  {
+                                                                           "type":  "int"
+                                                                       },
+                                                              "name":  {
+
+                                                                       }
+                                                          }
+                                     },
+    "@gameSessionGuestSeatName":  {
+                                      "placeholders":  {
+                                                           "seat":  {
+                                                                        "type":  "int"
+                                                                    }
+                                                       }
+                                  },
+    "loginPasswordLabel":  "密码",
+    "settingsBody":  "主题模式已经接到全局壳层，并且会在下次启动时保留。",
+    "launchLoadingBody":  "正在准备房间、模块和会话状态...",
+    "loginBody":  "先用本地种子账号打通登录壳层。后面替换成真实后端时，不需要重写整个应用入口。",
+    "profileBody":  "账号状态、界面偏好和开发期控制项统一放在这里管理。",
+    "loginUsernameLabel":  "用户名",
+    "themeTitle":  "界面风格",
+    "profileRolePlayer":  "普通玩家",
+    "localeBody":  "默认中文；如果系统语言是英文，应用会自动切换到英文。",
+    "loginAction":  "登录",
+    "themeDark":  "深色",
+    "loginDemoHint":  "当前默认填充的是开发演示账号，方便你直接进入应用。管理员账号我会在交付说明里单独给你。",
+    "settingsTitle":  "系统设置",
+    "profileGuest":  "游客",
+    "localeTitle":  "语言",
+    "themeSystem":  "跟随系统",
+    "loginInvalidCredentials":  "用户名或密码错误。",
+    "logoutAction":  "退出登录",
+    "themeLight":  "浅色",
+    "themeModeDescription":  "当前模式：{mode}",
+    "loginHeadline":  "登录你的派对中枢",
+    "profileTab":  "我的",
+    "profileTitle":  "用户中心",
+    "profileRoleAdmin":  "管理员",
+    "@themeModeDescription":  {
+                                  "placeholders":  {
+                                                       "mode":  {
+
+                                                                }
+                                                   }
+                              },
+    "localeModeSystem":  "跟随系统",
+    "localeModeChinese":  "中文",
+    "localeModeEnglish":  "English",
+    "localeModeDescription":  "当前语言模式：{mode}",
+    "@localeModeDescription":  {
+                                   "placeholders":  {
+                                                        "mode":  {
+
+                                                                 }
+                                                    }
+                               },
+    "loginSessionExpired":  "会话已失效，请重新登录。",
+    "loginFillDemo":  "填入试玩账号",
+    "loginFillAdmin":  "填入管理员账号",
+    "loginHeroTitle":  "把账号、房间和游戏会话收进同一套壳层。",
+    "loginHeroBody":  "现在的登录机制已经具备会话模型、设备列表和资料编辑边界，后面替换成真实后端时不会重写 UI。",
+    "loginSeedPlayerTitle":  "试玩玩家账号",
+    "loginSeedAdminTitle":  "管理员账号",
+    "guardLoginTitle":  "需要先登录",
+    "guardLoginBody":  "当前页面受登录态保护。请先登录后再访问。",
+    "guardAdminTitle":  "需要管理员权限",
+    "guardAdminBody":  "这个入口只对管理员开放。当前账号没有足够权限。",
+    "profileEditTitle":  "编辑资料",
+    "profileEditBody":  "调整昵称、个人简介和头像风格，资料会立即写回当前会话。",
+    "profileDisplayNameField":  "昵称",
+    "profileBioField":  "个人简介",
+    "profileAvatarField":  "头像风格",
+    "profileSaveAction":  "保存资料",
+    "profileSavedMessage":  "资料已更新。",
+    "profileSignedInAt":  "登录时间",
+    "profileSessionExpiry":  "会话过期",
+    "profileLevel":  "Lv.{level}",
+    "@profileLevel":  {
+                          "placeholders":  {
+                                               "level":  {
+                                                             "type":  "int"
+                                                         }
+                                           }
+                      },
+    "securityTitle":  "账号安全",
+    "securityBody":  "这里管理密码、设备登录和会话边界。当前实现已把敏感信息存取收口到独立存储接口，后续可替换成系统安全存储。",
+    "securitySessionCardTitle":  "当前会话",
+    "securitySessionId":  "会话 ID",
+    "securitySessionExpiry":  "到期时间",
+    "securityStorageMode":  "存储策略",
+    "securityStorageModeValue":  "本地密钥接口（开发态），可直接替换为 Keychain / Keystore",
+    "securityPasswordTitle":  "修改密码",
+    "securityPasswordBody":  "当前为开发期账号壳层，密码修改已预留协议与错误态。",
+    "securityCurrentPassword":  "当前密码",
+    "securityNextPassword":  "新密码",
+    "securityPasswordAction":  "更新密码",
+    "securityPasswordUpdated":  "密码校验已通过，开发账号协议已更新。",
+    "securityDevicesTitle":  "登录设备",
+    "securityDevicesBody":  "当前设备列表来自会话仓库抽象，后续可直接对接真实风控和设备管理。",
+    "securityCurrentDevice":  "当前设备",
+    "securitySignOutDevice":  "移除",
+    "securityIncorrectPassword":  "当前密码不正确。",
+    "securityWeakPassword":  "新密码至少 8 位。",
+    "adminConsoleTitle":  "管理员控制台",
+    "adminConsoleBody":  "这里先做企业级壳层：用户治理、房间治理和运营配置三个看板。后续接真实后台时只替换数据源。",
+    "adminMetricUsers":  "受管用户",
+    "adminMetricRooms":  "房间池",
+    "adminMetricIncidents":  "待处理事件",
+    "adminUsersSection":  "用户治理",
+    "adminUsersBody":  "集中处理违规、申诉和关键玩家画像。",
+    "adminUsersItemModeration":  "快速查看最近高风险登录和异常昵称变更。",
+    "adminUsersItemBan":  "预留封禁、解封和备注审计链路。",
+    "adminUsersItemSearch":  "支持按 UID、昵称、设备来源搜索用户。",
+    "adminRoomsSection":  "房间治理",
+    "adminRoomsBody":  "统一看等待房、对局房和异常房间状态。",
+    "adminRoomsItemQueue":  "查看各模块建房和匹配队列的拥塞情况。",
+    "adminRoomsItemHealth":  "检查房间会话同步状态和开局成功率。",
+    "adminRoomsItemCapacity":  "为节假日活动预留房间容量策略入口。",
+    "adminOpsSection":  "运营配置",
+    "adminOpsBody":  "把 Banner、推荐位和特性开关集中到同一套运营面板。",
+    "adminOpsItemConfig":  "运营位配置支持灰度开关和时间窗。",
+    "adminOpsItemBanner":  "首页 Banner 与模块排序统一由配置驱动。",
+    "adminOpsItemFeatureFlag":  "预留游戏模块开关与实验分流入口。",
+    "authProviderUsernamePassword":  "账号密码",
+    "shortDateTime":  "{year}年{month}月{day}日 {hour}:{minute}",
+    "@shortDateTime":  {
+                           "placeholders":  {
+                                                "year":  {
+                                                             "type":  "int"
+                                                         },
+                                                "month":  {
+                                                              "type":  "int"
+                                                          },
+                                                "day":  {
+                                                            "type":  "int"
+                                                        },
+                                                "hour":  {
+                                                             "type":  "int"
+                                                         },
+                                                "minute":  {
+                                                               "type":  "int"
+                                                           }
+                                            }
+                       }
+}

@@ -1,0 +1,468 @@
+﻿{
+    "@@locale":  "en",
+    "appTitle":  "Ember Party Club",
+    "discoverTab":  "Discover",
+    "roomsTab":  "Rooms",
+    "reset":  "Reset",
+    "play":  "Play",
+    "playAgain":  "Play again",
+    "viewPlan":  "View plan",
+    "playPrototype":  "Play prototype",
+    "homeHeroTitle":  "A mobile game hub designed for friend groups, not solo play.",
+    "homeHeroBody":  "The product focuses on low-latency rooms, pluggable game modules, stable voice interaction, and an enterprise-ready codebase.",
+    "modulesLabel":  "Modules",
+    "featuredLabel":  "Featured",
+    "launchStrategy":  "Launch Strategy",
+    "launchBannerTitle":  "Build the room layer first, then ship game modules on top.",
+    "launchBannerBody":  "Once accounts, friends, team-up, voice, realtime sync, and settlement are unified, every new game becomes cheaper to ship.",
+    "moduleFilterTitle":  "Module filter",
+    "moduleFilterSubtitle":  "Anchor new games to the shared room layer, then expand into card, social deduction, and party play.",
+    "candidateGamesTitle":  "Candidate games",
+    "@candidateGamesTitle":  {
+                                 "placeholders":  {
+                                                      "count":  {
+                                                                    "type":  "int"
+                                                                }
+                                                  }
+                             },
+    "candidateGamesSubtitle":  "Showing {count} modules suitable for the first release wave.",
+    "@candidateGamesSubtitle":  {
+                                    "placeholders":  {
+                                                         "count":  {
+                                                                       "type":  "int"
+                                                                   }
+                                                     }
+                                },
+    "planningQueue":  "{moduleName} is still in the planning queue.",
+    "@planningQueue":  {
+                           "placeholders":  {
+                                                "moduleName":  {
+
+                                                               }
+                                            }
+                       },
+    "roomLoungeTitle":  "Room Lounge",
+    "roomLoungeHero":  "Keep room creation, invites, parties, and voice inside one shared room layer.",
+    "roomLoungeBody":  "New games then only need rules and rendering instead of rebuilding multiplayer infrastructure.",
+    "activeRoomsMetric":  "Active rooms",
+    "onlinePlayersMetric":  "Players online",
+    "quickMatch":  "Quick Match",
+    "quickMatchBody":  "Auto room find + smart fill",
+    "createRoom":  "Create Room",
+    "createRoomBody":  "Pick a module, then configure seats and voice",
+    "hottestRoom":  "Hottest room",
+    "activeRoomList":  "Active rooms",
+    "hostLabel":  "Host {nickname}",
+    "@hostLabel":  {
+                       "placeholders":  {
+                                            "nickname":  {
+
+                                                         }
+                                        }
+                   },
+    "playersLabel":  "{current}/{capacity} players",
+    "@playersLabel":  {
+                          "placeholders":  {
+                                               "current":  {
+                                                               "type":  "int"
+                                                           },
+                                               "capacity":  {
+                                                                "type":  "int"
+                                                            }
+                                           }
+                      },
+    "voiceOn":  "Voice on",
+    "ranked":  "Ranked",
+    "casual":  "Casual",
+    "signalDeckTitle":  "Signal Deck",
+    "signalDeckSubtitle":  "First playable card battle",
+    "signalDeckIntro":  "This build already has card abilities, fixed-round rules, and a replay loop ready to plug into multiplayer rooms.",
+    "yourHand":  "Your hand",
+    "roundLog":  "Round log",
+    "noRoundsPlayed":  "No rounds played yet.",
+    "signalRoundLabel":  "Round {round}",
+    "@signalRoundLabel":  {
+                              "placeholders":  {
+                                                   "round":  {
+                                                                 "type":  "int"
+                                                             }
+                                               }
+                          },
+    "signalPowerCheck":  "Power check: you {playerPower} / rival {rivalPower}",
+    "@signalPowerCheck":  {
+                              "placeholders":  {
+                                                   "playerPower":  {
+                                                                       "type":  "int"
+                                                                   },
+                                                   "rivalPower":  {
+                                                                      "type":  "int"
+                                                                  }
+                                               }
+                          },
+    "youLabel":  "You",
+    "rivalLabel":  "Pulse AI",
+    "roundsWon":  "Rounds won",
+    "matchLabel":  "Match",
+    "youNotPlayed":  "You have not played yet.",
+    "youPlayed":  "You played {title}",
+    "@youPlayed":  {
+                       "placeholders":  {
+                                            "title":  {
+
+                                                      }
+                                        }
+                   },
+    "rivalWaiting":  "Pulse AI is waiting.",
+    "rivalPlayed":  "Pulse AI played {title}",
+    "@rivalPlayed":  {
+                         "placeholders":  {
+                                              "title":  {
+
+                                                        }
+                                          }
+                     },
+    "drawGame":  "Draw game",
+    "winnerTakesMatch":  "{winner} takes the match",
+    "@winnerTakesMatch":  {
+                              "placeholders":  {
+                                                   "winner":  {
+
+                                                              }
+                                               }
+                          },
+    "matchOver":  "The match is over.",
+    "signalPowerLabel":  "Power",
+    "signalPoints":  "{score} pts",
+    "@signalPoints":  {
+                          "placeholders":  {
+                                               "score":  {
+                                                             "type":  "int"
+                                                         }
+                                           }
+                      },
+    "signalStatus":  "Pick a card to open round {round} of {maxRounds}.",
+    "@signalStatus":  {
+                          "placeholders":  {
+                                               "round":  {
+                                                             "type":  "int"
+                                                         },
+                                               "maxRounds":  {
+                                                                 "type":  "int"
+                                                             }
+                                           }
+                      },
+    "signalFinishReason":  "Finished after {rounds} rounds. Score {playerScore}-{rivalScore}, rounds {playerRoundsWon}-{rivalRoundsWon}.",
+    "@signalFinishReason":  {
+                                "placeholders":  {
+                                                     "rounds":  {
+                                                                    "type":  "int"
+                                                                },
+                                                     "playerScore":  {
+                                                                         "type":  "int"
+                                                                     },
+                                                     "rivalScore":  {
+                                                                        "type":  "int"
+                                                                    },
+                                                     "playerRoundsWon":  {
+                                                                             "type":  "int"
+                                                                         },
+                                                     "rivalRoundsWon":  {
+                                                                            "type":  "int"
+                                                                        }
+                                                 }
+                            },
+    "signalRoundPlayerWinConnector":  "defeats {rivalCardTitle} ({rivalPower}). You gain 3 points.",
+    "@signalRoundPlayerWinConnector":  {
+                                           "placeholders":  {
+                                                                "rivalCardTitle":  {
+
+                                                                                   },
+                                                                "rivalPower":  {
+                                                                                   "type":  "int"
+                                                                               }
+                                                            }
+                                       },
+    "signalRoundRivalWinConnector":  "defeats {playerCardTitle} ({playerPower}). Pulse AI gains 3 points.",
+    "@signalRoundRivalWinConnector":  {
+                                          "placeholders":  {
+                                                               "playerCardTitle":  {
+
+                                                                                   },
+                                                               "playerPower":  {
+                                                                                   "type":  "int"
+                                                                               }
+                                                           }
+                                      },
+    "signalRoundDrawSummary":  "{playerCardTitle} and {rivalCardTitle} tie at {power}. Both sides gain 1 point.",
+    "@signalRoundDrawSummary":  {
+                                    "placeholders":  {
+                                                         "playerCardTitle":  {
+
+                                                                             },
+                                                         "rivalCardTitle":  {
+
+                                                                            },
+                                                         "power":  {
+                                                                       "type":  "int"
+                                                                   }
+                                                     }
+                                },
+    "moduleNameSignalDeck":  "Signal Deck",
+    "moduleNameMidnightVote":  "Midnight Vote",
+    "moduleNameOrbitMerchant":  "Orbit Merchant",
+    "moduleNameChaosMixer":  "Chaos Mixer",
+    "moduleTaglineSignalDeck":  "Fast-paced tactical card play",
+    "moduleTaglineMidnightVote":  "Social deduction with brisk votes",
+    "moduleTaglineOrbitMerchant":  "Mid-weight strategy trading",
+    "moduleTaglineChaosMixer":  "Party minigame collection",
+    "moduleSummarySignalDeck":  "A turn-based card game built around hand combos and table chemistry, designed to open party sessions fast.",
+    "moduleSummaryMidnightVote":  "A ten-minute hidden-role loop focused on voice interaction and vote pacing.",
+    "moduleSummaryOrbitMerchant":  "Combines resource trading with deckbuilding for long-running rooms and seasonal ladders.",
+    "moduleSummaryChaosMixer":  "Bundles trivia, acting, drawing, and punishment wheels into one party room.",
+    "roomTitleSignalRanked":  "Signal Deck ranked room",
+    "roomTitleChaosFriday":  "Chaos Mixer Friday party",
+    "roomTitleVoteFriends":  "Midnight Vote friends room",
+    "gameCategoryCard":  "Card",
+    "gameCategoryParty":  "Party",
+    "gameCategoryBluff":  "Bluff",
+    "gameCategoryStrategy":  "Strategy",
+    "matchTempoQuick":  "15 min",
+    "matchTempoStandard":  "30 min",
+    "matchTempoDeep":  "45+ min",
+    "roomStatusWaiting":  "Waiting",
+    "roomStatusInGame":  "In Game",
+    "roomStatusSettling":  "Settling",
+    "signalSuitEmber":  "Ember",
+    "signalSuitTide":  "Tide",
+    "signalSuitSpark":  "Spark",
+    "signalAbilityChain":  "Chain",
+    "signalAbilityCounter":  "Counter",
+    "signalAbilitySurge":  "Surge",
+    "signalAbilityAnchor":  "Anchor",
+    "signalCardTitleE1":  "Flare Link",
+    "signalCardTitleE2":  "Ash Pulse",
+    "signalCardTitleE3":  "Solar Call",
+    "signalCardTitleE4":  "Crimson Sync",
+    "signalCardTitleT1":  "Ripple Mark",
+    "signalCardTitleT2":  "Deep Current",
+    "signalCardTitleT3":  "Blue Echo",
+    "signalCardTitleT4":  "Mist Veil",
+    "signalCardTitleS1":  "Volt Tap",
+    "signalCardTitleS2":  "Quick Circuit",
+    "signalCardTitleS3":  "Static Crown",
+    "signalCardTitleS4":  "Signal Needle",
+    "signalCardNoteE1":  "Chain: +2 after another Ember card.",
+    "signalCardNoteE2":  "Surge: +1 while trailing.",
+    "signalCardNoteE3":  "Chain: powerful finisher in Ember streaks.",
+    "signalCardNoteE4":  "Anchor: +2 into heavy rival cards.",
+    "signalCardNoteT1":  "Counter: +2 against Ember.",
+    "signalCardNoteT2":  "Anchor: +2 when absorbing stronger cards.",
+    "signalCardNoteT3":  "Counter: wins tempo against Ember lines.",
+    "signalCardNoteT4":  "Surge: +1 while trailing.",
+    "signalCardNoteS1":  "Surge: +1 while trailing.",
+    "signalCardNoteS2":  "Chain: +2 after another Spark card.",
+    "signalCardNoteS3":  "Surge: late-round closer when behind.",
+    "signalCardNoteS4":  "Anchor: +2 into heavy rival cards.",
+    "roomDetailBody":  "This page is the bridge between room setup and the actual game session. Start with Signal Deck, then reuse the shell for other games.",
+    "roomCapacityFieldLabel":  "Seat count",
+    "roomVoiceToggle":  "Enable voice",
+    "roomCreateAndEnter":  "Create and enter",
+    "roomInfoSection":  "Room info",
+    "roomUnsupportedBody":  "This module is listed in the room layer already, but the playable session has not been wired yet.",
+    "roomDetailTitle":  "Room details",
+    "roomSelectModuleLabel":  "Game module",
+    "roomModuleLabel":  "Module",
+    "roomCreateDefaultName":  "{moduleName} room",
+    "roomSettingsSection":  "Room settings",
+    "roomStartGame":  "Start game",
+    "roomVoiceOff":  "Voice off",
+    "roomNotFound":  "Room not found.",
+    "roomCreateSheetBody":  "Pick a module, set seats, and jump straight into a room flow that can later plug into realtime sync.",
+    "roomCodeLabel":  "Room ID",
+    "roomRankedToggle":  "Ranked room",
+    "roomStartGameBody":  "Signal Deck is already wired as a local playable prototype. Starting now will mark the room in-game and open the match.",
+    "roomNameFieldLabel":  "Room name",
+    "roomCreateSheetTitle":  "Create room",
+    "quickMatchEmpty":  "No room is available for quick match yet.",
+    "roomHostNameLabel":  "Host",
+    "@roomCreateDefaultName":  {
+                                   "placeholders":  {
+                                                        "moduleName":  {
+
+                                                                       }
+                                                    }
+                               },
+    "gameSessionParticipantsLabel":  "Participants",
+    "gameSessionLocalPlayerName":  "You",
+    "gameSessionLocalTag":  "Local",
+    "gameSessionPhaseBriefing":  "Briefing",
+    "gameSessionSyncMultiplayerReady":  "Ready for sync",
+    "gameSessionSyncRoomBound":  "Room-bound",
+    "roomSessionTitle":  "{roomTitle} · {moduleName}",
+    "gameSessionPhaseFinished":  "Finished",
+    "gameSessionRoomLabel":  "Room session",
+    "gameSessionPhasePlaying":  "Playing",
+    "gameSessionSyncLocalPreview":  "Local preview",
+    "gameSessionGuestSeatName":  "Seat {seat}",
+    "gameSessionHostTag":  "Host",
+    "gameSessionParticipantLabel":  "{name} · Seat {seat}",
+    "signalDeckRoomSubtitle":  "Room-bound card battle session",
+    "gameSessionSyncLabel":  "Sync",
+    "@roomSessionTitle":  {
+                              "placeholders":  {
+                                                   "roomTitle":  {
+
+                                                                 },
+                                                   "moduleName":  {
+
+                                                                  }
+                                               }
+                          },
+    "@gameSessionParticipantLabel":  {
+                                         "placeholders":  {
+                                                              "seat":  {
+                                                                           "type":  "int"
+                                                                       },
+                                                              "name":  {
+
+                                                                       }
+                                                          }
+                                     },
+    "@gameSessionGuestSeatName":  {
+                                      "placeholders":  {
+                                                           "seat":  {
+                                                                        "type":  "int"
+                                                                    }
+                                                       }
+                                  },
+    "loginPasswordLabel":  "Password",
+    "settingsBody":  "Theme mode is already wired globally and persists across launches.",
+    "launchLoadingBody":  "Preparing rooms, modules, and session state...",
+    "loginBody":  "Use a seeded local account first. Once the auth shell is stable, replacing it with a real backend becomes straightforward.",
+    "profileBody":  "Manage account state, visual preferences, and developer-facing controls from one place.",
+    "loginUsernameLabel":  "Username",
+    "themeTitle":  "Theme",
+    "profileRolePlayer":  "Player",
+    "localeBody":  "Default is Chinese. If the system language is English, the app switches automatically.",
+    "loginAction":  "Sign in",
+    "themeDark":  "Dark",
+    "loginDemoHint":  "Default demo account is pre-filled for quick development. Admin account is seeded separately and kept for delivery notes.",
+    "settingsTitle":  "System settings",
+    "profileGuest":  "Guest",
+    "localeTitle":  "Language",
+    "themeSystem":  "System",
+    "loginInvalidCredentials":  "Username or password is incorrect.",
+    "logoutAction":  "Log out",
+    "themeLight":  "Light",
+    "themeModeDescription":  "Current mode: {mode}",
+    "loginHeadline":  "Sign in to your party hub",
+    "profileTab":  "Profile",
+    "profileTitle":  "User center",
+    "profileRoleAdmin":  "Administrator",
+    "@themeModeDescription":  {
+                                  "placeholders":  {
+                                                       "mode":  {
+
+                                                                }
+                                                   }
+                              },
+    "localeModeSystem":  "System",
+    "localeModeChinese":  "Chinese",
+    "localeModeEnglish":  "English",
+    "localeModeDescription":  "Current language mode: {mode}",
+    "@localeModeDescription":  {
+                                   "placeholders":  {
+                                                        "mode":  {
+
+                                                                 }
+                                                    }
+                               },
+    "loginSessionExpired":  "Your session expired. Sign in again.",
+    "loginFillDemo":  "Use demo account",
+    "loginFillAdmin":  "Use admin account",
+    "loginHeroTitle":  "Keep accounts, rooms, and game sessions inside one shell.",
+    "loginHeroBody":  "The login flow now has session models, device inventory, and profile-edit boundaries, so swapping to a real backend later does not require rewriting the UI.",
+    "loginSeedPlayerTitle":  "Demo player account",
+    "loginSeedAdminTitle":  "Administrator account",
+    "guardLoginTitle":  "Login required",
+    "guardLoginBody":  "This page is protected by authentication. Sign in before opening it.",
+    "guardAdminTitle":  "Admin access required",
+    "guardAdminBody":  "This entry point is restricted to administrators. The current account does not have enough permission.",
+    "profileEditTitle":  "Edit profile",
+    "profileEditBody":  "Update name, bio, and avatar style. Changes write back to the active session immediately.",
+    "profileDisplayNameField":  "Display name",
+    "profileBioField":  "Bio",
+    "profileAvatarField":  "Avatar style",
+    "profileSaveAction":  "Save profile",
+    "profileSavedMessage":  "Profile updated.",
+    "profileSignedInAt":  "Signed in",
+    "profileSessionExpiry":  "Session expires",
+    "profileLevel":  "Lv.{level}",
+    "@profileLevel":  {
+                          "placeholders":  {
+                                               "level":  {
+                                                             "type":  "int"
+                                                         }
+                                           }
+                      },
+    "securityTitle":  "Account security",
+    "securityBody":  "Manage passwords, devices, and session boundaries. Sensitive values already flow through a separate storage interface so secure platform storage can replace it later.",
+    "securitySessionCardTitle":  "Current session",
+    "securitySessionId":  "Session ID",
+    "securitySessionExpiry":  "Expires at",
+    "securityStorageMode":  "Storage strategy",
+    "securityStorageModeValue":  "Local secret interface (dev mode), ready to swap to Keychain / Keystore",
+    "securityPasswordTitle":  "Change password",
+    "securityPasswordBody":  "This is still a development auth shell, but the password-change contract and error handling are already in place.",
+    "securityCurrentPassword":  "Current password",
+    "securityNextPassword":  "New password",
+    "securityPasswordAction":  "Update password",
+    "securityPasswordUpdated":  "Password validation passed and the dev account contract has been updated.",
+    "securityDevicesTitle":  "Signed-in devices",
+    "securityDevicesBody":  "The device list comes from the session repository abstraction and can later plug straight into a real risk-control backend.",
+    "securityCurrentDevice":  "Current device",
+    "securitySignOutDevice":  "Remove",
+    "securityIncorrectPassword":  "Current password is incorrect.",
+    "securityWeakPassword":  "New password must be at least 8 characters.",
+    "adminConsoleTitle":  "Admin console",
+    "adminConsoleBody":  "This is the enterprise shell for user governance, room governance, and operations configuration. Realtime admin data can replace the seeded data source later.",
+    "adminMetricUsers":  "Managed users",
+    "adminMetricRooms":  "Room pool",
+    "adminMetricIncidents":  "Open incidents",
+    "adminUsersSection":  "User governance",
+    "adminUsersBody":  "Handle moderation, appeals, and high-value player profiles from one place.",
+    "adminUsersItemModeration":  "Review recent high-risk sign-ins and suspicious nickname changes.",
+    "adminUsersItemBan":  "Reserve ban, unban, and audit-note workflows.",
+    "adminUsersItemSearch":  "Search users by UID, nickname, or device source.",
+    "adminRoomsSection":  "Room governance",
+    "adminRoomsBody":  "Track waiting rooms, active sessions, and abnormal rooms together.",
+    "adminRoomsItemQueue":  "Inspect room creation and matchmaking congestion by module.",
+    "adminRoomsItemHealth":  "Monitor room session sync state and successful start rate.",
+    "adminRoomsItemCapacity":  "Reserve capacity controls for holiday events and spikes.",
+    "adminOpsSection":  "Operations config",
+    "adminOpsBody":  "Centralize banners, featured slots, and feature flags in a single operations panel.",
+    "adminOpsItemConfig":  "Support staged rollout windows for ops configuration.",
+    "adminOpsItemBanner":  "Drive homepage banners and module ordering from config.",
+    "adminOpsItemFeatureFlag":  "Reserve entry points for module toggles and experiments.",
+    "authProviderUsernamePassword":  "Username & password",
+    "shortDateTime":  "{year}-{month}-{day} {hour}:{minute}",
+    "@shortDateTime":  {
+                           "placeholders":  {
+                                                "year":  {
+                                                             "type":  "int"
+                                                         },
+                                                "month":  {
+                                                              "type":  "int"
+                                                          },
+                                                "day":  {
+                                                            "type":  "int"
+                                                        },
+                                                "hour":  {
+                                                             "type":  "int"
+                                                         },
+                                                "minute":  {
+                                                               "type":  "int"
+                                                           }
+                                            }
+                       }
+}
