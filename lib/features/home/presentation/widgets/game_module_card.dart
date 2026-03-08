@@ -144,9 +144,10 @@ class _GameModuleCardState extends State<GameModuleCard> {
             ),
           ),
           const SizedBox(height: 14),
-          Row(
-            children: [
-              TextButton.icon(
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final compactActions = constraints.maxWidth < 340;
+              final detailButton = TextButton.icon(
                 onPressed: () {
                   setState(() {
                     _expanded = !_expanded;
@@ -159,18 +160,40 @@ class _GameModuleCardState extends State<GameModuleCard> {
                 ),
                 label: Text(
                   _expanded ? l10n.collapseDetails : l10n.expandDetails,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              const Spacer(),
-              FilledButton.icon(
+              );
+              final openButton = FilledButton.icon(
                 key: ValueKey('open-${module.id}'),
                 onPressed: widget.onOpen,
                 icon: const Icon(Icons.play_arrow_rounded),
                 label: Text(
                   widget.isPlayable ? l10n.playPrototype : l10n.viewPlan,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
+              );
+
+              if (compactActions) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    detailButton,
+                    const SizedBox(height: 10),
+                    SizedBox(width: double.infinity, child: openButton),
+                  ],
+                );
+              }
+
+              return Row(
+                children: [
+                  Flexible(child: detailButton),
+                  const SizedBox(width: 12),
+                  openButton,
+                ],
+              );
+            },
           ),
         ],
       ),
