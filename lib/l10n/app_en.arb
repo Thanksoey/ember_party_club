@@ -6,6 +6,8 @@
     "reset":  "Reset",
     "play":  "Play",
     "playAgain":  "Play again",
+    "closeAction":  "Close",
+    "viewAbilityAction":  "View ability",
     "viewPlan":  "View plan",
     "playPrototype":  "Play prototype",
     "homeHeroTitle":  "Open a room, start the party.",
@@ -77,6 +79,10 @@
     "signalDeckTitle":  "Signal Deck",
     "signalDeckSubtitle":  "First playable card battle",
     "signalDeckIntro":  "This build already has card abilities, fixed-round rules, and a replay loop ready to plug into multiplayer rooms.",
+    "signalHandSubtitle":  "Cards fan out in one stacked hand. Tap any buried card to bring it to the top before playing it.",
+    "signalPileDraw":  "Draw Pile",
+    "signalPileDiscard":  "Discard",
+    "signalBattleConsoleTitle":  "Battle Core",
     "yourHand":  "Your hand",
     "roundLog":  "Round log",
     "noRoundsPlayed":  "No rounds played yet.",
@@ -263,6 +269,14 @@
     "signalCardNoteS2":  "Chain: +2 after another Spark card.",
     "signalCardNoteS3":  "Surge: late-round closer when behind.",
     "signalCardNoteS4":  "Anchor: +2 into heavy rival cards.",
+    "signalCardAbilityDialogTitle":  "{cardTitle} ability details",
+    "@signalCardAbilityDialogTitle":  {
+                                         "placeholders":  {
+                                                              "cardTitle":  {
+
+                                                                            }
+                                                          }
+                                     },
     "roomDetailBody":  "This page is the bridge between room setup and the actual game session. Start with Signal Deck, then reuse the shell for other games.",
     "roomCapacityFieldLabel":  "Seat count",
     "roomVoiceToggle":  "Enable voice",
@@ -280,7 +294,7 @@
     "roomCreateSheetBody":  "Pick a module, set seats, and jump straight into a room flow that can later plug into realtime sync.",
     "roomCodeLabel":  "Room ID",
     "roomRankedToggle":  "Ranked room",
-    "roomStartGameBody":  "Signal Deck is already wired as a local playable prototype. Starting now will mark the room in-game and open the match.",
+    "roomStartGameBody":  "This room module is already wired as a local playable prototype. Starting now marks the room in-game and opens the match directly.",
     "roomNameFieldLabel":  "Room name",
     "roomCreateSheetTitle":  "Create room",
     "quickMatchEmpty":  "No room is available for quick match yet.",
@@ -648,6 +662,17 @@
     },
     "midnightRevealClue": "Reveal clue",
     "midnightSuspectsTitle": "Suspects",
+    "midnightDossierTitle": "Suspect Dossiers",
+    "midnightDossierSubtitle": "Select a target first, then lock the vote from the case board and visible clues.",
+    "midnightEvidenceProgress": "Clues {revealed} / {total}",
+    "@midnightEvidenceProgress": {
+      "placeholders": {
+        "revealed": {},
+        "total": {}
+      }
+    },
+    "midnightFocusLabel": "Active Investigation Target",
+    "midnightVisibleCluesTitle": "Visible Clues",
     "midnightTimelineTitle": "Investigation Timeline",
     "midnightTimelineEmpty": "No votes yet. Lock a suspect to log this round.",
     "midnightSelectSuspect": "Choose this suspect as your prime lead.",
@@ -726,7 +751,14 @@
     "orbitMetricNetWorth": "Net Worth",
     "orbitMetricCargo": "Cargo",
     "orbitMarketBoardTitle": "Market Board",
-    "orbitMarketBoardSubtitle": "Tap a commodity card to trade.",
+    "orbitMarketBoardSubtitle": "Watch quotes and execute trades from the terminal.",
+    "orbitTerminalTitle": "Trade Terminal",
+    "orbitTerminalSubtitle": "Keep one commodity in focus while the full quote list stays ready on the right.",
+    "orbitPriceLabel": "Quote",
+    "orbitHoldingsLabel": "Holdings",
+    "orbitSignalHot": "Overheated",
+    "orbitSignalStable": "Stable",
+    "orbitSignalCool": "Discount",
     "orbitTimelineTitle": "Trade Timeline",
     "orbitTimelineEmpty": "No deals yet. Buy or sell one resource to begin.",
     "orbitResourceStats": "Price {price} | Cargo {cargo}",
@@ -828,6 +860,8 @@
     "guideSectionGoalTitle": "Core goal",
     "guideSectionTurnTitle": "Turn flow",
     "guideSectionTipsTitle": "Winning tips",
+    "guideSectionReopenTitle": "Open Again",
+    "guideReopenBody": "If you skip now, this guide will not auto-open for the same game next time. Use the top guide icon whenever you want to reopen it.",
     "signalGuideGoalBody": "Win rounds with higher effective power. The higher total score takes the match.",
     "signalGuideTurnBody": "Play 1 card each round. Matching the battlefield suit grants +1, momentum stacks after winning rounds, and abilities resolve from the card trait.",
     "signalGuideTipsBody": "Watch the active field and your momentum. Save chain cards for same-suit turns and use counter or anchor cards to swing key rounds.",

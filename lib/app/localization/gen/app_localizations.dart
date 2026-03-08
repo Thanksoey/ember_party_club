@@ -134,6 +134,18 @@ abstract class AppLocalizations {
   /// **'Play again'**
   String get playAgain;
 
+  /// No description provided for @closeAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get closeAction;
+
+  /// No description provided for @viewAbilityAction.
+  ///
+  /// In en, this message translates to:
+  /// **'View ability'**
+  String get viewAbilityAction;
+
   /// No description provided for @viewPlan.
   ///
   /// In en, this message translates to:
@@ -331,6 +343,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This build already has card abilities, fixed-round rules, and a replay loop ready to plug into multiplayer rooms.'**
   String get signalDeckIntro;
+
+  /// No description provided for @signalHandSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cards fan out in one stacked hand. Tap any buried card to bring it to the top before playing it.'**
+  String get signalHandSubtitle;
+
+  /// No description provided for @signalPileDraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw Pile'**
+  String get signalPileDraw;
+
+  /// No description provided for @signalPileDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get signalPileDiscard;
+
+  /// No description provided for @signalBattleConsoleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Battle Core'**
+  String get signalBattleConsoleTitle;
 
   /// No description provided for @yourHand.
   ///
@@ -816,6 +852,12 @@ abstract class AppLocalizations {
   /// **'Anchor: +2 into heavy rival cards.'**
   String get signalCardNoteS4;
 
+  /// No description provided for @signalCardAbilityDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{cardTitle} ability details'**
+  String signalCardAbilityDialogTitle(Object cardTitle);
+
   /// No description provided for @roomDetailBody.
   ///
   /// In en, this message translates to:
@@ -921,7 +963,7 @@ abstract class AppLocalizations {
   /// No description provided for @roomStartGameBody.
   ///
   /// In en, this message translates to:
-  /// **'Signal Deck is already wired as a local playable prototype. Starting now will mark the room in-game and open the match.'**
+  /// **'This room module is already wired as a local playable prototype. Starting now marks the room in-game and opens the match directly.'**
   String get roomStartGameBody;
 
   /// No description provided for @roomNameFieldLabel.
@@ -2076,6 +2118,36 @@ abstract class AppLocalizations {
   /// **'Suspects'**
   String get midnightSuspectsTitle;
 
+  /// No description provided for @midnightDossierTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suspect Dossiers'**
+  String get midnightDossierTitle;
+
+  /// No description provided for @midnightDossierSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a target first, then lock the vote from the case board and visible clues.'**
+  String get midnightDossierSubtitle;
+
+  /// No description provided for @midnightEvidenceProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Clues {revealed} / {total}'**
+  String midnightEvidenceProgress(Object revealed, Object total);
+
+  /// No description provided for @midnightFocusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Investigation Target'**
+  String get midnightFocusLabel;
+
+  /// No description provided for @midnightVisibleCluesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Visible Clues'**
+  String get midnightVisibleCluesTitle;
+
   /// No description provided for @midnightTimelineTitle.
   ///
   /// In en, this message translates to:
@@ -2299,8 +2371,50 @@ abstract class AppLocalizations {
   /// No description provided for @orbitMarketBoardSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Tap a commodity card to trade.'**
+  /// **'Watch quotes and execute trades from the terminal.'**
   String get orbitMarketBoardSubtitle;
+
+  /// No description provided for @orbitTerminalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trade Terminal'**
+  String get orbitTerminalTitle;
+
+  /// No description provided for @orbitTerminalSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep one commodity in focus while the full quote list stays ready on the right.'**
+  String get orbitTerminalSubtitle;
+
+  /// No description provided for @orbitPriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Quote'**
+  String get orbitPriceLabel;
+
+  /// No description provided for @orbitHoldingsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Holdings'**
+  String get orbitHoldingsLabel;
+
+  /// No description provided for @orbitSignalHot.
+  ///
+  /// In en, this message translates to:
+  /// **'Overheated'**
+  String get orbitSignalHot;
+
+  /// No description provided for @orbitSignalStable.
+  ///
+  /// In en, this message translates to:
+  /// **'Stable'**
+  String get orbitSignalStable;
+
+  /// No description provided for @orbitSignalCool.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount'**
+  String get orbitSignalCool;
 
   /// No description provided for @orbitTimelineTitle.
   ///
@@ -2486,6 +2600,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Winning tips'**
   String get guideSectionTipsTitle;
+
+  /// No description provided for @guideSectionReopenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Again'**
+  String get guideSectionReopenTitle;
+
+  /// No description provided for @guideReopenBody.
+  ///
+  /// In en, this message translates to:
+  /// **'If you skip now, this guide will not auto-open for the same game next time. Use the top guide icon whenever you want to reopen it.'**
+  String get guideReopenBody;
 
   /// No description provided for @signalGuideGoalBody.
   ///

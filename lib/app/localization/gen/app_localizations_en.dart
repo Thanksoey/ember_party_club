@@ -27,6 +27,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get playAgain => 'Play again';
 
   @override
+  String get closeAction => 'Close';
+
+  @override
+  String get viewAbilityAction => 'View ability';
+
+  @override
   String get viewPlan => 'View plan';
 
   @override
@@ -141,6 +147,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get signalDeckIntro =>
       'This build already has card abilities, fixed-round rules, and a replay loop ready to plug into multiplayer rooms.';
+
+  @override
+  String get signalHandSubtitle =>
+      'Cards fan out in one stacked hand. Tap any buried card to bring it to the top before playing it.';
+
+  @override
+  String get signalPileDraw => 'Draw Pile';
+
+  @override
+  String get signalPileDiscard => 'Discard';
+
+  @override
+  String get signalBattleConsoleTitle => 'Battle Core';
 
   @override
   String get yourHand => 'Your hand';
@@ -416,6 +435,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signalCardNoteS4 => 'Anchor: +2 into heavy rival cards.';
 
   @override
+  String signalCardAbilityDialogTitle(Object cardTitle) {
+    return '$cardTitle ability details';
+  }
+
+  @override
   String get roomDetailBody =>
       'This page is the bridge between room setup and the actual game session. Start with Signal Deck, then reuse the shell for other games.';
 
@@ -473,7 +497,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get roomStartGameBody =>
-      'Signal Deck is already wired as a local playable prototype. Starting now will mark the room in-game and open the match.';
+      'This room module is already wired as a local playable prototype. Starting now marks the room in-game and opens the match directly.';
 
   @override
   String get roomNameFieldLabel => 'Room name';
@@ -1141,6 +1165,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get midnightSuspectsTitle => 'Suspects';
 
   @override
+  String get midnightDossierTitle => 'Suspect Dossiers';
+
+  @override
+  String get midnightDossierSubtitle =>
+      'Select a target first, then lock the vote from the case board and visible clues.';
+
+  @override
+  String midnightEvidenceProgress(Object revealed, Object total) {
+    return 'Clues $revealed / $total';
+  }
+
+  @override
+  String get midnightFocusLabel => 'Active Investigation Target';
+
+  @override
+  String get midnightVisibleCluesTitle => 'Visible Clues';
+
+  @override
   String get midnightTimelineTitle => 'Investigation Timeline';
 
   @override
@@ -1273,7 +1315,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get orbitMarketBoardTitle => 'Market Board';
 
   @override
-  String get orbitMarketBoardSubtitle => 'Tap a commodity card to trade.';
+  String get orbitMarketBoardSubtitle =>
+      'Watch quotes and execute trades from the terminal.';
+
+  @override
+  String get orbitTerminalTitle => 'Trade Terminal';
+
+  @override
+  String get orbitTerminalSubtitle =>
+      'Keep one commodity in focus while the full quote list stays ready on the right.';
+
+  @override
+  String get orbitPriceLabel => 'Quote';
+
+  @override
+  String get orbitHoldingsLabel => 'Holdings';
+
+  @override
+  String get orbitSignalHot => 'Overheated';
+
+  @override
+  String get orbitSignalStable => 'Stable';
+
+  @override
+  String get orbitSignalCool => 'Discount';
 
   @override
   String get orbitTimelineTitle => 'Trade Timeline';
@@ -1386,6 +1451,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guideSectionTipsTitle => 'Winning tips';
+
+  @override
+  String get guideSectionReopenTitle => 'Open Again';
+
+  @override
+  String get guideReopenBody =>
+      'If you skip now, this guide will not auto-open for the same game next time. Use the top guide icon whenever you want to reopen it.';
 
   @override
   String get signalGuideGoalBody =>

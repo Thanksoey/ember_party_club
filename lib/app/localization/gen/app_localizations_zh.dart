@@ -27,6 +27,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get playAgain => '再来一局';
 
   @override
+  String get closeAction => '关闭';
+
+  @override
+  String get viewAbilityAction => '查看能力';
+
+  @override
   String get viewPlan => '查看规划';
 
   @override
@@ -135,6 +141,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get signalDeckIntro => '这一版已经具备技能牌、固定回合赛制和结算复玩循环，后续可直接接到多人房间。';
+
+  @override
+  String get signalHandSubtitle => '手牌会重叠铺开显示，点选任意一张即可切到最上层并准备出牌。';
+
+  @override
+  String get signalPileDraw => '抽牌堆';
+
+  @override
+  String get signalPileDiscard => '弃牌堆';
+
+  @override
+  String get signalBattleConsoleTitle => '战场核心';
 
   @override
   String get yourHand => '你的手牌';
@@ -406,6 +424,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get signalCardNoteS4 => '压阵：对上高强度重牌时强度 +2。';
 
   @override
+  String signalCardAbilityDialogTitle(Object cardTitle) {
+    return '$cardTitle 能力说明';
+  }
+
+  @override
   String get roomDetailBody => '这里是房间配置和正式游戏之间的桥接层。先接通信号牌局，后面其他游戏直接复用。';
 
   @override
@@ -459,7 +482,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get roomRankedToggle => '排位房间';
 
   @override
-  String get roomStartGameBody => '信号牌局已经接成可玩的本地原型。现在开始会把房间标记为进行中，并直接进入对局。';
+  String get roomStartGameBody => '当前房间模块已经接成可玩的本地原型。现在开始会把房间标记为进行中，并直接进入对应对局。';
 
   @override
   String get roomNameFieldLabel => '房间名称';
@@ -1085,6 +1108,23 @@ class AppLocalizationsZh extends AppLocalizations {
   String get midnightSuspectsTitle => '嫌疑人';
 
   @override
+  String get midnightDossierTitle => '嫌疑档案';
+
+  @override
+  String get midnightDossierSubtitle => '先选中一名对象，再根据案卷与线索锁定投票。';
+
+  @override
+  String midnightEvidenceProgress(Object revealed, Object total) {
+    return '线索 $revealed / $total';
+  }
+
+  @override
+  String get midnightFocusLabel => '当前审查对象';
+
+  @override
+  String get midnightVisibleCluesTitle => '已公开线索';
+
+  @override
   String get midnightTimelineTitle => '调查时间线';
 
   @override
@@ -1207,7 +1247,28 @@ class AppLocalizationsZh extends AppLocalizations {
   String get orbitMarketBoardTitle => '市场面板';
 
   @override
-  String get orbitMarketBoardSubtitle => '点击资源卡进行买卖。';
+  String get orbitMarketBoardSubtitle => '在交易终端中观察报价并执行买卖。';
+
+  @override
+  String get orbitTerminalTitle => '交易终端';
+
+  @override
+  String get orbitTerminalSubtitle => '左侧聚焦当前商品，右侧快速切换全部报价。';
+
+  @override
+  String get orbitPriceLabel => '报价';
+
+  @override
+  String get orbitHoldingsLabel => '持仓';
+
+  @override
+  String get orbitSignalHot => '过热';
+
+  @override
+  String get orbitSignalStable => '平稳';
+
+  @override
+  String get orbitSignalCool => '低位';
 
   @override
   String get orbitTimelineTitle => '交易时间线';
@@ -1319,6 +1380,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get guideSectionTipsTitle => '上手重点';
+
+  @override
+  String get guideSectionReopenTitle => '再次查看';
+
+  @override
+  String get guideReopenBody => '如果这次选择跳过，后续进入同一游戏时不会再自动弹出。需要时可以点击顶部的说明图标重新打开。';
 
   @override
   String get signalGuideGoalBody => '用更高的有效强度赢下回合。整局结束时，总分更高的一方获胜。';

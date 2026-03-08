@@ -6,6 +6,8 @@
     "reset":  "重置",
     "play":  "出牌",
     "playAgain":  "再来一局",
+    "closeAction":  "关闭",
+    "viewAbilityAction":  "查看能力",
     "viewPlan":  "查看规划",
     "playPrototype":  "试玩原型",
     "homeHeroTitle":  "今晚开房，马上开玩。",
@@ -77,6 +79,10 @@
     "signalDeckTitle":  "信号牌局",
     "signalDeckSubtitle":  "首个可玩的卡牌对战原型",
     "signalDeckIntro":  "这一版已经具备技能牌、固定回合赛制和结算复玩循环，后续可直接接到多人房间。",
+    "signalHandSubtitle": "手牌会重叠铺开显示，点选任意一张即可切到最上层并准备出牌。",
+    "signalPileDraw": "抽牌堆",
+    "signalPileDiscard": "弃牌堆",
+    "signalBattleConsoleTitle": "战场核心",
     "yourHand":  "你的手牌",
     "roundLog":  "回合记录",
     "noRoundsPlayed":  "还没有进行任何回合。",
@@ -263,6 +269,14 @@
     "signalCardNoteS2":  "连携：上一张若同为电火系，则强度 +2。",
     "signalCardNoteS3":  "追击：后段回合逆转能力更强。",
     "signalCardNoteS4":  "压阵：对上高强度重牌时强度 +2。",
+    "signalCardAbilityDialogTitle":  "{cardTitle} 能力说明",
+    "@signalCardAbilityDialogTitle":  {
+                                         "placeholders":  {
+                                                              "cardTitle":  {
+
+                                                                            }
+                                                          }
+                                     },
     "roomDetailBody":  "这里是房间配置和正式游戏之间的桥接层。先接通信号牌局，后面其他游戏直接复用。",
     "roomCapacityFieldLabel":  "座位数量",
     "roomVoiceToggle":  "开启语音",
@@ -280,7 +294,7 @@
     "roomCreateSheetBody":  "先选择模块和座位数，再直接进入房间流程，后面可以继续接实时同步。",
     "roomCodeLabel":  "房间编号",
     "roomRankedToggle":  "排位房间",
-    "roomStartGameBody":  "信号牌局已经接成可玩的本地原型。现在开始会把房间标记为进行中，并直接进入对局。",
+    "roomStartGameBody":  "当前房间模块已经接成可玩的本地原型。现在开始会把房间标记为进行中，并直接进入对应对局。",
     "roomNameFieldLabel":  "房间名称",
     "roomCreateSheetTitle":  "创建房间",
     "quickMatchEmpty":  "当前还没有可快速进入的房间。",
@@ -648,6 +662,17 @@
     },
     "midnightRevealClue": "揭示线索",
     "midnightSuspectsTitle": "嫌疑人",
+    "midnightDossierTitle": "嫌疑档案",
+    "midnightDossierSubtitle": "先选中一名对象，再根据案卷与线索锁定投票。",
+    "midnightEvidenceProgress": "线索 {revealed} / {total}",
+    "@midnightEvidenceProgress": {
+      "placeholders": {
+        "revealed": {},
+        "total": {}
+      }
+    },
+    "midnightFocusLabel": "当前审查对象",
+    "midnightVisibleCluesTitle": "已公开线索",
     "midnightTimelineTitle": "调查时间线",
     "midnightTimelineEmpty": "还没有投票记录。锁定一名嫌疑人后会记录在这里。",
     "midnightSelectSuspect": "将其设为本回合首要嫌疑人。",
@@ -726,7 +751,14 @@
     "orbitMetricNetWorth": "净值",
     "orbitMetricCargo": "货舱",
     "orbitMarketBoardTitle": "市场面板",
-    "orbitMarketBoardSubtitle": "点击资源卡进行买卖。",
+    "orbitMarketBoardSubtitle": "在交易终端中观察报价并执行买卖。",
+    "orbitTerminalTitle": "交易终端",
+    "orbitTerminalSubtitle": "左侧聚焦当前商品，右侧快速切换全部报价。",
+    "orbitPriceLabel": "报价",
+    "orbitHoldingsLabel": "持仓",
+    "orbitSignalHot": "过热",
+    "orbitSignalStable": "平稳",
+    "orbitSignalCool": "低位",
     "orbitTimelineTitle": "交易时间线",
     "orbitTimelineEmpty": "还没有成交记录。先买入或卖出一项资源。",
     "orbitResourceStats": "价格 {price} ｜ 持仓 {cargo}",
@@ -828,6 +860,8 @@
     "guideSectionGoalTitle": "核心目标",
     "guideSectionTurnTitle": "回合流程",
     "guideSectionTipsTitle": "上手重点",
+    "guideSectionReopenTitle": "再次查看",
+    "guideReopenBody": "如果这次选择跳过，后续进入同一游戏时不会再自动弹出。需要时可以点击顶部的说明图标重新打开。",
     "signalGuideGoalBody": "用更高的有效强度赢下回合。整局结束时，总分更高的一方获胜。",
     "signalGuideTurnBody": "每回合打出 1 张牌。同属性战场会提供 +1，加上连胜动能与牌面技能后结算强度。",
     "signalGuideTipsBody": "优先观察当前场域和自身动能。连携牌尽量留给同系回合，关键回合再用克制或压阵牌抢分。",
