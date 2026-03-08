@@ -1,7 +1,14 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations.dart';
+import '../../../../app/widgets/app_panel.dart';
 import '../../../game_session/application/game_room_session_controller.dart';
+import '../../../modules/chaos_mixer/application/chaos_mixer_controller.dart';
+import '../../../modules/chaos_mixer/presentation/pages/chaos_mixer_page.dart';
+import '../../../modules/midnight_vote/application/midnight_vote_controller.dart';
+import '../../../modules/midnight_vote/presentation/pages/midnight_vote_page.dart';
+import '../../../modules/orbit_merchant/application/orbit_merchant_controller.dart';
+import '../../../modules/orbit_merchant/presentation/pages/orbit_merchant_page.dart';
 import '../../../modules/signal_deck/application/signal_deck_controller.dart';
 import '../../../modules/signal_deck/presentation/pages/signal_deck_page.dart';
 import '../../application/room_lounge_controller.dart';
@@ -34,7 +41,11 @@ class RoomDetailPage extends StatelessWidget {
         }
 
         final module = controller.moduleFor(room);
-        final isSignalDeck = room.gameModuleId == 'signal-deck';
+        final isPlayable =
+            room.gameModuleId == 'signal-deck' ||
+            room.gameModuleId == 'chaos-mixer' ||
+            room.gameModuleId == 'midnight-vote' ||
+            room.gameModuleId == 'orbit-merchant';
 
         return Scaffold(
           appBar: AppBar(title: Text(l10n.roomDetailTitle)),
@@ -56,22 +67,46 @@ class RoomDetailPage extends StatelessWidget {
                   title: l10n.roomInfoSection,
                   children: [
                     _InfoRow(label: l10n.roomCodeLabel, value: room.id),
-                    _InfoRow(label: l10n.roomModuleLabel, value: module == null ? room.gameModuleId : l10n.moduleName(module)),
-                    _InfoRow(label: l10n.roomHostNameLabel, value: room.host.nickname),
+                    _InfoRow(
+                      label: l10n.roomModuleLabel,
+                      value: module == null
+                          ? room.gameModuleId
+                          : l10n.moduleName(module),
+                    ),
+                    _InfoRow(
+                      label: l10n.roomHostNameLabel,
+                      value: room.host.nickname,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 16),
                 _InfoSection(
                   title: l10n.roomSettingsSection,
                   children: [
-                    _InfoRow(label: l10n.roomCapacityFieldLabel, value: l10n.playersLabel(room.currentPlayers, room.capacity)),
-                    _InfoRow(label: l10n.roomVoiceToggle, value: room.isVoiceEnabled ? l10n.voiceOn : l10n.roomVoiceOff),
-                    _InfoRow(label: l10n.roomRankedToggle, value: room.isRanked ? l10n.ranked : l10n.casual),
+                    _InfoRow(
+                      label: l10n.roomCapacityFieldLabel,
+                      value: l10n.playersLabel(
+                        room.currentPlayers,
+                        room.capacity,
+                      ),
+                    ),
+                    _InfoRow(
+                      label: l10n.roomVoiceToggle,
+                      value: room.isVoiceEnabled
+                          ? l10n.voiceOn
+                          : l10n.roomVoiceOff,
+                    ),
+                    _InfoRow(
+                      label: l10n.roomRankedToggle,
+                      value: room.isRanked ? l10n.ranked : l10n.casual,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  isSignalDeck ? l10n.roomStartGameBody : l10n.roomUnsupportedBody,
+                  isPlayable
+                      ? l10n.roomStartGameBody
+                      : l10n.roomUnsupportedBody,
                   style: theme.textTheme.bodyLarge,
                 ),
                 const SizedBox(height: 16),
@@ -79,19 +114,21 @@ class RoomDetailPage extends StatelessWidget {
                   width: double.infinity,
                   child: FilledButton(
                     key: const ValueKey('start-room-game'),
-                    onPressed: isSignalDeck
+                    onPressed: isPlayable
                         ? () {
-                            final activeRoom = controller.markRoomInGame(room.id) ?? room;
-                            Navigator.of(context).push(
-                              MaterialPageRoute<void>(
-                                builder: (_) => SignalDeckPage(
-                                  controller: SignalDeckController(),
-                                  roomSessionController: GameRoomSessionController.fromRoom(
-                                    room: activeRoom,
-                                    moduleName: module == null ? activeRoom.gameModuleId : l10n.moduleName(module),
-                                  ),
-                                ),
-                              ),
+                            final activeRoom =
+                                controller.markRoomInGame(room.id) ?? room;
+                            final roomSessionController =
+                                GameRoomSessionController.fromRoom(
+                                  room: activeRoom,
+                                  moduleName: module == null
+                                      ? activeRoom.gameModuleId
+                                      : l10n.moduleName(module),
+                                );
+                            _openRoomGame(
+                              context: context,
+                              moduleId: activeRoom.gameModuleId,
+                              roomSessionController: roomSessionController,
                             );
                           }
                         : null,
@@ -105,13 +142,66 @@ class RoomDetailPage extends StatelessWidget {
       },
     );
   }
+
+  void _openRoomGame({
+    required BuildContext context,
+    required String moduleId,
+    required GameRoomSessionController roomSessionController,
+  }) {
+    switch (moduleId) {
+      case 'signal-deck':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => SignalDeckPage(
+              controller: SignalDeckController(),
+              roomSessionController: roomSessionController,
+              disposeRoomSessionController: true,
+            ),
+          ),
+        );
+        return;
+      case 'chaos-mixer':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => ChaosMixerPage(
+              controller: ChaosMixerController(),
+              roomSessionController: roomSessionController,
+              disposeRoomSessionController: true,
+            ),
+          ),
+        );
+        return;
+      case 'midnight-vote':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => MidnightVotePage(
+              controller: MidnightVoteController(),
+              roomSessionController: roomSessionController,
+              disposeRoomSessionController: true,
+            ),
+          ),
+        );
+        return;
+      case 'orbit-merchant':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => OrbitMerchantPage(
+              controller: OrbitMerchantController(),
+              roomSessionController: roomSessionController,
+              disposeRoomSessionController: true,
+            ),
+          ),
+        );
+        return;
+      default:
+        roomSessionController.dispose();
+        return;
+    }
+  }
 }
 
 class _InfoSection extends StatelessWidget {
-  const _InfoSection({
-    required this.title,
-    required this.children,
-  });
+  const _InfoSection({required this.title, required this.children});
 
   final String title;
   final List<Widget> children;
@@ -120,12 +210,7 @@ class _InfoSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-      ),
+    return AppPanel(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -139,10 +224,7 @@ class _InfoSection extends StatelessWidget {
 }
 
 class _InfoRow extends StatelessWidget {
-  const _InfoRow({
-    required this.label,
-    required this.value,
-  });
+  const _InfoRow({required this.label, required this.value});
 
   final String label;
   final String value;
@@ -161,7 +243,12 @@ class _InfoRow extends StatelessWidget {
             child: Text(label, style: theme.textTheme.bodyMedium),
           ),
           Expanded(
-            child: Text(value, style: theme.textTheme.bodyLarge),
+            child: Text(
+              value,
+              style: theme.textTheme.bodyLarge,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),

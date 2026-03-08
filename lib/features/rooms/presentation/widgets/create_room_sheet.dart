@@ -1,14 +1,11 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations.dart';
 import '../../../../core/models/game_module.dart';
 import '../../application/room_lounge_controller.dart';
 
 class CreateRoomSheet extends StatefulWidget {
-  const CreateRoomSheet({
-    super.key,
-    required this.controller,
-  });
+  const CreateRoomSheet({super.key, required this.controller});
 
   final RoomLoungeController controller;
 
@@ -38,7 +35,9 @@ class _CreateRoomSheetState extends State<CreateRoomSheet> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_titleController.text.isEmpty) {
-      _titleController.text = context.l10n.roomCreateDefaultName(context.l10n.moduleName(_selectedModule));
+      _titleController.text = context.l10n.roomCreateDefaultName(
+        context.l10n.moduleName(_selectedModule),
+      );
     }
   }
 
@@ -53,7 +52,12 @@ class _CreateRoomSheetState extends State<CreateRoomSheet> {
     final theme = Theme.of(context);
     final l10n = context.l10n;
     final capacities = [
-      for (var seat = _selectedModule.minPlayers; seat <= _selectedModule.maxPlayers; seat++) seat,
+      for (
+        var seat = _selectedModule.minPlayers;
+        seat <= _selectedModule.maxPlayers;
+        seat++
+      )
+        seat,
     ];
 
     return SafeArea(
@@ -69,7 +73,10 @@ class _CreateRoomSheetState extends State<CreateRoomSheet> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(l10n.roomCreateSheetTitle, style: theme.textTheme.headlineSmall),
+              Text(
+                l10n.roomCreateSheetTitle,
+                style: theme.textTheme.headlineSmall,
+              ),
               const SizedBox(height: 8),
               Text(l10n.roomCreateSheetBody, style: theme.textTheme.bodyLarge),
               const SizedBox(height: 20),
@@ -78,14 +85,18 @@ class _CreateRoomSheetState extends State<CreateRoomSheet> {
                 controller: _titleController,
                 decoration: InputDecoration(
                   labelText: l10n.roomNameFieldLabel,
-                  hintText: l10n.roomCreateDefaultName(l10n.moduleName(_selectedModule)),
+                  hintText: l10n.roomCreateDefaultName(
+                    l10n.moduleName(_selectedModule),
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<GameModule>(
                 key: ValueKey('room-module-field-${_selectedModule.id}'),
                 initialValue: _selectedModule,
-                decoration: InputDecoration(labelText: l10n.roomSelectModuleLabel),
+                decoration: InputDecoration(
+                  labelText: l10n.roomSelectModuleLabel,
+                ),
                 items: widget.controller.availableModules
                     .map(
                       (module) => DropdownMenuItem<GameModule>(
@@ -99,13 +110,19 @@ class _CreateRoomSheetState extends State<CreateRoomSheet> {
                     return;
                   }
                   setState(() {
-                    final previousDefault = l10n.roomCreateDefaultName(l10n.moduleName(_selectedModule));
+                    final previousDefault = l10n.roomCreateDefaultName(
+                      l10n.moduleName(_selectedModule),
+                    );
                     _selectedModule = module;
-                    if (_capacity < module.minPlayers || _capacity > module.maxPlayers) {
+                    if (_capacity < module.minPlayers ||
+                        _capacity > module.maxPlayers) {
                       _capacity = _defaultCapacityFor(module);
                     }
-                    if (_titleController.text.trim().isEmpty || _titleController.text == previousDefault) {
-                      _titleController.text = l10n.roomCreateDefaultName(l10n.moduleName(module));
+                    if (_titleController.text.trim().isEmpty ||
+                        _titleController.text == previousDefault) {
+                      _titleController.text = l10n.roomCreateDefaultName(
+                        l10n.moduleName(module),
+                      );
                     }
                   });
                 },
@@ -114,7 +131,9 @@ class _CreateRoomSheetState extends State<CreateRoomSheet> {
               DropdownButtonFormField<int>(
                 key: ValueKey('room-capacity-field-${_capacity}'),
                 initialValue: _capacity,
-                decoration: InputDecoration(labelText: l10n.roomCapacityFieldLabel),
+                decoration: InputDecoration(
+                  labelText: l10n.roomCapacityFieldLabel,
+                ),
                 items: capacities
                     .map(
                       (seat) => DropdownMenuItem<int>(
@@ -160,7 +179,9 @@ class _CreateRoomSheetState extends State<CreateRoomSheet> {
                   key: const ValueKey('submit-create-room'),
                   onPressed: () {
                     final title = _titleController.text.trim().isEmpty
-                        ? l10n.roomCreateDefaultName(l10n.moduleName(_selectedModule))
+                        ? l10n.roomCreateDefaultName(
+                            l10n.moduleName(_selectedModule),
+                          )
                         : _titleController.text.trim();
                     final room = widget.controller.createRoom(
                       title: title,

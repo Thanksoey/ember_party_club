@@ -1,6 +1,7 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations.dart';
+import '../../../../app/widgets/app_panel.dart';
 
 class PresenceStrip extends StatelessWidget {
   const PresenceStrip({
@@ -17,12 +18,7 @@ class PresenceStrip extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = context.l10n;
 
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-      ),
+    return AppPanel(
       child: Row(
         children: [
           Expanded(
@@ -32,7 +28,11 @@ class PresenceStrip extends StatelessWidget {
               color: theme.colorScheme.primary,
             ),
           ),
-          Container(width: 1, height: 40, color: theme.colorScheme.primary.withValues(alpha: 0.08)),
+          Container(
+            width: 1,
+            height: 40,
+            color: theme.colorScheme.outline.withValues(alpha: 0.4),
+          ),
           Expanded(
             child: _MetricCell(
               label: l10n.onlinePlayersMetric,
@@ -64,11 +64,18 @@ class _MetricCell extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: theme.textTheme.bodyMedium),
+        Text(
+          label,
+          style: theme.textTheme.bodyMedium,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
         const SizedBox(height: 6),
         Text(
           value,
           style: theme.textTheme.headlineSmall?.copyWith(color: color),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );

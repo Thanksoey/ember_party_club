@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations.dart';
 import '../../../../core/models/game_module.dart';
@@ -22,10 +22,14 @@ class RoomSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = context.l10n;
-    final accentColor = isHighlighted ? theme.colorScheme.secondary : theme.colorScheme.primary;
+    final accentColor = isHighlighted
+        ? theme.colorScheme.secondary
+        : theme.colorScheme.primary;
 
     return Material(
-      color: theme.colorScheme.surface.withValues(alpha: 0.92),
+      color: theme.colorScheme.surface.withValues(
+        alpha: theme.brightness == Brightness.dark ? 0.9 : 0.95,
+      ),
       borderRadius: BorderRadius.circular(24),
       child: InkWell(
         onTap: onTap,
@@ -35,7 +39,7 @@ class RoomSummaryCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: accentColor.withValues(alpha: isHighlighted ? 0.3 : 0.08),
+              color: accentColor.withValues(alpha: isHighlighted ? 0.3 : 0.12),
               width: isHighlighted ? 1.5 : 1,
             ),
           ),
@@ -43,22 +47,36 @@ class RoomSummaryCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(l10n.roomTitle(room), style: theme.textTheme.titleLarge),
+                        Text(
+                          l10n.roomTitle(room),
+                          style: theme.textTheme.titleLarge,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                         const SizedBox(height: 6),
                         Text(
-                          module == null ? room.gameModuleId : l10n.moduleName(module!),
+                          module == null
+                              ? room.gameModuleId
+                              : l10n.moduleName(module!),
                           style: theme.textTheme.bodyMedium,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                   ),
+                  const SizedBox(width: 10),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       color: accentColor.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(999),
@@ -79,9 +97,16 @@ class RoomSummaryCard extends StatelessWidget {
                 runSpacing: 10,
                 children: [
                   _RoomMetaPill(label: l10n.hostLabel(room.host.nickname)),
-                  _RoomMetaPill(label: l10n.playersLabel(room.currentPlayers, room.capacity)),
+                  _RoomMetaPill(
+                    label: l10n.playersLabel(
+                      room.currentPlayers,
+                      room.capacity,
+                    ),
+                  ),
                   if (room.isVoiceEnabled) _RoomMetaPill(label: l10n.voiceOn),
-                  _RoomMetaPill(label: room.isRanked ? l10n.ranked : l10n.casual),
+                  _RoomMetaPill(
+                    label: room.isRanked ? l10n.ranked : l10n.casual,
+                  ),
                 ],
               ),
               const SizedBox(height: 14),
@@ -90,12 +115,23 @@ class RoomSummaryCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       '${(room.fillRatio * 100).round()}%',
-                      style: theme.textTheme.headlineSmall?.copyWith(color: accentColor),
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        color: accentColor,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Text(l10n.roomCodeLabel, style: theme.textTheme.bodyMedium),
                   const SizedBox(width: 6),
-                  Text(room.id.toUpperCase(), style: theme.textTheme.titleMedium),
+                  Flexible(
+                    child: Text(
+                      room.id.toUpperCase(),
+                      style: theme.textTheme.titleMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 14),

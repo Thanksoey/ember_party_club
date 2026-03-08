@@ -1,10 +1,6 @@
-﻿import '../../../core/models/player_profile.dart';
+import '../../../core/models/player_profile.dart';
 
-enum RoomStatus {
-  waiting,
-  inGame,
-  settling,
-}
+enum RoomStatus { waiting, inGame, settling }
 
 class RoomSummary {
   const RoomSummary({

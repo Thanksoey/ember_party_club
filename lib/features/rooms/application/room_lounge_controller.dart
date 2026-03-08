@@ -1,4 +1,4 @@
-﻿import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../core/models/game_module.dart';
 import '../../../core/models/player_profile.dart';
@@ -9,12 +9,27 @@ class RoomLoungeController extends ChangeNotifier {
   RoomLoungeController.seeded({
     required List<RoomSummary> rooms,
     required GameModuleRegistry registry,
-  })  : _rooms = List<RoomSummary>.of(rooms),
-        _registry = registry;
+    Duration initialLoadingDuration = const Duration(milliseconds: 460),
+  }) : _rooms = List<RoomSummary>.of(rooms),
+       _registry = registry {
+    if (initialLoadingDuration <= Duration.zero) {
+      _isHydrating = false;
+      return;
+    }
+    Future<void>.delayed(initialLoadingDuration, () {
+      if (_disposed) {
+        return;
+      }
+      _isHydrating = false;
+      notifyListeners();
+    });
+  }
 
   final List<RoomSummary> _rooms;
   final GameModuleRegistry _registry;
   int _createdRoomCount = 0;
+  bool _isHydrating = true;
+  bool _disposed = false;
 
   static const PlayerProfile _localHost = PlayerProfile(
     id: 'local-host',
@@ -29,14 +44,18 @@ class RoomLoungeController extends ChangeNotifier {
 
   int get liveRoomCount => _rooms.length;
 
-  int get liveSeatCount => _rooms.fold(0, (sum, room) => sum + room.currentPlayers);
+  bool get isHydrating => _isHydrating;
+
+  int get liveSeatCount =>
+      _rooms.fold(0, (sum, room) => sum + room.currentPlayers);
 
   RoomSummary? get hottestRoom {
     if (_rooms.isEmpty) {
       return null;
     }
 
-    final sortedRooms = [..._rooms]..sort((left, right) => right.fillRatio.compareTo(left.fillRatio));
+    final sortedRooms = [..._rooms]
+      ..sort((left, right) => right.fillRatio.compareTo(left.fillRatio));
     return sortedRooms.first;
   }
 
@@ -91,11 +110,21 @@ class RoomLoungeController extends ChangeNotifier {
   }
 
   RoomSummary? quickMatchTarget() {
-    final waitingRooms = _rooms.where((room) => room.status == RoomStatus.waiting).toList(growable: false);
+    final waitingRooms = _rooms
+        .where((room) => room.status == RoomStatus.waiting)
+        .toList(growable: false);
     if (waitingRooms.isEmpty) {
       return hottestRoom;
     }
-    waitingRooms.sort((left, right) => right.fillRatio.compareTo(left.fillRatio));
+    waitingRooms.sort(
+      (left, right) => right.fillRatio.compareTo(left.fillRatio),
+    );
     return waitingRooms.first;
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
   }
 }
