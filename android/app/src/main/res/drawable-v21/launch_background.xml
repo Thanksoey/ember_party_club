@@ -4,13 +4,12 @@
         <shape android:shape="rectangle">
             <gradient
                 android:angle="270"
-                android:endColor="#120A08"
-                android:startColor="#3B1C14" />
+                android:endColor="#F4E1D3"
+                android:startColor="#FDF4EB" />
         </shape>
     </item>
 
     <item
-        android:bottom="24dp"
         android:gravity="center"
         android:drawable="@drawable/launch_wordmark" />
 </layer-list>
