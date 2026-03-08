@@ -61,7 +61,9 @@ class _PartyForgeShellState extends State<PartyForgeShell> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
-    final wideBrand = MediaQuery.of(context).size.width > 760;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final wideBrand = screenWidth > 760;
+    final compactHeader = screenWidth < 440;
 
     return Scaffold(
       extendBody: true,
@@ -104,7 +106,11 @@ class _PartyForgeShellState extends State<PartyForgeShell> {
                         children: [
                           ConstrainedBox(
                             constraints: BoxConstraints(
-                              maxWidth: wideBrand ? 280 : 168,
+                              maxWidth: wideBrand
+                                  ? 280
+                                  : compactHeader
+                                  ? 132
+                                  : 168,
                             ),
                             child: BrandLockup(
                               badgeSize: 42,
@@ -114,7 +120,7 @@ class _PartyForgeShellState extends State<PartyForgeShell> {
                           ),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: wideBrand
+                            child: wideBrand || compactHeader
                                 ? const SizedBox.shrink()
                                 : AnimatedSwitcher(
                                     duration: const Duration(milliseconds: 220),
@@ -146,43 +152,45 @@ class _PartyForgeShellState extends State<PartyForgeShell> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 AvatarBadge(user: user, size: 40),
-                                const SizedBox(width: 10),
-                                ConstrainedBox(
-                                  constraints: const BoxConstraints(
-                                    maxWidth: 128,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        user.displayName,
-                                        style: theme.textTheme.titleMedium
-                                            ?.copyWith(
-                                              color:
-                                                  theme.colorScheme.onSurface,
-                                            ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      if (MediaQuery.of(context).size.width >
-                                          620)
+                                if (!compactHeader) ...[
+                                  const SizedBox(width: 10),
+                                  ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                      maxWidth: 128,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
                                         Text(
-                                          user.isAdmin
-                                              ? l10n.profileRoleAdmin
-                                              : l10n.profileRolePlayer,
-                                          style: theme.textTheme.bodySmall
+                                          user.displayName,
+                                          style: theme.textTheme.titleMedium
                                               ?.copyWith(
-                                                color: theme
-                                                    .colorScheme
-                                                    .onSurface
-                                                    .withValues(alpha: 0.76),
+                                                color:
+                                                    theme.colorScheme.onSurface,
                                               ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
-                                    ],
+                                        if (screenWidth > 620)
+                                          Text(
+                                            user.isAdmin
+                                                ? l10n.profileRoleAdmin
+                                                : l10n.profileRolePlayer,
+                                            style: theme.textTheme.bodySmall
+                                                ?.copyWith(
+                                                  color: theme
+                                                      .colorScheme
+                                                      .onSurface
+                                                      .withValues(alpha: 0.76),
+                                                ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                      ],
+                                    ),
                                   ),
-                                ),
+                                ],
                               ],
                             ),
                         ],

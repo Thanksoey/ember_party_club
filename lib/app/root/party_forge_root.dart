@@ -9,8 +9,8 @@ import '../../features/rooms/application/room_lounge_controller.dart';
 import '../../features/settings/application/settings_controller.dart';
 import '../localization/app_localizations.dart';
 import '../shell/party_forge_shell.dart';
-import '../widgets/app_loading_indicator.dart';
-import '../widgets/brand_lockup.dart';
+import '../widgets/app_startup_stage.dart';
+import '../widgets/party_launch_stage.dart';
 
 class PartyForgeRoot extends StatefulWidget {
   const PartyForgeRoot({
@@ -31,30 +31,48 @@ class PartyForgeRoot extends StatefulWidget {
 }
 
 class _PartyForgeRootState extends State<PartyForgeRoot> {
+  static const Duration _startupStageDuration = Duration(milliseconds: 2200);
+  static const Duration _startupExitDelay = Duration(milliseconds: 280);
+  static const Duration _entryStageDuration = Duration(milliseconds: 1650);
+  static const Duration _entryExitDelay = Duration(milliseconds: 180);
+
+  bool _showStartupIntro = true;
   bool _showTransition = false;
   bool _lastAuthenticated = false;
+  Timer? _startupTimer;
   Timer? _transitionTimer;
 
   @override
   void initState() {
     super.initState();
     _lastAuthenticated = widget.authController.isAuthenticated;
-    if (_lastAuthenticated) {
-      _triggerTransition();
-    }
+    _scheduleStartupIntro();
     widget.authController.addListener(_handleAuthChanged);
   }
 
   @override
   void dispose() {
     widget.authController.removeListener(_handleAuthChanged);
+    _startupTimer?.cancel();
     _transitionTimer?.cancel();
     super.dispose();
   }
 
+  void _scheduleStartupIntro() {
+    _startupTimer?.cancel();
+    _startupTimer = Timer(_startupStageDuration + _startupExitDelay, () {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _showStartupIntro = false;
+      });
+    });
+  }
+
   void _handleAuthChanged() {
     final isAuthenticated = widget.authController.isAuthenticated;
-    if (!_lastAuthenticated && isAuthenticated) {
+    if (!_lastAuthenticated && isAuthenticated && !_showStartupIntro) {
       _triggerTransition();
     }
     if (!isAuthenticated) {
@@ -73,7 +91,7 @@ class _PartyForgeRootState extends State<PartyForgeRoot> {
     setState(() {
       _showTransition = true;
     });
-    _transitionTimer = Timer(const Duration(milliseconds: 1100), () {
+    _transitionTimer = Timer(_entryStageDuration + _entryExitDelay, () {
       if (!mounted) {
         return;
       }
@@ -83,12 +101,78 @@ class _PartyForgeRootState extends State<PartyForgeRoot> {
     });
   }
 
+  String _localizedText(
+    BuildContext context, {
+    required String zh,
+    required String en,
+  }) {
+    return Localizations.localeOf(context).languageCode == 'en' ? en : zh;
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: widget.authController,
       builder: (context, _) {
+        final l10n = context.l10n;
         final authenticated = widget.authController.isAuthenticated;
+        final openingOverline = _localizedText(
+          context,
+          zh: '余烬派对社',
+          en: 'EMBER PARTY CLUB',
+        );
+        final openingCaption = _localizedText(
+          context,
+          zh: '余烬与灯光正在点亮今夜会所舞池。',
+          en: 'Ember light is warming up tonight\'s party floor.',
+        );
+        final openingStatus = _localizedText(
+          context,
+          zh: '正在校准房间、玩法模块与现场节奏',
+          en: 'Preparing rooms, modules and ambiance cadence',
+        );
+        final openingDetails = _localizedText(
+          context,
+          zh: '徽记、房间中枢与开场灯效已就位。',
+          en: 'Syncing badge, room hub and opening lights.',
+        );
+        final entryOverline = _localizedText(
+          context,
+          zh: '会员入场通道',
+          en: 'MEMBERS ROOM ACCESS',
+        );
+        final entryTitle = _localizedText(
+          context,
+          zh: '入场门已开启',
+          en: 'Doors Are Open',
+        );
+        final entryCaption = _localizedText(
+          context,
+          zh: '正在同步座位、房间与会话状态，马上带你入场。',
+          en: 'Linking seats, rooms and session state before you step in.',
+        );
+        final entryStatus = _localizedText(
+          context,
+          zh: '私人房间即将开放',
+          en: 'Private room opening',
+        );
+        final entryDetails = _localizedText(
+          context,
+          zh: '门禁、席位与派对流程已完成联动。',
+          en: 'Access, seats and party flow are now aligned.',
+        );
+
+        if (_showStartupIntro) {
+          return AppStartupStage(
+            key: const ValueKey('startup-intro'),
+            overline: openingOverline,
+            title: l10n.appTitle,
+            caption: openingCaption,
+            statusLabel: openingStatus,
+            detailsLabel: openingDetails,
+            stageDuration: _startupStageDuration,
+          );
+        }
 
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 500),
@@ -114,8 +198,15 @@ class _PartyForgeRootState extends State<PartyForgeRoot> {
           },
           child: authenticated
               ? _showTransition
-                    ? const _LaunchTransitionView(
-                        key: ValueKey('launch-transition'),
+                    ? PartyLaunchStage(
+                        key: const ValueKey('launch-transition'),
+                        variant: PartyLaunchStageVariant.entry,
+                        overline: entryOverline,
+                        title: entryTitle,
+                        caption: entryCaption,
+                        statusLabel: entryStatus,
+                        detailsLabel: entryDetails,
+                        stageDuration: _entryStageDuration,
                       )
                     : PartyForgeShell(
                         key: const ValueKey('app-shell'),
@@ -130,91 +221,6 @@ class _PartyForgeRootState extends State<PartyForgeRoot> {
                 ),
         );
       },
-    );
-  }
-}
-
-class _LaunchTransitionView extends StatefulWidget {
-  const _LaunchTransitionView({super.key});
-
-  @override
-  State<_LaunchTransitionView> createState() => _LaunchTransitionViewState();
-}
-
-class _LaunchTransitionViewState extends State<_LaunchTransitionView>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 980),
-    )..forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = context.l10n;
-
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              theme.scaffoldBackgroundColor,
-              theme.colorScheme.primary.withValues(alpha: 0.16),
-              theme.colorScheme.secondary.withValues(alpha: 0.16),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Center(
-          child: FadeTransition(
-            opacity: CurvedAnimation(
-              parent: _controller,
-              curve: Curves.easeOut,
-            ),
-            child: ScaleTransition(
-              scale: Tween<double>(begin: 0.9, end: 1.0).animate(
-                CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  BrandLockup(
-                    badgeSize: 84,
-                    center: true,
-                    caption: l10n.launchLoadingBody,
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    l10n.headerSubtitleRooms,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(
-                        alpha: 0.74,
-                      ),
-                      letterSpacing: 0.3,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-                  const AppLoadingIndicator(),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

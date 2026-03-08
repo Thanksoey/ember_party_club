@@ -3,6 +3,12 @@ import 'package:flutter/services.dart';
 enum AppFeedbackType {
   tap,
   cardPlay,
+  cardDraw,
+  investigate,
+  tradeFocus,
+  tradeBuy,
+  tradeSell,
+  chaosSpin,
   roundWin,
   roundLose,
   guideStep,
@@ -50,6 +56,36 @@ class AppFeedback {
         await Future<void>.delayed(const Duration(milliseconds: 45));
         await SystemSound.play(SystemSoundType.click);
         return;
+      case AppFeedbackType.cardDraw:
+        await SystemSound.play(SystemSoundType.click);
+        await Future<void>.delayed(const Duration(milliseconds: 40));
+        await SystemSound.play(SystemSoundType.alert);
+        return;
+      case AppFeedbackType.investigate:
+        await SystemSound.play(SystemSoundType.alert);
+        await Future<void>.delayed(const Duration(milliseconds: 55));
+        await SystemSound.play(SystemSoundType.click);
+        return;
+      case AppFeedbackType.tradeFocus:
+        await SystemSound.play(SystemSoundType.click);
+        return;
+      case AppFeedbackType.tradeBuy:
+        await SystemSound.play(SystemSoundType.alert);
+        await Future<void>.delayed(const Duration(milliseconds: 45));
+        await SystemSound.play(SystemSoundType.click);
+        return;
+      case AppFeedbackType.tradeSell:
+        await SystemSound.play(SystemSoundType.click);
+        await Future<void>.delayed(const Duration(milliseconds: 45));
+        await SystemSound.play(SystemSoundType.alert);
+        return;
+      case AppFeedbackType.chaosSpin:
+        await SystemSound.play(SystemSoundType.click);
+        await Future<void>.delayed(const Duration(milliseconds: 35));
+        await SystemSound.play(SystemSoundType.click);
+        await Future<void>.delayed(const Duration(milliseconds: 35));
+        await SystemSound.play(SystemSoundType.alert);
+        return;
       case AppFeedbackType.roundWin:
         await SystemSound.play(SystemSoundType.click);
         await Future<void>.delayed(const Duration(milliseconds: 65));
@@ -83,8 +119,14 @@ class AppFeedback {
       case AppFeedbackType.tap:
       case AppFeedbackType.guideStep:
       case AppFeedbackType.reset:
+      case AppFeedbackType.tradeFocus:
         return HapticFeedback.selectionClick();
       case AppFeedbackType.cardPlay:
+      case AppFeedbackType.cardDraw:
+      case AppFeedbackType.investigate:
+      case AppFeedbackType.tradeBuy:
+      case AppFeedbackType.tradeSell:
+      case AppFeedbackType.chaosSpin:
       case AppFeedbackType.roundWin:
       case AppFeedbackType.guideReady:
         return HapticFeedback.lightImpact();
