@@ -57,13 +57,28 @@ void main() {
     await tester.pumpAndSettle(const Duration(milliseconds: 1800));
   }
 
+  Future<void> pumpAnimatedUi(WidgetTester tester) async {
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 600));
+  }
+
+  Future<void> dismissGameGuideIfVisible(WidgetTester tester) async {
+    final closeButton = find.byKey(const ValueKey('game-guide-close'));
+    if (closeButton.evaluate().isEmpty) {
+      return;
+    }
+
+    await tester.binding.handlePopRoute();
+    await pumpAnimatedUi(tester);
+  }
+
   testWidgets('shows login page and can sign in', (tester) async {
     await pumpPartyApp(
       tester,
       authController: AuthController.unauthenticatedTest(),
     );
 
-    expect(find.text('登录你的派对中枢'), findsOneWidget);
+    expect(find.text('登录后加入今晚的派对局'), findsWidgets);
     await tester.tap(find.byKey(const ValueKey('login-submit')));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
@@ -73,7 +88,9 @@ void main() {
     expect(find.text('我的'), findsWidgets);
   });
 
-  testWidgets('renders discover and rooms shell content in Chinese', (tester) async {
+  testWidgets('renders discover and rooms shell content in Chinese', (
+    tester,
+  ) async {
     await pumpPartyApp(tester);
 
     expect(find.text('余烬派对社'), findsWidgets);
@@ -99,46 +116,59 @@ void main() {
       scrollable: find.byType(Scrollable).first,
     );
     await tester.tap(button);
-    await tester.pumpAndSettle();
+    await pumpAnimatedUi(tester);
+    await dismissGameGuideIfVisible(tester);
 
     expect(find.text('信号牌局'), findsOneWidget);
     expect(find.text('你的手牌'), findsOneWidget);
     expect(find.text('出牌'), findsWidgets);
   });
 
-  testWidgets('creates a Signal Deck room and advances room session phase from room flow', (tester) async {
-    await pumpPartyApp(tester);
+  testWidgets(
+    'creates a Signal Deck room and advances room session phase from room flow',
+    (tester) async {
+      await pumpPartyApp(tester);
 
-    await tester.tap(find.text('房间').last);
-    await tester.pumpAndSettle();
+      await tester.tap(find.text('房间').last);
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const ValueKey('open-create-room')));
-    await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('open-create-room')));
+      await tester.pumpAndSettle();
 
-    expect(find.text('创建房间'), findsWidgets);
-    expect(find.text('信号牌局 房间'), findsWidgets);
+      expect(find.text('创建房间'), findsWidgets);
+      expect(find.text('信号牌局 房间'), findsWidgets);
 
-    await tester.tap(find.byKey(const ValueKey('submit-create-room')));
-    await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('submit-create-room')));
+      await tester.pumpAndSettle();
 
-    expect(find.text('房间详情'), findsOneWidget);
-    expect(find.text('开始游戏'), findsOneWidget);
+      expect(find.text('房间详情'), findsOneWidget);
+      expect(find.text('开始游戏'), findsOneWidget);
 
-    await tester.tap(find.byKey(const ValueKey('start-room-game')));
-    await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('start-room-game')));
+      await pumpAnimatedUi(tester);
+      await dismissGameGuideIfVisible(tester);
 
-    expect(find.text('房间会话'), findsOneWidget);
-    expect(find.text('准备阶段'), findsOneWidget);
-    expect(find.textContaining('已绑定房间'), findsOneWidget);
+      expect(find.text('房间会话'), findsOneWidget);
+      expect(find.text('准备阶段'), findsOneWidget);
+      expect(find.textContaining('已绑定房间'), findsOneWidget);
 
-    await tester.tap(find.text('出牌').first);
-    await tester.pumpAndSettle();
+      final playButton = find.byWidgetPredicate(
+        (widget) =>
+            widget is FilledButton &&
+            widget.key is ValueKey<String> &&
+            (widget.key as ValueKey<String>).value.startsWith('signal-play-'),
+      );
+      await tester.tap(playButton.first);
+      await pumpAnimatedUi(tester);
 
-    expect(find.text('对局进行中'), findsOneWidget);
-    expect(find.text('你的手牌'), findsOneWidget);
-  });
+      expect(find.text('对局进行中'), findsOneWidget);
+      expect(find.text('你的手牌'), findsOneWidget);
+    },
+  );
 
-  testWidgets('can switch theme and locale from profile settings', (tester) async {
+  testWidgets('can switch theme and locale from profile settings', (
+    tester,
+  ) async {
     await pumpPartyApp(tester, locale: null);
 
     await tester.tap(find.byIcon(Icons.person_outline));
@@ -155,7 +185,9 @@ void main() {
     expect(materialApp.locale, const Locale('en'));
   });
 
-  testWidgets('can edit profile and reflect changes in shell header', (tester) async {
+  testWidgets('can edit profile and reflect changes in shell header', (
+    tester,
+  ) async {
     await pumpPartyApp(tester);
 
     await tester.tap(find.text('我的').last);
@@ -163,8 +195,14 @@ void main() {
     await tester.tap(find.text('编辑资料'));
     await tester.pumpAndSettle();
 
-    await tester.enterText(find.byKey(const ValueKey('profile-display-name')), '星舰队长');
-    await tester.enterText(find.byKey(const ValueKey('profile-bio')), '负责好友局的首轮试玩。');
+    await tester.enterText(
+      find.byKey(const ValueKey('profile-display-name')),
+      '星舰队长',
+    );
+    await tester.enterText(
+      find.byKey(const ValueKey('profile-bio')),
+      '负责好友局的首轮试玩。',
+    );
     await tester.tap(find.byKey(const ValueKey('avatar-seed-3')));
     await tester.tap(find.byKey(const ValueKey('save-profile')));
     await tester.pumpAndSettle();
@@ -184,7 +222,10 @@ void main() {
       ),
     );
 
-    await pumpPartyApp(tester, authController: AuthController.test(session: session));
+    await pumpPartyApp(
+      tester,
+      authController: AuthController.test(session: session),
+    );
 
     await tester.tap(find.text('我的').last);
     await tester.pumpAndSettle();

@@ -49,10 +49,7 @@ void main() {
   });
 
   testWidgets('profile page golden', (tester) async {
-    await pumpGoldenApp(
-      tester,
-      authController: AuthController.test(),
-    );
+    await pumpGoldenApp(tester, authController: AuthController.test());
 
     await tester.tap(find.text('我的').last);
     await tester.pumpAndSettle();
