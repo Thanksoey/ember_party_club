@@ -20,6 +20,7 @@
       --ember-gold: #f0c56a;
       --ember-cream: #fff4e7;
       --ember-mint: rgba(95, 215, 196, 0.3);
+      --ember-copper: rgba(228, 91, 42, 0.28);
     }
 
     html,
@@ -42,7 +43,7 @@
       display: grid;
       place-items: center;
       background: transparent;
-      transition: opacity 240ms ease, visibility 240ms ease;
+      transition: opacity 300ms ease, visibility 300ms ease;
       z-index: 9999;
     }
 
@@ -52,28 +53,147 @@
       pointer-events: none;
     }
 
+    .launch-aurora {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .launch-aurora::before,
+    .launch-aurora::after {
+      content: "";
+      position: absolute;
+      width: 54vmax;
+      height: 54vmax;
+      border-radius: 50%;
+      filter: blur(28px);
+      opacity: 0.56;
+      animation: ember-float 8s ease-in-out infinite alternate;
+    }
+
+    .launch-aurora::before {
+      left: -12vmax;
+      top: -18vmax;
+      background: radial-gradient(circle, rgba(228, 91, 42, 0.28), transparent 64%);
+    }
+
+    .launch-aurora::after {
+      right: -14vmax;
+      bottom: -22vmax;
+      background: radial-gradient(circle, rgba(60, 229, 204, 0.18), transparent 62%);
+      animation-direction: alternate-reverse;
+      animation-duration: 9.6s;
+    }
+
+    .launch-beam,
+    .launch-beam-secondary {
+      position: absolute;
+      top: -16vh;
+      width: 38vw;
+      height: 120vh;
+      opacity: 0.18;
+      filter: blur(2px);
+      transform-origin: top center;
+      pointer-events: none;
+    }
+
+    .launch-beam {
+      left: 14vw;
+      background: linear-gradient(180deg, rgba(240, 197, 106, 0.32), transparent 70%);
+      clip-path: polygon(46% 0, 58% 0, 100% 100%, 0 100%);
+      animation: beam-sway 6.2s ease-in-out infinite alternate;
+    }
+
+    .launch-beam-secondary {
+      right: 12vw;
+      background: linear-gradient(180deg, rgba(95, 215, 196, 0.22), transparent 72%);
+      clip-path: polygon(42% 0, 54% 0, 100% 100%, 0 100%);
+      animation: beam-sway-secondary 7.1s ease-in-out infinite alternate;
+    }
+
+    .launch-floor {
+      position: absolute;
+      left: 50%;
+      bottom: 10vh;
+      width: min(58vw, 620px);
+      height: 58px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(240, 197, 106, 0.12), transparent 68%);
+      filter: blur(4px);
+      pointer-events: none;
+    }
+
     .launch-card {
       position: relative;
       width: min(76vw, 520px);
-      padding: 40px 28px 28px;
-      border: 1px solid rgba(240, 197, 106, 0.16);
-      border-radius: 28px;
+      padding: 34px 28px 30px;
+      border: 1px solid rgba(240, 197, 106, 0.14);
+      border-radius: 34px;
       background:
-        linear-gradient(180deg, rgba(59, 28, 20, 0.92), rgba(18, 10, 8, 0.96)),
+        linear-gradient(180deg, rgba(53, 26, 18, 0.94), rgba(18, 10, 8, 0.97)),
         rgba(18, 10, 8, 0.94);
       box-shadow:
-        0 28px 80px rgba(0, 0, 0, 0.36),
+        0 34px 90px rgba(0, 0, 0, 0.42),
+        0 0 42px rgba(228, 91, 42, 0.06),
         inset 0 1px 0 rgba(255, 244, 231, 0.08);
       text-align: center;
+      animation: card-rise 0.8s ease-out both, card-breathe 4.8s ease-in-out infinite;
+      overflow: hidden;
     }
 
     .launch-card::before {
       content: "";
       position: absolute;
-      inset: 18px;
-      border-radius: 20px;
+      inset: 16px;
+      border-radius: 26px;
       border: 1px solid rgba(240, 197, 106, 0.08);
       pointer-events: none;
+    }
+
+    .launch-card::after {
+      content: "";
+      position: absolute;
+      inset: -40% auto -40% -12%;
+      width: 36%;
+      background: linear-gradient(180deg, transparent, rgba(255, 244, 231, 0.08), transparent);
+      transform: rotate(18deg);
+      animation: card-sheen 6.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .launch-badge-shell {
+      position: relative;
+      width: 136px;
+      height: 136px;
+      margin: 0 auto 20px;
+    }
+
+    .launch-badge-shell::before,
+    .launch-badge-shell::after {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border-radius: 50%;
+      border: 1px solid rgba(240, 197, 106, 0.14);
+      animation: badge-ring 3.4s ease-out infinite;
+    }
+
+    .launch-badge-shell::after {
+      inset: 2px;
+      border-color: rgba(95, 215, 196, 0.12);
+      animation-delay: 1.6s;
+    }
+
+    .launch-badge {
+      position: absolute;
+      inset: 15px;
+      width: calc(100% - 30px);
+      height: calc(100% - 30px);
+      object-fit: contain;
+      filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.34));
+      animation: badge-float 4.2s ease-in-out infinite;
     }
 
     .launch-wordmark {
@@ -81,6 +201,7 @@
       width: min(100%, 420px);
       margin: 0 auto 18px;
       filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.32));
+      animation: wordmark-glow 2.8s ease-in-out infinite;
     }
 
     .launch-caption {
@@ -89,6 +210,29 @@
       letter-spacing: 0.18em;
       font-size: 12px;
       text-transform: uppercase;
+    }
+
+    .launch-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(240, 197, 106, 0.08);
+      background: rgba(255, 244, 231, 0.025);
+      color: rgba(255, 244, 231, 0.78);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .launch-status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--ember-gold), rgba(95, 215, 196, 0.92));
+      box-shadow: 0 0 14px rgba(240, 197, 106, 0.28);
     }
 
     .launch-progress {
@@ -116,13 +260,87 @@
       0% { transform: translateX(-120%); }
       100% { transform: translateX(310%); }
     }
+
+    @keyframes ember-float {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(0, 28px, 0) scale(1.08); }
+    }
+
+    @keyframes beam-sway {
+      0% { transform: rotate(-10deg); }
+      100% { transform: rotate(-2deg); }
+    }
+
+    @keyframes beam-sway-secondary {
+      0% { transform: rotate(8deg); }
+      100% { transform: rotate(1deg); }
+    }
+
+    @keyframes card-rise {
+      from { opacity: 0; transform: translateY(34px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes card-breathe {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    @keyframes badge-float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-4px) scale(1.015); }
+    }
+
+    @keyframes badge-ring {
+      0% { opacity: 0.64; transform: scale(0.88); }
+      100% { opacity: 0; transform: scale(1.18); }
+    }
+
+    @keyframes card-sheen {
+      0%, 68% { transform: translateX(-110%) rotate(18deg); opacity: 0; }
+      76% { opacity: 1; }
+      100% { transform: translateX(320%) rotate(18deg); opacity: 0; }
+    }
+
+    @keyframes wordmark-glow {
+      0%, 100% { filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.32)); }
+      50% { filter: drop-shadow(0 12px 24px rgba(240, 197, 106, 0.16)); }
+    }
+
+    @media (max-width: 640px) {
+      .launch-card {
+        width: min(88vw, 520px);
+        padding: 28px 20px 22px;
+      }
+
+      .launch-badge-shell {
+        width: 124px;
+        height: 124px;
+        margin-bottom: 14px;
+      }
+
+      .launch-wordmark {
+        width: min(100%, 340px);
+      }
+    }
   </style>
 </head>
 <body>
   <div class="launch-shell" id="launch-shell" aria-label="Ember Party Club launch screen">
+    <div class="launch-aurora" aria-hidden="true"></div>
+    <div class="launch-beam" aria-hidden="true"></div>
+    <div class="launch-beam-secondary" aria-hidden="true"></div>
+    <div class="launch-floor" aria-hidden="true"></div>
     <div class="launch-card">
+      <div class="launch-badge-shell" aria-hidden="true">
+        <img class="launch-badge" src="branding/ember_app_icon.png" alt="">
+      </div>
       <img class="launch-wordmark" src="branding/ember_wordmark.png" alt="Ember Party Club">
-      <p class="launch-caption">Private Room Club Experience</p>
+      <p class="launch-caption">Private Club Opening</p>
+      <div class="launch-status">
+        <span class="launch-status-dot" aria-hidden="true"></span>
+        <span>Warming lights, rooms and party cadence</span>
+      </div>
       <div class="launch-progress" aria-hidden="true"></div>
     </div>
   </div>
