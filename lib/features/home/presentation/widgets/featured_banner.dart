@@ -1,13 +1,10 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations.dart';
 import '../../../../core/models/game_module.dart';
 
 class FeaturedBanner extends StatelessWidget {
-  const FeaturedBanner({
-    super.key,
-    required this.modules,
-  });
+  const FeaturedBanner({super.key, required this.modules});
 
   final List<GameModule> modules;
 
@@ -45,13 +42,13 @@ class FeaturedBanner extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.18),
+              color: theme.colorScheme.onPrimary.withValues(alpha: 0.18),
               borderRadius: BorderRadius.circular(999),
             ),
             child: Text(
               l10n.launchStrategy,
-              style: const TextStyle(
-                color: Colors.white,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onPrimary,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -59,20 +56,28 @@ class FeaturedBanner extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             l10n.launchBannerTitle,
-            style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white),
+            style: theme.textTheme.headlineSmall?.copyWith(
+              color: theme.colorScheme.onPrimary,
+            ),
           ),
           const SizedBox(height: 10),
           Text(
             l10n.launchBannerBody,
-            style: theme.textTheme.bodyLarge?.copyWith(color: Colors.white.withValues(alpha: 0.92)),
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: theme.colorScheme.onPrimary.withValues(alpha: 0.92),
+            ),
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 18),
           Text(
             labels,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.white,
+              color: theme.colorScheme.onPrimary,
               fontWeight: FontWeight.w700,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
