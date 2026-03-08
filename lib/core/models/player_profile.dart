@@ -1,4 +1,4 @@
-﻿class PlayerProfile {
+class PlayerProfile {
   const PlayerProfile({
     required this.id,
     required this.nickname,

@@ -1,4 +1,6 @@
-﻿import 'package:flutter/material.dart';
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
 
 import '../../app/localization/app_localizations.dart';
 import '../../features/auth/application/auth_controller.dart';
@@ -10,7 +12,7 @@ import '../../features/rooms/presentation/pages/room_lounge_page.dart';
 import '../../features/settings/application/settings_controller.dart';
 import '../widgets/app_backdrop.dart';
 import '../widgets/avatar_badge.dart';
-import '../widgets/brand_mark.dart';
+import '../widgets/brand_lockup.dart';
 
 class PartyForgeShell extends StatefulWidget {
   const PartyForgeShell({
@@ -32,12 +34,14 @@ class PartyForgeShell extends StatefulWidget {
 
 class _PartyForgeShellState extends State<PartyForgeShell> {
   int _currentIndex = 0;
+  late final PageController _pageController;
+  late final List<Widget> _pages;
 
   @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final theme = Theme.of(context);
-    final pages = <Widget>[
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    _pages = <Widget>[
       GameHubPage(controller: widget.gameHubController),
       RoomLoungePage(controller: widget.roomLoungeController),
       ProfilePage(
@@ -45,6 +49,19 @@ class _PartyForgeShellState extends State<PartyForgeShell> {
         settingsController: widget.settingsController,
       ),
     ];
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final wideBrand = MediaQuery.of(context).size.width > 760;
 
     return Scaffold(
       extendBody: true,
@@ -55,57 +72,136 @@ class _PartyForgeShellState extends State<PartyForgeShell> {
               bottom: false,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                child: Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surface.withValues(alpha: 0.9),
-                    borderRadius: BorderRadius.circular(28),
-                    border: Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.5)),
-                  ),
-                  child: Row(
-                    children: [
-                      const BrandMark(size: 42),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(l10n.appTitle, style: theme.textTheme.titleLarge),
-                            Text(
-                              _headerSubtitle(l10n),
-                              style: theme.textTheme.bodyMedium,
-                            ),
-                          ],
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(28),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                    child: Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surface.withValues(
+                          alpha: theme.brightness == Brightness.dark
+                              ? 0.94
+                              : 0.97,
                         ),
+                        borderRadius: BorderRadius.circular(28),
+                        border: Border.all(
+                          color: theme.colorScheme.outline.withValues(
+                            alpha: 0.72,
+                          ),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: theme.colorScheme.primary.withValues(
+                              alpha: 0.08,
+                            ),
+                            blurRadius: 18,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
                       ),
-                      if (widget.authController.currentUser case final user?)
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            AvatarBadge(user: user, size: 40),
-                            const SizedBox(width: 10),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                      child: Row(
+                        children: [
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: wideBrand ? 280 : 168,
+                            ),
+                            child: BrandLockup(
+                              badgeSize: 42,
+                              compact: true,
+                              caption: wideBrand ? _headerSubtitle(l10n) : null,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: wideBrand
+                                ? const SizedBox.shrink()
+                                : AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 220),
+                                    transitionBuilder: (child, animation) {
+                                      return FadeTransition(
+                                        opacity: animation,
+                                        child: child,
+                                      );
+                                    },
+                                    child: Text(
+                                      _headerSubtitle(l10n),
+                                      key: ValueKey(
+                                        '${_currentIndex}_$wideBrand',
+                                      ),
+                                      style: theme.textTheme.bodyMedium
+                                          ?.copyWith(
+                                            color: theme.colorScheme.onSurface
+                                                .withValues(alpha: 0.84),
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                          ),
+                          if (widget.authController.currentUser
+                              case final user?)
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(user.displayName, style: theme.textTheme.titleMedium),
-                                Text(
-                                  user.isAdmin ? l10n.profileRoleAdmin : l10n.profileRolePlayer,
-                                  style: theme.textTheme.bodyMedium,
+                                AvatarBadge(user: user, size: 40),
+                                const SizedBox(width: 10),
+                                ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    maxWidth: 128,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        user.displayName,
+                                        style: theme.textTheme.titleMedium
+                                            ?.copyWith(
+                                              color:
+                                                  theme.colorScheme.onSurface,
+                                            ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      if (MediaQuery.of(context).size.width >
+                                          620)
+                                        Text(
+                                          user.isAdmin
+                                              ? l10n.profileRoleAdmin
+                                              : l10n.profileRolePlayer,
+                                          style: theme.textTheme.bodySmall
+                                              ?.copyWith(
+                                                color: theme
+                                                    .colorScheme
+                                                    .onSurface
+                                                    .withValues(alpha: 0.76),
+                                              ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                    ],
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 6),
             Expanded(
-              child: IndexedStack(
-                index: _currentIndex,
-                children: pages,
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                children: _pages,
               ),
             ),
           ],
@@ -121,6 +217,11 @@ class _PartyForgeShellState extends State<PartyForgeShell> {
               setState(() {
                 _currentIndex = index;
               });
+              _pageController.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 340),
+                curve: Curves.easeOutCubic,
+              );
             },
             destinations: [
               NavigationDestination(
@@ -148,12 +249,12 @@ class _PartyForgeShellState extends State<PartyForgeShell> {
   String _headerSubtitle(AppLocalizations l10n) {
     switch (_currentIndex) {
       case 0:
-        return l10n.homeHeroBody;
+        return l10n.headerSubtitleDiscover;
       case 1:
-        return l10n.roomLoungeBody;
+        return l10n.headerSubtitleRooms;
       case 2:
-        return l10n.profileBody;
+        return l10n.headerSubtitleProfile;
     }
-    return l10n.homeHeroBody;
+    return l10n.headerSubtitleDiscover;
   }
 }

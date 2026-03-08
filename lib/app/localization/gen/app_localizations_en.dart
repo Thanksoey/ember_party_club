@@ -33,12 +33,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get playPrototype => 'Play prototype';
 
   @override
-  String get homeHeroTitle =>
-      'A mobile game hub designed for friend groups, not solo play.';
+  String get homeHeroTitle => 'Open a room, start the party.';
 
   @override
   String get homeHeroBody =>
-      'The product focuses on low-latency rooms, pluggable game modules, stable voice interaction, and an enterprise-ready codebase.';
+      'Bring friends into one room first, then switch between card, bluff, and party game modes as the vibe changes.';
 
   @override
   String get modulesLabel => 'Modules';
@@ -547,7 +546,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsBody =>
-      'Theme mode is already wired globally and persists across launches.';
+      'Theme and language preferences are saved automatically and restored on next launch.';
 
   @override
   String get launchLoadingBody =>
@@ -555,7 +554,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loginBody =>
-      'Use a seeded local account first. Once the auth shell is stable, replacing it with a real backend becomes straightforward.';
+      'Sign in to create rooms and start matches instantly. New here? Register in one step.';
 
   @override
   String get profileBody =>
@@ -563,6 +562,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loginUsernameLabel => 'Username';
+
+  @override
+  String get registerDisplayNameLabel => 'Display name';
+
+  @override
+  String get registerConfirmPasswordLabel => 'Confirm password';
 
   @override
   String get themeTitle => 'Theme';
@@ -576,6 +581,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loginAction => 'Sign in';
+
+  @override
+  String get registerAction => 'Create account';
 
   @override
   String get themeDark => 'Dark';
@@ -600,6 +608,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginInvalidCredentials => 'Username or password is incorrect.';
 
   @override
+  String get registerUsernameTaken => 'This username is already taken.';
+
+  @override
+  String get registerPasswordMismatch => 'The two passwords do not match.';
+
+  @override
   String get logoutAction => 'Log out';
 
   @override
@@ -611,7 +625,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get loginHeadline => 'Sign in to your party hub';
+  String get loginHeadline => 'Sign in and join tonight\'s party run';
+
+  @override
+  String get authModeSignIn => 'Sign in';
+
+  @override
+  String get authModeRegister => 'Register';
 
   @override
   String get profileTab => 'Profile';
@@ -621,6 +641,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileRoleAdmin => 'Administrator';
+
+  @override
+  String get authGuideAction => 'App intro & rules';
+
+  @override
+  String get authGuideTitle => 'App Intro & Rules';
+
+  @override
+  String get authGuideIntroTitle => 'What is Ember Party Club?';
+
+  @override
+  String get authGuideIntroBody =>
+      'Ember Party Club is built for group game nights. Enter one shared room, then swap play modes without breaking the session.';
+
+  @override
+  String get authGuideRulesTitle => 'Core Rules';
+
+  @override
+  String get authGuideRuleSignalTitle => 'Signal Deck Basics';
+
+  @override
+  String get authGuideRuleSignalBody =>
+      'Each round, both sides pick one card. Higher effective power wins the round. Most points after the match wins.';
+
+  @override
+  String get authGuideRuleRoomTitle => 'Room Flow';
+
+  @override
+  String get authGuideRuleRoomBody =>
+      'Host creates a room, configures seats and voice, then starts the game module. Session state is shared with all participants.';
+
+  @override
+  String get authGuideRuleFairTitle => 'Fair Play';
+
+  @override
+  String get authGuideRuleFairBody =>
+      'Respect other players, avoid abusive language, and keep the game pace moving so everyone can participate.';
+
+  @override
+  String get headerSubtitleDiscover => 'Pick tonight\'s game mode';
+
+  @override
+  String get headerSubtitleRooms => 'Create rooms and prep the match';
+
+  @override
+  String get headerSubtitleProfile => 'Account, preferences, security';
 
   @override
   String get localeModeSystem => 'System';
@@ -844,6 +910,542 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authProviderUsernamePassword => 'Username & password';
+
+  @override
+  String get gameSessionTimelineTitle => 'Sync timeline';
+
+  @override
+  String get gameSessionTimelineEmpty => 'No sync event has arrived yet.';
+
+  @override
+  String get gameSessionCommandConnect => 'Connect sync channel';
+
+  @override
+  String get gameSessionCommandStartGame => 'Start match';
+
+  @override
+  String get gameSessionCommandPlayCard => 'Broadcast play';
+
+  @override
+  String get gameSessionCommandResetMatch => 'Reset match';
+
+  @override
+  String get gameSessionEventSyncConnected => 'Realtime channel connected.';
+
+  @override
+  String get gameSessionEventSyncReady =>
+      'Sync ready. The room has entered multiplayer mode.';
+
+  @override
+  String gameSessionEventCommandDispatched(Object command) {
+    return 'Command dispatched: $command';
+  }
+
+  @override
+  String gameSessionEventCommandAcknowledged(Object command) {
+    return 'Server acknowledged command: $command';
+  }
+
+  @override
+  String gameSessionEventPhaseChanged(Object phase) {
+    return 'Session phase switched to $phase';
+  }
+
+  @override
+  String gameSessionEventParticipantSynced(int seat) {
+    return 'Seat $seat completed sync.';
+  }
+
+  @override
+  String gameSessionEventSignalCard(Object cardTitle) {
+    return 'Round card broadcast: $cardTitle';
+  }
+
+  @override
+  String get gameSessionEventMatchReset =>
+      'Room match reset and ready for the next round.';
+
+  @override
+  String get feedbackTitle => 'Feedback';
+
+  @override
+  String get feedbackSoundEffects => 'Sound Effects';
+
+  @override
+  String get feedbackHaptics => 'Haptics';
+
+  @override
+  String get feedbackOn => 'On';
+
+  @override
+  String get feedbackOff => 'Off';
+
+  @override
+  String get chaosIntro =>
+      'Each round gives a random party challenge. Success grants points and streak multipliers.';
+
+  @override
+  String get chaosScoreLabel => 'Score';
+
+  @override
+  String get chaosStreakLabel => 'Streak';
+
+  @override
+  String get chaosBestLabel => 'Best';
+
+  @override
+  String get chaosRerollLabel => 'Reroll';
+
+  @override
+  String chaosStatusPlaying(int round) {
+    return 'Round $round: complete the challenge to keep your streak bonus.';
+  }
+
+  @override
+  String chaosStatusFinished(int score, int bestStreak) {
+    return 'Challenge complete. Score $score, best streak $bestStreak.';
+  }
+
+  @override
+  String get chaosActionSuccess => 'Success';
+
+  @override
+  String get chaosActionFail => 'Fail';
+
+  @override
+  String get chaosActionReroll => 'Reroll';
+
+  @override
+  String get chaosRoundTimeline => 'Round Timeline';
+
+  @override
+  String get chaosRoundEmpty => 'Finish one challenge to populate logs.';
+
+  @override
+  String chaosBasePointsLabel(int points) {
+    return 'Base +$points';
+  }
+
+  @override
+  String chaosTimerLabel(int seconds) {
+    return 'Timer ${seconds}s';
+  }
+
+  @override
+  String chaosRoundTitle(int round, Object title) {
+    return 'Round $round - $title';
+  }
+
+  @override
+  String chaosRoundSuccess(int points) {
+    return 'Success, +$points points';
+  }
+
+  @override
+  String get chaosRoundFailed => 'Failed, streak reset';
+
+  @override
+  String chaosStreakAfterRound(int streak) {
+    return 'Streak after round: $streak';
+  }
+
+  @override
+  String get chaosSummaryTitle => 'Chaos Summary';
+
+  @override
+  String chaosSummaryBody(int score, int bestStreak) {
+    return 'Final score $score, best streak $bestStreak.';
+  }
+
+  @override
+  String get chaosRunAgain => 'Run Again';
+
+  @override
+  String get chaosChallengeTitleMimic => 'Mirror Mimic';
+
+  @override
+  String get chaosChallengeTitleRapidQa => 'Rapid Triple';
+
+  @override
+  String get chaosChallengeTitleRhythm => 'Rhythm Relay';
+
+  @override
+  String get chaosChallengeTitleDrawAndGuess => 'Sketch Sprint';
+
+  @override
+  String get chaosChallengeTitleSoundOnly => 'Sound Only';
+
+  @override
+  String get chaosChallengeTitleFrozenPose => 'Freeze Frame';
+
+  @override
+  String get chaosChallengeTitleReverseStory => 'Reverse Story';
+
+  @override
+  String get chaosChallengeTitleEmojiSpeak => 'Emoji Translate';
+
+  @override
+  String get chaosChallengeDetailMimic =>
+      'Mimic a profession for 30 seconds and get one correct guess.';
+
+  @override
+  String get chaosChallengeDetailRapidQa =>
+      'Answer 3 random prompts, each within 5 seconds.';
+
+  @override
+  String get chaosChallengeDetailRhythm =>
+      'Follow the clap pattern and chant correctly with no misses.';
+
+  @override
+  String get chaosChallengeDetailDrawAndGuess =>
+      'Sketch a keyword in 20 seconds and have teammates guess it.';
+
+  @override
+  String get chaosChallengeDetailSoundOnly =>
+      'No words from the answer, only sound effects are allowed.';
+
+  @override
+  String get chaosChallengeDetailFrozenPose =>
+      'Hold a pose for 10 seconds and let teammates name the scene.';
+
+  @override
+  String get chaosChallengeDetailReverseStory =>
+      'Tell the ending first, then the beginning, still making sense.';
+
+  @override
+  String get chaosChallengeDetailEmojiSpeak =>
+      'Describe a movie or song title using only 3 emojis.';
+
+  @override
+  String midnightStatusPlaying(int round) {
+    return 'Round $round: vote before the trail goes cold.';
+  }
+
+  @override
+  String midnightStatusFinished(int playerScore, int aiScore) {
+    return 'Case files closed. You $playerScore - Rival $aiScore.';
+  }
+
+  @override
+  String get midnightInsightLabel => 'Insight';
+
+  @override
+  String midnightCaseLabel(Object title) {
+    return 'Case: $title';
+  }
+
+  @override
+  String get midnightRevealClue => 'Reveal clue';
+
+  @override
+  String get midnightSuspectsTitle => 'Suspects';
+
+  @override
+  String get midnightTimelineTitle => 'Investigation Timeline';
+
+  @override
+  String get midnightTimelineEmpty =>
+      'No votes yet. Lock a suspect to log this round.';
+
+  @override
+  String get midnightSelectSuspect => 'Choose this suspect as your prime lead.';
+
+  @override
+  String get midnightLockVote => 'Lock vote';
+
+  @override
+  String midnightTimelineRound(int round, Object caseTitle) {
+    return 'Round $round - $caseTitle';
+  }
+
+  @override
+  String midnightTimelineVotes(
+    Object playerVote,
+    Object aiVote,
+    Object culpritVote,
+  ) {
+    return 'You voted $playerVote; rival voted $aiVote; culprit was $culpritVote.';
+  }
+
+  @override
+  String midnightTimelineResult(int playerPoints, int aiPoints) {
+    return 'Points: you +$playerPoints, rival +$aiPoints.';
+  }
+
+  @override
+  String get midnightResultWin => 'Investigation Dominance';
+
+  @override
+  String get midnightResultLose => 'Rival Takes the Case';
+
+  @override
+  String midnightResultScore(int playerScore, int aiScore) {
+    return 'Final score: you $playerScore - rival $aiScore.';
+  }
+
+  @override
+  String get midnightCaseTitleCaseA => 'Echoes in the Lantern Street';
+
+  @override
+  String get midnightCaseTitleCaseB => 'Cloud Deck Signal Theft';
+
+  @override
+  String get midnightCaseTitleCaseC => 'Harbor District Missing Cargo';
+
+  @override
+  String get midnightClueA1 =>
+      'Witness heard a silver whistle near the north alley.';
+
+  @override
+  String get midnightClueA2 =>
+      'A glove with dye marks was found behind the stage.';
+
+  @override
+  String get midnightClueA3 =>
+      'The culprit knew the lamp schedule to avoid patrols.';
+
+  @override
+  String get midnightClueB1 =>
+      'Security logs show one forged cargo badge at midnight.';
+
+  @override
+  String get midnightClueB2 =>
+      'The stolen crate was too heavy for a single courier.';
+
+  @override
+  String get midnightClueB3 =>
+      'A cracked comms chip points to someone in signal control.';
+
+  @override
+  String get midnightClueC1 => 'Wet boot prints came from berth C before dawn.';
+
+  @override
+  String get midnightClueC2 =>
+      'The lock was opened with an old customs override code.';
+
+  @override
+  String get midnightClueC3 =>
+      'Only one suspect knew the blind spot of camera seven.';
+
+  @override
+  String get midnightSuspectVex => 'Vex';
+
+  @override
+  String get midnightSuspectLyra => 'Lyra';
+
+  @override
+  String get midnightSuspectKade => 'Kade';
+
+  @override
+  String get midnightSuspectMina => 'Mina';
+
+  @override
+  String get midnightSuspectNox => 'Nox';
+
+  @override
+  String get midnightSuspectSora => 'Sora';
+
+  @override
+  String get midnightSuspectDax => 'Dax';
+
+  @override
+  String get midnightSuspectYuri => 'Yuri';
+
+  @override
+  String orbitStatusFinished(int netWorth) {
+    return 'Contract complete. Final net worth: $netWorth.';
+  }
+
+  @override
+  String get orbitStatusPlaying =>
+      'Trade one resource each turn and stay ahead of market swings.';
+
+  @override
+  String get orbitMetricCash => 'Cash';
+
+  @override
+  String get orbitMetricNetWorth => 'Net Worth';
+
+  @override
+  String get orbitMetricCargo => 'Cargo';
+
+  @override
+  String get orbitMarketBoardTitle => 'Market Board';
+
+  @override
+  String get orbitMarketBoardSubtitle => 'Tap a commodity card to trade.';
+
+  @override
+  String get orbitTimelineTitle => 'Trade Timeline';
+
+  @override
+  String get orbitTimelineEmpty =>
+      'No deals yet. Buy or sell one resource to begin.';
+
+  @override
+  String orbitResourceStats(int price, int cargo) {
+    return 'Price $price | Cargo $cargo';
+  }
+
+  @override
+  String get orbitBuy => 'Buy';
+
+  @override
+  String get orbitSell => 'Sell';
+
+  @override
+  String orbitRoundLogTitle(
+    int round,
+    Object action,
+    Object resource,
+    int price,
+  ) {
+    return 'Round $round - $action $resource @ $price';
+  }
+
+  @override
+  String orbitRoundLogStats(int cash, int netWorth) {
+    return 'Cash $cash | Net $netWorth';
+  }
+
+  @override
+  String get orbitResultTitle => 'Trade Settlement';
+
+  @override
+  String orbitResultBody(int netWorth) {
+    return 'Final net worth: $netWorth';
+  }
+
+  @override
+  String get orbitTradeAgain => 'Trade Again';
+
+  @override
+  String get orbitActionBuy => 'BUY';
+
+  @override
+  String get orbitActionSell => 'SELL';
+
+  @override
+  String get orbitResourceOre => 'Ore';
+
+  @override
+  String get orbitResourceCrystal => 'Crystal';
+
+  @override
+  String get orbitResourceGas => 'Gas';
+
+  @override
+  String get signalMetricBattlefield => 'Battlefield';
+
+  @override
+  String get signalMetricMomentum => 'Momentum';
+
+  @override
+  String signalFieldChip(Object suit) {
+    return 'Field: $suit';
+  }
+
+  @override
+  String signalMomentumChip(int playerMomentum, int rivalMomentum) {
+    return 'Momentum $playerMomentum-$rivalMomentum';
+  }
+
+  @override
+  String get signalBattleBonus => 'Battle +1';
+
+  @override
+  String signalMomentumBonus(int bonus) {
+    return 'Momentum +$bonus';
+  }
+
+  @override
+  String get howToPlayAction => 'How to play';
+
+  @override
+  String get guideReadyAction => 'Start match';
+
+  @override
+  String get guideBackAction => 'Back';
+
+  @override
+  String get guideNextAction => 'Next';
+
+  @override
+  String get guideSkipAction => 'Skip for now';
+
+  @override
+  String guideStepCounter(int current, int total) {
+    return 'Step $current/$total';
+  }
+
+  @override
+  String get guideSectionGoalTitle => 'Core goal';
+
+  @override
+  String get guideSectionTurnTitle => 'Turn flow';
+
+  @override
+  String get guideSectionTipsTitle => 'Winning tips';
+
+  @override
+  String get signalGuideGoalBody =>
+      'Win rounds with higher effective power. The higher total score takes the match.';
+
+  @override
+  String get signalGuideTurnBody =>
+      'Play 1 card each round. Matching the battlefield suit grants +1, momentum stacks after winning rounds, and abilities resolve from the card trait.';
+
+  @override
+  String get signalGuideTipsBody =>
+      'Watch the active field and your momentum. Save chain cards for same-suit turns and use counter or anchor cards to swing key rounds.';
+
+  @override
+  String get midnightGuideGoalBody =>
+      'Identify the culprit before the rival does. Correct votes award points over the full case sequence.';
+
+  @override
+  String get midnightGuideTurnBody =>
+      'Review revealed clues, spend insight to expose more evidence, then lock one suspect as your vote for the round.';
+
+  @override
+  String get midnightGuideTipsBody =>
+      'Do not burn all insight early. Cross-check alibis, motive, and map access before committing your last vote.';
+
+  @override
+  String get orbitGuideGoalBody =>
+      'Finish the contract with the highest net worth by balancing cash flow, holdings, and price swings.';
+
+  @override
+  String get orbitGuideTurnBody =>
+      'Each turn you buy or sell exactly one resource. The market reprices after the action, so tempo matters as much as value.';
+
+  @override
+  String get orbitGuideTipsBody =>
+      'Keep enough cash for reversals, do not overstack one commodity, and sell into peaks instead of waiting for perfect prices.';
+
+  @override
+  String get chaosGuideGoalBody =>
+      'String together party challenges for score and streak bonuses before the round set ends.';
+
+  @override
+  String get chaosGuideTurnBody =>
+      'Each challenge has a timer and base score. Clear it to grow streak value or fail and reset momentum.';
+
+  @override
+  String get chaosGuideTipsBody =>
+      'Use rerolls on low-confidence prompts, protect an existing streak, and prioritize fast-completion tasks late in the run.';
+
+  @override
+  String get moduleReadinessLabel => 'Readiness';
+
+  @override
+  String get expandDetails => 'Expand details';
+
+  @override
+  String get collapseDetails => 'Hide details';
+
+  @override
+  String get enterAction => 'Enter';
 
   @override
   String shortDateTime(int year, int month, int day, int hour, int minute) {

@@ -33,10 +33,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get playPrototype => '试玩原型';
 
   @override
-  String get homeHeroTitle => '给朋友局而不是单机局设计的移动游戏中心';
+  String get homeHeroTitle => '今晚开房，马上开玩。';
 
   @override
-  String get homeHeroBody => '核心方向是低延迟房间、可插拔游戏模块、稳定语音互动，以及能长期演进的企业级代码结构。';
+  String get homeHeroBody => '先把朋友拉进同一个房间，再按气氛切换卡牌、推理或派对小游戏。';
 
   @override
   String get modulesLabel => '模块数';
@@ -531,19 +531,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get loginPasswordLabel => '密码';
 
   @override
-  String get settingsBody => '主题模式已经接到全局壳层，并且会在下次启动时保留。';
+  String get settingsBody => '主题和语言会自动保存，下次打开保持你上次的选择。';
 
   @override
   String get launchLoadingBody => '正在准备房间、模块和会话状态...';
 
   @override
-  String get loginBody => '先用本地种子账号打通登录壳层。后面替换成真实后端时，不需要重写整个应用入口。';
+  String get loginBody => '登录后就能直接建房、组队、开局。没账号的话在这里一键注册。';
 
   @override
   String get profileBody => '账号状态、界面偏好和开发期控制项统一放在这里管理。';
 
   @override
   String get loginUsernameLabel => '用户名';
+
+  @override
+  String get registerDisplayNameLabel => '昵称';
+
+  @override
+  String get registerConfirmPasswordLabel => '确认密码';
 
   @override
   String get themeTitle => '界面风格';
@@ -556,6 +562,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get loginAction => '登录';
+
+  @override
+  String get registerAction => '注册';
 
   @override
   String get themeDark => '深色';
@@ -579,6 +588,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get loginInvalidCredentials => '用户名或密码错误。';
 
   @override
+  String get registerUsernameTaken => '该用户名已被占用。';
+
+  @override
+  String get registerPasswordMismatch => '两次输入的密码不一致。';
+
+  @override
   String get logoutAction => '退出登录';
 
   @override
@@ -590,7 +605,13 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get loginHeadline => '登录你的派对中枢';
+  String get loginHeadline => '登录后加入今晚的派对局';
+
+  @override
+  String get authModeSignIn => '登录';
+
+  @override
+  String get authModeRegister => '注册';
 
   @override
   String get profileTab => '我的';
@@ -600,6 +621,49 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get profileRoleAdmin => '管理员';
+
+  @override
+  String get authGuideAction => 'App 介绍与规则';
+
+  @override
+  String get authGuideTitle => 'App 介绍与规则';
+
+  @override
+  String get authGuideIntroTitle => '这是什么应用？';
+
+  @override
+  String get authGuideIntroBody =>
+      '余烬派对社是朋友聚会用的开局工具。先进同一个房间，再选择要玩的模式，整场不用反复切页面。';
+
+  @override
+  String get authGuideRulesTitle => '核心规则';
+
+  @override
+  String get authGuideRuleSignalTitle => '信号牌局基础规则';
+
+  @override
+  String get authGuideRuleSignalBody => '每回合双方各出一张牌，按有效强度判胜负。整局结束时分数更高的一方获胜。';
+
+  @override
+  String get authGuideRuleRoomTitle => '房间流程';
+
+  @override
+  String get authGuideRuleRoomBody => '由房主创建房间并设置人数、语音后开局。房间状态会同步给所有参与者。';
+
+  @override
+  String get authGuideRuleFairTitle => '公平游戏';
+
+  @override
+  String get authGuideRuleFairBody => '请尊重其他玩家，避免辱骂与恶意行为，保持对局节奏，让所有人都能参与。';
+
+  @override
+  String get headerSubtitleDiscover => '挑今晚要玩的模式';
+
+  @override
+  String get headerSubtitleRooms => '开房、组队、准备开局';
+
+  @override
+  String get headerSubtitleProfile => '账号、偏好和安全设置';
 
   @override
   String get localeModeSystem => '跟随系统';
@@ -801,6 +865,508 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get authProviderUsernamePassword => '账号密码';
+
+  @override
+  String get gameSessionTimelineTitle => '同步时间线';
+
+  @override
+  String get gameSessionTimelineEmpty => '尚未收到同步事件。';
+
+  @override
+  String get gameSessionCommandConnect => '连接同步通道';
+
+  @override
+  String get gameSessionCommandStartGame => '开始对局';
+
+  @override
+  String get gameSessionCommandPlayCard => '广播出牌';
+
+  @override
+  String get gameSessionCommandResetMatch => '重置对局';
+
+  @override
+  String get gameSessionEventSyncConnected => '实时通道已连接。';
+
+  @override
+  String get gameSessionEventSyncReady => '同步准备就绪，房间已进入多人模式。';
+
+  @override
+  String gameSessionEventCommandDispatched(Object command) {
+    return '已发送指令：$command';
+  }
+
+  @override
+  String gameSessionEventCommandAcknowledged(Object command) {
+    return '服务端已确认指令：$command';
+  }
+
+  @override
+  String gameSessionEventPhaseChanged(Object phase) {
+    return '会话阶段切换为：$phase';
+  }
+
+  @override
+  String gameSessionEventParticipantSynced(int seat) {
+    return '$seat 号位已完成同步。';
+  }
+
+  @override
+  String gameSessionEventSignalCard(Object cardTitle) {
+    return '已广播本回合卡牌：$cardTitle';
+  }
+
+  @override
+  String get gameSessionEventMatchReset => '房间对局已重置，等待下一轮开始。';
+
+  @override
+  String get feedbackTitle => '系统反馈';
+
+  @override
+  String get feedbackSoundEffects => '音效';
+
+  @override
+  String get feedbackHaptics => '震动';
+
+  @override
+  String get feedbackOn => '已开启';
+
+  @override
+  String get feedbackOff => '已关闭';
+
+  @override
+  String get chaosIntro => '每回合会抽取一个派对挑战。完成后可得分，并叠加连胜倍率。';
+
+  @override
+  String get chaosScoreLabel => '得分';
+
+  @override
+  String get chaosStreakLabel => '连胜';
+
+  @override
+  String get chaosBestLabel => '最佳连胜';
+
+  @override
+  String get chaosRerollLabel => '重抽';
+
+  @override
+  String chaosStatusPlaying(int round) {
+    return '第 $round 回合：完成挑战以保住连胜加成。';
+  }
+
+  @override
+  String chaosStatusFinished(int score, int bestStreak) {
+    return '挑战结束，总分 $score，最佳连胜 $bestStreak。';
+  }
+
+  @override
+  String get chaosActionSuccess => '完成';
+
+  @override
+  String get chaosActionFail => '失败';
+
+  @override
+  String get chaosActionReroll => '重抽';
+
+  @override
+  String get chaosRoundTimeline => '回合时间线';
+
+  @override
+  String get chaosRoundEmpty => '完成至少一个挑战后，这里会记录回合进展。';
+
+  @override
+  String chaosBasePointsLabel(int points) {
+    return '基础 +$points';
+  }
+
+  @override
+  String chaosTimerLabel(int seconds) {
+    return '倒计时 $seconds 秒';
+  }
+
+  @override
+  String chaosRoundTitle(int round, Object title) {
+    return '第 $round 回合 · $title';
+  }
+
+  @override
+  String chaosRoundSuccess(int points) {
+    return '成功，+$points 分';
+  }
+
+  @override
+  String get chaosRoundFailed => '失败，连胜重置';
+
+  @override
+  String chaosStreakAfterRound(int streak) {
+    return '本回合后连胜：$streak';
+  }
+
+  @override
+  String get chaosSummaryTitle => '混沌总结';
+
+  @override
+  String chaosSummaryBody(int score, int bestStreak) {
+    return '最终得分 $score，最佳连胜 $bestStreak。';
+  }
+
+  @override
+  String get chaosRunAgain => '再开一轮';
+
+  @override
+  String get chaosChallengeTitleMimic => '镜像模仿';
+
+  @override
+  String get chaosChallengeTitleRapidQa => '极速三连答';
+
+  @override
+  String get chaosChallengeTitleRhythm => '节奏接力';
+
+  @override
+  String get chaosChallengeTitleDrawAndGuess => '速写猜题';
+
+  @override
+  String get chaosChallengeTitleSoundOnly => '纯音效';
+
+  @override
+  String get chaosChallengeTitleFrozenPose => '冻结定格';
+
+  @override
+  String get chaosChallengeTitleReverseStory => '倒叙故事';
+
+  @override
+  String get chaosChallengeTitleEmojiSpeak => '表情翻译';
+
+  @override
+  String get chaosChallengeDetailMimic => '模仿一个职业 30 秒，并让队友至少猜中一次。';
+
+  @override
+  String get chaosChallengeDetailRapidQa => '连续回答 3 个随机问题，每题限时 5 秒。';
+
+  @override
+  String get chaosChallengeDetailRhythm => '准确跟上拍手节奏和口号，中途不能失误。';
+
+  @override
+  String get chaosChallengeDetailDrawAndGuess => '20 秒内画出关键词，并让队友猜中。';
+
+  @override
+  String get chaosChallengeDetailSoundOnly => '不能说答案相关词，只能用音效表达。';
+
+  @override
+  String get chaosChallengeDetailFrozenPose => '保持一个定格姿势 10 秒，让队友说出场景。';
+
+  @override
+  String get chaosChallengeDetailReverseStory => '先讲结尾，再讲开头，仍要自圆其说。';
+
+  @override
+  String get chaosChallengeDetailEmojiSpeak => '只用 3 个表情描述电影名或歌名。';
+
+  @override
+  String midnightStatusPlaying(int round) {
+    return '第 $round 回合：在热度消散前锁定投票。';
+  }
+
+  @override
+  String midnightStatusFinished(int playerScore, int aiScore) {
+    return '案卷关闭。你 $playerScore - 对手 $aiScore。';
+  }
+
+  @override
+  String get midnightInsightLabel => '洞察';
+
+  @override
+  String midnightCaseLabel(Object title) {
+    return '案件：$title';
+  }
+
+  @override
+  String get midnightRevealClue => '揭示线索';
+
+  @override
+  String get midnightSuspectsTitle => '嫌疑人';
+
+  @override
+  String get midnightTimelineTitle => '调查时间线';
+
+  @override
+  String get midnightTimelineEmpty => '还没有投票记录。锁定一名嫌疑人后会记录在这里。';
+
+  @override
+  String get midnightSelectSuspect => '将其设为本回合首要嫌疑人。';
+
+  @override
+  String get midnightLockVote => '锁定投票';
+
+  @override
+  String midnightTimelineRound(int round, Object caseTitle) {
+    return '第 $round 回合 · $caseTitle';
+  }
+
+  @override
+  String midnightTimelineVotes(
+    Object playerVote,
+    Object aiVote,
+    Object culpritVote,
+  ) {
+    return '你投给了 $playerVote；对手投给了 $aiVote；真凶是 $culpritVote。';
+  }
+
+  @override
+  String midnightTimelineResult(int playerPoints, int aiPoints) {
+    return '得分：你 +$playerPoints，对手 +$aiPoints。';
+  }
+
+  @override
+  String get midnightResultWin => '调查压制';
+
+  @override
+  String get midnightResultLose => '对手拿下案子';
+
+  @override
+  String midnightResultScore(int playerScore, int aiScore) {
+    return '最终比分：你 $playerScore - 对手 $aiScore。';
+  }
+
+  @override
+  String get midnightCaseTitleCaseA => '灯街回声案';
+
+  @override
+  String get midnightCaseTitleCaseB => '云港信号失窃案';
+
+  @override
+  String get midnightCaseTitleCaseC => '港区失踪货箱案';
+
+  @override
+  String get midnightClueA1 => '目击者在北侧小巷听到了一声银哨。';
+
+  @override
+  String get midnightClueA2 => '舞台后方发现了一只沾有染料的手套。';
+
+  @override
+  String get midnightClueA3 => '凶手熟悉点灯时间表，才能避开巡逻。';
+
+  @override
+  String get midnightClueB1 => '安保记录显示，午夜有一张伪造货运通行证被刷入。';
+
+  @override
+  String get midnightClueB2 => '失窃的货箱太重，一个人根本搬不走。';
+
+  @override
+  String get midnightClueB3 => '一枚裂开的通讯芯片指向了信号控制岗位。';
+
+  @override
+  String get midnightClueC1 => '天亮前，C 泊位附近留下了潮湿的靴印。';
+
+  @override
+  String get midnightClueC2 => '锁是用一组旧海关覆盖码打开的。';
+
+  @override
+  String get midnightClueC3 => '只有一名嫌疑人知道七号摄像头的盲区。';
+
+  @override
+  String get midnightSuspectVex => '维克斯';
+
+  @override
+  String get midnightSuspectLyra => '莱拉';
+
+  @override
+  String get midnightSuspectKade => '凯德';
+
+  @override
+  String get midnightSuspectMina => '米娜';
+
+  @override
+  String get midnightSuspectNox => '诺克斯';
+
+  @override
+  String get midnightSuspectSora => '索拉';
+
+  @override
+  String get midnightSuspectDax => '达克斯';
+
+  @override
+  String get midnightSuspectYuri => '尤里';
+
+  @override
+  String orbitStatusFinished(int netWorth) {
+    return '合约结束，最终净值 $netWorth。';
+  }
+
+  @override
+  String get orbitStatusPlaying => '每回合只交易一项资源，领先市场波动。';
+
+  @override
+  String get orbitMetricCash => '现金';
+
+  @override
+  String get orbitMetricNetWorth => '净值';
+
+  @override
+  String get orbitMetricCargo => '货舱';
+
+  @override
+  String get orbitMarketBoardTitle => '市场面板';
+
+  @override
+  String get orbitMarketBoardSubtitle => '点击资源卡进行买卖。';
+
+  @override
+  String get orbitTimelineTitle => '交易时间线';
+
+  @override
+  String get orbitTimelineEmpty => '还没有成交记录。先买入或卖出一项资源。';
+
+  @override
+  String orbitResourceStats(int price, int cargo) {
+    return '价格 $price ｜ 持仓 $cargo';
+  }
+
+  @override
+  String get orbitBuy => '买入';
+
+  @override
+  String get orbitSell => '卖出';
+
+  @override
+  String orbitRoundLogTitle(
+    int round,
+    Object action,
+    Object resource,
+    int price,
+  ) {
+    return '第 $round 回合 · $action $resource @ $price';
+  }
+
+  @override
+  String orbitRoundLogStats(int cash, int netWorth) {
+    return '现金 $cash ｜ 净值 $netWorth';
+  }
+
+  @override
+  String get orbitResultTitle => '贸易结算';
+
+  @override
+  String orbitResultBody(int netWorth) {
+    return '最终净值：$netWorth';
+  }
+
+  @override
+  String get orbitTradeAgain => '再跑一轮';
+
+  @override
+  String get orbitActionBuy => '买入';
+
+  @override
+  String get orbitActionSell => '卖出';
+
+  @override
+  String get orbitResourceOre => '矿石';
+
+  @override
+  String get orbitResourceCrystal => '晶矿';
+
+  @override
+  String get orbitResourceGas => '气体';
+
+  @override
+  String get signalMetricBattlefield => '战场属性';
+
+  @override
+  String get signalMetricMomentum => '动能';
+
+  @override
+  String signalFieldChip(Object suit) {
+    return '场域：$suit';
+  }
+
+  @override
+  String signalMomentumChip(int playerMomentum, int rivalMomentum) {
+    return '动能 $playerMomentum-$rivalMomentum';
+  }
+
+  @override
+  String get signalBattleBonus => '战场 +1';
+
+  @override
+  String signalMomentumBonus(int bonus) {
+    return '动能 +$bonus';
+  }
+
+  @override
+  String get howToPlayAction => '玩法说明';
+
+  @override
+  String get guideReadyAction => '开始对局';
+
+  @override
+  String get guideBackAction => '上一步';
+
+  @override
+  String get guideNextAction => '下一步';
+
+  @override
+  String get guideSkipAction => '先跳过';
+
+  @override
+  String guideStepCounter(int current, int total) {
+    return '步骤 $current/$total';
+  }
+
+  @override
+  String get guideSectionGoalTitle => '核心目标';
+
+  @override
+  String get guideSectionTurnTitle => '回合流程';
+
+  @override
+  String get guideSectionTipsTitle => '上手重点';
+
+  @override
+  String get signalGuideGoalBody => '用更高的有效强度赢下回合。整局结束时，总分更高的一方获胜。';
+
+  @override
+  String get signalGuideTurnBody => '每回合打出 1 张牌。同属性战场会提供 +1，加上连胜动能与牌面技能后结算强度。';
+
+  @override
+  String get signalGuideTipsBody => '优先观察当前场域和自身动能。连携牌尽量留给同系回合，关键回合再用克制或压阵牌抢分。';
+
+  @override
+  String get midnightGuideGoalBody => '比对手更快锁定真凶。每次正确投票都会累计分数，整套案卷结束后结算胜负。';
+
+  @override
+  String get midnightGuideTurnBody => '先阅读已公开线索，再消耗洞察揭示更多证据，最后锁定一名嫌疑人作为本回合投票。';
+
+  @override
+  String get midnightGuideTipsBody => '不要过早把洞察全部花完。把不在场证明、动机和行动路线对上，再做最后一票。';
+
+  @override
+  String get orbitGuideGoalBody => '在合约结束前，通过现金、持仓和价格波动管理，做出最高净值。';
+
+  @override
+  String get orbitGuideTurnBody => '每回合只能买入或卖出一种资源。你行动后市场会重新报价，节奏和价格同样重要。';
+
+  @override
+  String get orbitGuideTipsBody => '手里要始终留出回旋现金，不要把仓位压在单一资源上，涨到峰值时及时兑现。';
+
+  @override
+  String get chaosGuideGoalBody => '在一轮轮派对挑战中拉高总分，并用连胜倍率把分数滚起来。';
+
+  @override
+  String get chaosGuideTurnBody => '每个挑战都有时限和基础分。完成则继续叠连胜，失败就会把当前连胜清空。';
+
+  @override
+  String get chaosGuideTipsBody => '低把握题目优先用重抽保护连胜，后半段更适合选择完成速度快的任务。';
+
+  @override
+  String get moduleReadinessLabel => '完成度';
+
+  @override
+  String get expandDetails => '展开详情';
+
+  @override
+  String get collapseDetails => '收起详情';
+
+  @override
+  String get enterAction => '进入';
 
   @override
   String shortDateTime(int year, int month, int day, int hour, int minute) {

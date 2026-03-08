@@ -1,8 +1,11 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../../core/models/game_module.dart';
 import '../../features/auth/domain/app_user.dart';
 import '../../features/game_session/domain/game_room_session.dart';
+import '../../features/game_session/domain/game_room_session_command.dart';
+import '../../features/game_session/domain/game_room_session_event.dart';
+import '../../features/modules/orbit_merchant/application/orbit_merchant_controller.dart';
 import '../../features/modules/signal_deck/domain/signal_card.dart';
 import '../../features/modules/signal_deck/domain/signal_deck_state.dart';
 import '../../features/rooms/domain/room_summary.dart';
@@ -81,6 +84,48 @@ extension AppLocalizationsX on AppLocalizations {
     switch (provider) {
       case AuthProvider.usernamePassword:
         return authProviderUsernamePassword;
+    }
+  }
+
+  String gameRoomCommandLabel(GameRoomSessionCommandType commandType) {
+    switch (commandType) {
+      case GameRoomSessionCommandType.connect:
+        return gameSessionCommandConnect;
+      case GameRoomSessionCommandType.startGame:
+        return gameSessionCommandStartGame;
+      case GameRoomSessionCommandType.playCard:
+        return gameSessionCommandPlayCard;
+      case GameRoomSessionCommandType.resetMatch:
+        return gameSessionCommandResetMatch;
+    }
+  }
+
+  String gameRoomEventLabel(GameRoomSessionEvent event) {
+    switch (event.type) {
+      case GameRoomSessionEventType.syncConnected:
+        return gameSessionEventSyncConnected;
+      case GameRoomSessionEventType.syncReady:
+        return gameSessionEventSyncReady;
+      case GameRoomSessionEventType.commandDispatched:
+        return gameSessionEventCommandDispatched(
+          gameRoomCommandLabel(event.commandType!),
+        );
+      case GameRoomSessionEventType.commandAcknowledged:
+        return gameSessionEventCommandAcknowledged(
+          gameRoomCommandLabel(event.commandType!),
+        );
+      case GameRoomSessionEventType.phaseChanged:
+        return gameSessionEventPhaseChanged(
+          gameSessionPhaseLabel(event.phase!),
+        );
+      case GameRoomSessionEventType.participantSynced:
+        return gameSessionEventParticipantSynced(event.seat ?? 0);
+      case GameRoomSessionEventType.signalCardBroadcast:
+        return gameSessionEventSignalCard(
+          event.cardId == null ? '-' : signalCardTitle(event.cardId!),
+        );
+      case GameRoomSessionEventType.matchReset:
+        return gameSessionEventMatchReset;
     }
   }
 
@@ -292,6 +337,133 @@ extension AppLocalizationsX on AppLocalizations {
         return signalCardNoteS4;
       default:
         return cardId;
+    }
+  }
+
+  String chaosChallengeTitle(String challengeId) {
+    switch (challengeId) {
+      case 'mimic':
+        return chaosChallengeTitleMimic;
+      case 'rapid-qa':
+        return chaosChallengeTitleRapidQa;
+      case 'rhythm':
+        return chaosChallengeTitleRhythm;
+      case 'draw-and-guess':
+        return chaosChallengeTitleDrawAndGuess;
+      case 'sound-only':
+        return chaosChallengeTitleSoundOnly;
+      case 'frozen-pose':
+        return chaosChallengeTitleFrozenPose;
+      case 'reverse-story':
+        return chaosChallengeTitleReverseStory;
+      case 'emoji-speak':
+        return chaosChallengeTitleEmojiSpeak;
+      default:
+        return challengeId;
+    }
+  }
+
+  String chaosChallengeDetail(String challengeId) {
+    switch (challengeId) {
+      case 'mimic':
+        return chaosChallengeDetailMimic;
+      case 'rapid-qa':
+        return chaosChallengeDetailRapidQa;
+      case 'rhythm':
+        return chaosChallengeDetailRhythm;
+      case 'draw-and-guess':
+        return chaosChallengeDetailDrawAndGuess;
+      case 'sound-only':
+        return chaosChallengeDetailSoundOnly;
+      case 'frozen-pose':
+        return chaosChallengeDetailFrozenPose;
+      case 'reverse-story':
+        return chaosChallengeDetailReverseStory;
+      case 'emoji-speak':
+        return chaosChallengeDetailEmojiSpeak;
+      default:
+        return challengeId;
+    }
+  }
+
+  String midnightCaseTitle(String caseId) {
+    switch (caseId) {
+      case 'case-a':
+        return midnightCaseTitleCaseA;
+      case 'case-b':
+        return midnightCaseTitleCaseB;
+      case 'case-c':
+        return midnightCaseTitleCaseC;
+      default:
+        return caseId;
+    }
+  }
+
+  String midnightClue(String caseId, String clueId) {
+    switch ('$caseId/$clueId') {
+      case 'case-a/a-1':
+        return midnightClueA1;
+      case 'case-a/a-2':
+        return midnightClueA2;
+      case 'case-a/a-3':
+        return midnightClueA3;
+      case 'case-b/b-1':
+        return midnightClueB1;
+      case 'case-b/b-2':
+        return midnightClueB2;
+      case 'case-b/b-3':
+        return midnightClueB3;
+      case 'case-c/c-1':
+        return midnightClueC1;
+      case 'case-c/c-2':
+        return midnightClueC2;
+      case 'case-c/c-3':
+        return midnightClueC3;
+      default:
+        return clueId;
+    }
+  }
+
+  String midnightSuspectName(String suspectId) {
+    switch (suspectId) {
+      case 'vex':
+        return midnightSuspectVex;
+      case 'lyra':
+        return midnightSuspectLyra;
+      case 'kade':
+        return midnightSuspectKade;
+      case 'mina':
+        return midnightSuspectMina;
+      case 'nox':
+        return midnightSuspectNox;
+      case 'sora':
+        return midnightSuspectSora;
+      case 'dax':
+        return midnightSuspectDax;
+      case 'yuri':
+        return midnightSuspectYuri;
+      default:
+        return suspectId;
+    }
+  }
+
+  String orbitResourceLabel(OrbitResource resource) {
+    switch (resource) {
+      case OrbitResource.ore:
+        return orbitResourceOre;
+      case OrbitResource.crystal:
+        return orbitResourceCrystal;
+      case OrbitResource.gas:
+        return orbitResourceGas;
+    }
+  }
+
+  String orbitTradeActionLabel(OrbitTradeAction action) {
+    switch (action) {
+      case OrbitTradeAction.buy:
+        return orbitActionBuy;
+      case OrbitTradeAction.sell:
+        return orbitActionSell;
     }
   }
 }

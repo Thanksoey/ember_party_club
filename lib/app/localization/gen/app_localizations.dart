@@ -149,13 +149,13 @@ abstract class AppLocalizations {
   /// No description provided for @homeHeroTitle.
   ///
   /// In en, this message translates to:
-  /// **'A mobile game hub designed for friend groups, not solo play.'**
+  /// **'Open a room, start the party.'**
   String get homeHeroTitle;
 
   /// No description provided for @homeHeroBody.
   ///
   /// In en, this message translates to:
-  /// **'The product focuses on low-latency rooms, pluggable game modules, stable voice interaction, and an enterprise-ready codebase.'**
+  /// **'Bring friends into one room first, then switch between card, bluff, and party game modes as the vibe changes.'**
   String get homeHeroBody;
 
   /// No description provided for @modulesLabel.
@@ -1053,7 +1053,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsBody.
   ///
   /// In en, this message translates to:
-  /// **'Theme mode is already wired globally and persists across launches.'**
+  /// **'Theme and language preferences are saved automatically and restored on next launch.'**
   String get settingsBody;
 
   /// No description provided for @launchLoadingBody.
@@ -1065,7 +1065,7 @@ abstract class AppLocalizations {
   /// No description provided for @loginBody.
   ///
   /// In en, this message translates to:
-  /// **'Use a seeded local account first. Once the auth shell is stable, replacing it with a real backend becomes straightforward.'**
+  /// **'Sign in to create rooms and start matches instantly. New here? Register in one step.'**
   String get loginBody;
 
   /// No description provided for @profileBody.
@@ -1079,6 +1079,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Username'**
   String get loginUsernameLabel;
+
+  /// No description provided for @registerDisplayNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Display name'**
+  String get registerDisplayNameLabel;
+
+  /// No description provided for @registerConfirmPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password'**
+  String get registerConfirmPasswordLabel;
 
   /// No description provided for @themeTitle.
   ///
@@ -1103,6 +1115,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign in'**
   String get loginAction;
+
+  /// No description provided for @registerAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get registerAction;
 
   /// No description provided for @themeDark.
   ///
@@ -1146,6 +1164,18 @@ abstract class AppLocalizations {
   /// **'Username or password is incorrect.'**
   String get loginInvalidCredentials;
 
+  /// No description provided for @registerUsernameTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'This username is already taken.'**
+  String get registerUsernameTaken;
+
+  /// No description provided for @registerPasswordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'The two passwords do not match.'**
+  String get registerPasswordMismatch;
+
   /// No description provided for @logoutAction.
   ///
   /// In en, this message translates to:
@@ -1167,8 +1197,20 @@ abstract class AppLocalizations {
   /// No description provided for @loginHeadline.
   ///
   /// In en, this message translates to:
-  /// **'Sign in to your party hub'**
+  /// **'Sign in and join tonight\'s party run'**
   String get loginHeadline;
+
+  /// No description provided for @authModeSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get authModeSignIn;
+
+  /// No description provided for @authModeRegister.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get authModeRegister;
 
   /// No description provided for @profileTab.
   ///
@@ -1187,6 +1229,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Administrator'**
   String get profileRoleAdmin;
+
+  /// No description provided for @authGuideAction.
+  ///
+  /// In en, this message translates to:
+  /// **'App intro & rules'**
+  String get authGuideAction;
+
+  /// No description provided for @authGuideTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'App Intro & Rules'**
+  String get authGuideTitle;
+
+  /// No description provided for @authGuideIntroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What is Ember Party Club?'**
+  String get authGuideIntroTitle;
+
+  /// No description provided for @authGuideIntroBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Ember Party Club is built for group game nights. Enter one shared room, then swap play modes without breaking the session.'**
+  String get authGuideIntroBody;
+
+  /// No description provided for @authGuideRulesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Core Rules'**
+  String get authGuideRulesTitle;
+
+  /// No description provided for @authGuideRuleSignalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Signal Deck Basics'**
+  String get authGuideRuleSignalTitle;
+
+  /// No description provided for @authGuideRuleSignalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Each round, both sides pick one card. Higher effective power wins the round. Most points after the match wins.'**
+  String get authGuideRuleSignalBody;
+
+  /// No description provided for @authGuideRuleRoomTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Room Flow'**
+  String get authGuideRuleRoomTitle;
+
+  /// No description provided for @authGuideRuleRoomBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Host creates a room, configures seats and voice, then starts the game module. Session state is shared with all participants.'**
+  String get authGuideRuleRoomBody;
+
+  /// No description provided for @authGuideRuleFairTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair Play'**
+  String get authGuideRuleFairTitle;
+
+  /// No description provided for @authGuideRuleFairBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Respect other players, avoid abusive language, and keep the game pace moving so everyone can participate.'**
+  String get authGuideRuleFairBody;
+
+  /// No description provided for @headerSubtitleDiscover.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick tonight\'s game mode'**
+  String get headerSubtitleDiscover;
+
+  /// No description provided for @headerSubtitleRooms.
+  ///
+  /// In en, this message translates to:
+  /// **'Create rooms and prep the match'**
+  String get headerSubtitleRooms;
+
+  /// No description provided for @headerSubtitleProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Account, preferences, security'**
+  String get headerSubtitleProfile;
 
   /// No description provided for @localeModeSystem.
   ///
@@ -1577,6 +1703,885 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Username & password'**
   String get authProviderUsernamePassword;
+
+  /// No description provided for @gameSessionTimelineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync timeline'**
+  String get gameSessionTimelineTitle;
+
+  /// No description provided for @gameSessionTimelineEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No sync event has arrived yet.'**
+  String get gameSessionTimelineEmpty;
+
+  /// No description provided for @gameSessionCommandConnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect sync channel'**
+  String get gameSessionCommandConnect;
+
+  /// No description provided for @gameSessionCommandStartGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Start match'**
+  String get gameSessionCommandStartGame;
+
+  /// No description provided for @gameSessionCommandPlayCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Broadcast play'**
+  String get gameSessionCommandPlayCard;
+
+  /// No description provided for @gameSessionCommandResetMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset match'**
+  String get gameSessionCommandResetMatch;
+
+  /// No description provided for @gameSessionEventSyncConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Realtime channel connected.'**
+  String get gameSessionEventSyncConnected;
+
+  /// No description provided for @gameSessionEventSyncReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync ready. The room has entered multiplayer mode.'**
+  String get gameSessionEventSyncReady;
+
+  /// No description provided for @gameSessionEventCommandDispatched.
+  ///
+  /// In en, this message translates to:
+  /// **'Command dispatched: {command}'**
+  String gameSessionEventCommandDispatched(Object command);
+
+  /// No description provided for @gameSessionEventCommandAcknowledged.
+  ///
+  /// In en, this message translates to:
+  /// **'Server acknowledged command: {command}'**
+  String gameSessionEventCommandAcknowledged(Object command);
+
+  /// No description provided for @gameSessionEventPhaseChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Session phase switched to {phase}'**
+  String gameSessionEventPhaseChanged(Object phase);
+
+  /// No description provided for @gameSessionEventParticipantSynced.
+  ///
+  /// In en, this message translates to:
+  /// **'Seat {seat} completed sync.'**
+  String gameSessionEventParticipantSynced(int seat);
+
+  /// No description provided for @gameSessionEventSignalCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Round card broadcast: {cardTitle}'**
+  String gameSessionEventSignalCard(Object cardTitle);
+
+  /// No description provided for @gameSessionEventMatchReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Room match reset and ready for the next round.'**
+  String get gameSessionEventMatchReset;
+
+  /// No description provided for @feedbackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback'**
+  String get feedbackTitle;
+
+  /// No description provided for @feedbackSoundEffects.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound Effects'**
+  String get feedbackSoundEffects;
+
+  /// No description provided for @feedbackHaptics.
+  ///
+  /// In en, this message translates to:
+  /// **'Haptics'**
+  String get feedbackHaptics;
+
+  /// No description provided for @feedbackOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get feedbackOn;
+
+  /// No description provided for @feedbackOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get feedbackOff;
+
+  /// No description provided for @chaosIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Each round gives a random party challenge. Success grants points and streak multipliers.'**
+  String get chaosIntro;
+
+  /// No description provided for @chaosScoreLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Score'**
+  String get chaosScoreLabel;
+
+  /// No description provided for @chaosStreakLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak'**
+  String get chaosStreakLabel;
+
+  /// No description provided for @chaosBestLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Best'**
+  String get chaosBestLabel;
+
+  /// No description provided for @chaosRerollLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reroll'**
+  String get chaosRerollLabel;
+
+  /// No description provided for @chaosStatusPlaying.
+  ///
+  /// In en, this message translates to:
+  /// **'Round {round}: complete the challenge to keep your streak bonus.'**
+  String chaosStatusPlaying(int round);
+
+  /// No description provided for @chaosStatusFinished.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenge complete. Score {score}, best streak {bestStreak}.'**
+  String chaosStatusFinished(int score, int bestStreak);
+
+  /// No description provided for @chaosActionSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get chaosActionSuccess;
+
+  /// No description provided for @chaosActionFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Fail'**
+  String get chaosActionFail;
+
+  /// No description provided for @chaosActionReroll.
+  ///
+  /// In en, this message translates to:
+  /// **'Reroll'**
+  String get chaosActionReroll;
+
+  /// No description provided for @chaosRoundTimeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Round Timeline'**
+  String get chaosRoundTimeline;
+
+  /// No description provided for @chaosRoundEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish one challenge to populate logs.'**
+  String get chaosRoundEmpty;
+
+  /// No description provided for @chaosBasePointsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Base +{points}'**
+  String chaosBasePointsLabel(int points);
+
+  /// No description provided for @chaosTimerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer {seconds}s'**
+  String chaosTimerLabel(int seconds);
+
+  /// No description provided for @chaosRoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Round {round} - {title}'**
+  String chaosRoundTitle(int round, Object title);
+
+  /// No description provided for @chaosRoundSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Success, +{points} points'**
+  String chaosRoundSuccess(int points);
+
+  /// No description provided for @chaosRoundFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed, streak reset'**
+  String get chaosRoundFailed;
+
+  /// No description provided for @chaosStreakAfterRound.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak after round: {streak}'**
+  String chaosStreakAfterRound(int streak);
+
+  /// No description provided for @chaosSummaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Chaos Summary'**
+  String get chaosSummaryTitle;
+
+  /// No description provided for @chaosSummaryBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Final score {score}, best streak {bestStreak}.'**
+  String chaosSummaryBody(int score, int bestStreak);
+
+  /// No description provided for @chaosRunAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Run Again'**
+  String get chaosRunAgain;
+
+  /// No description provided for @chaosChallengeTitleMimic.
+  ///
+  /// In en, this message translates to:
+  /// **'Mirror Mimic'**
+  String get chaosChallengeTitleMimic;
+
+  /// No description provided for @chaosChallengeTitleRapidQa.
+  ///
+  /// In en, this message translates to:
+  /// **'Rapid Triple'**
+  String get chaosChallengeTitleRapidQa;
+
+  /// No description provided for @chaosChallengeTitleRhythm.
+  ///
+  /// In en, this message translates to:
+  /// **'Rhythm Relay'**
+  String get chaosChallengeTitleRhythm;
+
+  /// No description provided for @chaosChallengeTitleDrawAndGuess.
+  ///
+  /// In en, this message translates to:
+  /// **'Sketch Sprint'**
+  String get chaosChallengeTitleDrawAndGuess;
+
+  /// No description provided for @chaosChallengeTitleSoundOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound Only'**
+  String get chaosChallengeTitleSoundOnly;
+
+  /// No description provided for @chaosChallengeTitleFrozenPose.
+  ///
+  /// In en, this message translates to:
+  /// **'Freeze Frame'**
+  String get chaosChallengeTitleFrozenPose;
+
+  /// No description provided for @chaosChallengeTitleReverseStory.
+  ///
+  /// In en, this message translates to:
+  /// **'Reverse Story'**
+  String get chaosChallengeTitleReverseStory;
+
+  /// No description provided for @chaosChallengeTitleEmojiSpeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Emoji Translate'**
+  String get chaosChallengeTitleEmojiSpeak;
+
+  /// No description provided for @chaosChallengeDetailMimic.
+  ///
+  /// In en, this message translates to:
+  /// **'Mimic a profession for 30 seconds and get one correct guess.'**
+  String get chaosChallengeDetailMimic;
+
+  /// No description provided for @chaosChallengeDetailRapidQa.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer 3 random prompts, each within 5 seconds.'**
+  String get chaosChallengeDetailRapidQa;
+
+  /// No description provided for @chaosChallengeDetailRhythm.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow the clap pattern and chant correctly with no misses.'**
+  String get chaosChallengeDetailRhythm;
+
+  /// No description provided for @chaosChallengeDetailDrawAndGuess.
+  ///
+  /// In en, this message translates to:
+  /// **'Sketch a keyword in 20 seconds and have teammates guess it.'**
+  String get chaosChallengeDetailDrawAndGuess;
+
+  /// No description provided for @chaosChallengeDetailSoundOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'No words from the answer, only sound effects are allowed.'**
+  String get chaosChallengeDetailSoundOnly;
+
+  /// No description provided for @chaosChallengeDetailFrozenPose.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold a pose for 10 seconds and let teammates name the scene.'**
+  String get chaosChallengeDetailFrozenPose;
+
+  /// No description provided for @chaosChallengeDetailReverseStory.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell the ending first, then the beginning, still making sense.'**
+  String get chaosChallengeDetailReverseStory;
+
+  /// No description provided for @chaosChallengeDetailEmojiSpeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe a movie or song title using only 3 emojis.'**
+  String get chaosChallengeDetailEmojiSpeak;
+
+  /// No description provided for @midnightStatusPlaying.
+  ///
+  /// In en, this message translates to:
+  /// **'Round {round}: vote before the trail goes cold.'**
+  String midnightStatusPlaying(int round);
+
+  /// No description provided for @midnightStatusFinished.
+  ///
+  /// In en, this message translates to:
+  /// **'Case files closed. You {playerScore} - Rival {aiScore}.'**
+  String midnightStatusFinished(int playerScore, int aiScore);
+
+  /// No description provided for @midnightInsightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Insight'**
+  String get midnightInsightLabel;
+
+  /// No description provided for @midnightCaseLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Case: {title}'**
+  String midnightCaseLabel(Object title);
+
+  /// No description provided for @midnightRevealClue.
+  ///
+  /// In en, this message translates to:
+  /// **'Reveal clue'**
+  String get midnightRevealClue;
+
+  /// No description provided for @midnightSuspectsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suspects'**
+  String get midnightSuspectsTitle;
+
+  /// No description provided for @midnightTimelineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Investigation Timeline'**
+  String get midnightTimelineTitle;
+
+  /// No description provided for @midnightTimelineEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No votes yet. Lock a suspect to log this round.'**
+  String get midnightTimelineEmpty;
+
+  /// No description provided for @midnightSelectSuspect.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose this suspect as your prime lead.'**
+  String get midnightSelectSuspect;
+
+  /// No description provided for @midnightLockVote.
+  ///
+  /// In en, this message translates to:
+  /// **'Lock vote'**
+  String get midnightLockVote;
+
+  /// No description provided for @midnightTimelineRound.
+  ///
+  /// In en, this message translates to:
+  /// **'Round {round} - {caseTitle}'**
+  String midnightTimelineRound(int round, Object caseTitle);
+
+  /// No description provided for @midnightTimelineVotes.
+  ///
+  /// In en, this message translates to:
+  /// **'You voted {playerVote}; rival voted {aiVote}; culprit was {culpritVote}.'**
+  String midnightTimelineVotes(
+    Object playerVote,
+    Object aiVote,
+    Object culpritVote,
+  );
+
+  /// No description provided for @midnightTimelineResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Points: you +{playerPoints}, rival +{aiPoints}.'**
+  String midnightTimelineResult(int playerPoints, int aiPoints);
+
+  /// No description provided for @midnightResultWin.
+  ///
+  /// In en, this message translates to:
+  /// **'Investigation Dominance'**
+  String get midnightResultWin;
+
+  /// No description provided for @midnightResultLose.
+  ///
+  /// In en, this message translates to:
+  /// **'Rival Takes the Case'**
+  String get midnightResultLose;
+
+  /// No description provided for @midnightResultScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Final score: you {playerScore} - rival {aiScore}.'**
+  String midnightResultScore(int playerScore, int aiScore);
+
+  /// No description provided for @midnightCaseTitleCaseA.
+  ///
+  /// In en, this message translates to:
+  /// **'Echoes in the Lantern Street'**
+  String get midnightCaseTitleCaseA;
+
+  /// No description provided for @midnightCaseTitleCaseB.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud Deck Signal Theft'**
+  String get midnightCaseTitleCaseB;
+
+  /// No description provided for @midnightCaseTitleCaseC.
+  ///
+  /// In en, this message translates to:
+  /// **'Harbor District Missing Cargo'**
+  String get midnightCaseTitleCaseC;
+
+  /// No description provided for @midnightClueA1.
+  ///
+  /// In en, this message translates to:
+  /// **'Witness heard a silver whistle near the north alley.'**
+  String get midnightClueA1;
+
+  /// No description provided for @midnightClueA2.
+  ///
+  /// In en, this message translates to:
+  /// **'A glove with dye marks was found behind the stage.'**
+  String get midnightClueA2;
+
+  /// No description provided for @midnightClueA3.
+  ///
+  /// In en, this message translates to:
+  /// **'The culprit knew the lamp schedule to avoid patrols.'**
+  String get midnightClueA3;
+
+  /// No description provided for @midnightClueB1.
+  ///
+  /// In en, this message translates to:
+  /// **'Security logs show one forged cargo badge at midnight.'**
+  String get midnightClueB1;
+
+  /// No description provided for @midnightClueB2.
+  ///
+  /// In en, this message translates to:
+  /// **'The stolen crate was too heavy for a single courier.'**
+  String get midnightClueB2;
+
+  /// No description provided for @midnightClueB3.
+  ///
+  /// In en, this message translates to:
+  /// **'A cracked comms chip points to someone in signal control.'**
+  String get midnightClueB3;
+
+  /// No description provided for @midnightClueC1.
+  ///
+  /// In en, this message translates to:
+  /// **'Wet boot prints came from berth C before dawn.'**
+  String get midnightClueC1;
+
+  /// No description provided for @midnightClueC2.
+  ///
+  /// In en, this message translates to:
+  /// **'The lock was opened with an old customs override code.'**
+  String get midnightClueC2;
+
+  /// No description provided for @midnightClueC3.
+  ///
+  /// In en, this message translates to:
+  /// **'Only one suspect knew the blind spot of camera seven.'**
+  String get midnightClueC3;
+
+  /// No description provided for @midnightSuspectVex.
+  ///
+  /// In en, this message translates to:
+  /// **'Vex'**
+  String get midnightSuspectVex;
+
+  /// No description provided for @midnightSuspectLyra.
+  ///
+  /// In en, this message translates to:
+  /// **'Lyra'**
+  String get midnightSuspectLyra;
+
+  /// No description provided for @midnightSuspectKade.
+  ///
+  /// In en, this message translates to:
+  /// **'Kade'**
+  String get midnightSuspectKade;
+
+  /// No description provided for @midnightSuspectMina.
+  ///
+  /// In en, this message translates to:
+  /// **'Mina'**
+  String get midnightSuspectMina;
+
+  /// No description provided for @midnightSuspectNox.
+  ///
+  /// In en, this message translates to:
+  /// **'Nox'**
+  String get midnightSuspectNox;
+
+  /// No description provided for @midnightSuspectSora.
+  ///
+  /// In en, this message translates to:
+  /// **'Sora'**
+  String get midnightSuspectSora;
+
+  /// No description provided for @midnightSuspectDax.
+  ///
+  /// In en, this message translates to:
+  /// **'Dax'**
+  String get midnightSuspectDax;
+
+  /// No description provided for @midnightSuspectYuri.
+  ///
+  /// In en, this message translates to:
+  /// **'Yuri'**
+  String get midnightSuspectYuri;
+
+  /// No description provided for @orbitStatusFinished.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract complete. Final net worth: {netWorth}.'**
+  String orbitStatusFinished(int netWorth);
+
+  /// No description provided for @orbitStatusPlaying.
+  ///
+  /// In en, this message translates to:
+  /// **'Trade one resource each turn and stay ahead of market swings.'**
+  String get orbitStatusPlaying;
+
+  /// No description provided for @orbitMetricCash.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash'**
+  String get orbitMetricCash;
+
+  /// No description provided for @orbitMetricNetWorth.
+  ///
+  /// In en, this message translates to:
+  /// **'Net Worth'**
+  String get orbitMetricNetWorth;
+
+  /// No description provided for @orbitMetricCargo.
+  ///
+  /// In en, this message translates to:
+  /// **'Cargo'**
+  String get orbitMetricCargo;
+
+  /// No description provided for @orbitMarketBoardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Market Board'**
+  String get orbitMarketBoardTitle;
+
+  /// No description provided for @orbitMarketBoardSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a commodity card to trade.'**
+  String get orbitMarketBoardSubtitle;
+
+  /// No description provided for @orbitTimelineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trade Timeline'**
+  String get orbitTimelineTitle;
+
+  /// No description provided for @orbitTimelineEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No deals yet. Buy or sell one resource to begin.'**
+  String get orbitTimelineEmpty;
+
+  /// No description provided for @orbitResourceStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Price {price} | Cargo {cargo}'**
+  String orbitResourceStats(int price, int cargo);
+
+  /// No description provided for @orbitBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy'**
+  String get orbitBuy;
+
+  /// No description provided for @orbitSell.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell'**
+  String get orbitSell;
+
+  /// No description provided for @orbitRoundLogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Round {round} - {action} {resource} @ {price}'**
+  String orbitRoundLogTitle(
+    int round,
+    Object action,
+    Object resource,
+    int price,
+  );
+
+  /// No description provided for @orbitRoundLogStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash {cash} | Net {netWorth}'**
+  String orbitRoundLogStats(int cash, int netWorth);
+
+  /// No description provided for @orbitResultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trade Settlement'**
+  String get orbitResultTitle;
+
+  /// No description provided for @orbitResultBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Final net worth: {netWorth}'**
+  String orbitResultBody(int netWorth);
+
+  /// No description provided for @orbitTradeAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Trade Again'**
+  String get orbitTradeAgain;
+
+  /// No description provided for @orbitActionBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'BUY'**
+  String get orbitActionBuy;
+
+  /// No description provided for @orbitActionSell.
+  ///
+  /// In en, this message translates to:
+  /// **'SELL'**
+  String get orbitActionSell;
+
+  /// No description provided for @orbitResourceOre.
+  ///
+  /// In en, this message translates to:
+  /// **'Ore'**
+  String get orbitResourceOre;
+
+  /// No description provided for @orbitResourceCrystal.
+  ///
+  /// In en, this message translates to:
+  /// **'Crystal'**
+  String get orbitResourceCrystal;
+
+  /// No description provided for @orbitResourceGas.
+  ///
+  /// In en, this message translates to:
+  /// **'Gas'**
+  String get orbitResourceGas;
+
+  /// No description provided for @signalMetricBattlefield.
+  ///
+  /// In en, this message translates to:
+  /// **'Battlefield'**
+  String get signalMetricBattlefield;
+
+  /// No description provided for @signalMetricMomentum.
+  ///
+  /// In en, this message translates to:
+  /// **'Momentum'**
+  String get signalMetricMomentum;
+
+  /// No description provided for @signalFieldChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Field: {suit}'**
+  String signalFieldChip(Object suit);
+
+  /// No description provided for @signalMomentumChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Momentum {playerMomentum}-{rivalMomentum}'**
+  String signalMomentumChip(int playerMomentum, int rivalMomentum);
+
+  /// No description provided for @signalBattleBonus.
+  ///
+  /// In en, this message translates to:
+  /// **'Battle +1'**
+  String get signalBattleBonus;
+
+  /// No description provided for @signalMomentumBonus.
+  ///
+  /// In en, this message translates to:
+  /// **'Momentum +{bonus}'**
+  String signalMomentumBonus(int bonus);
+
+  /// No description provided for @howToPlayAction.
+  ///
+  /// In en, this message translates to:
+  /// **'How to play'**
+  String get howToPlayAction;
+
+  /// No description provided for @guideReadyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Start match'**
+  String get guideReadyAction;
+
+  /// No description provided for @guideBackAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get guideBackAction;
+
+  /// No description provided for @guideNextAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get guideNextAction;
+
+  /// No description provided for @guideSkipAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get guideSkipAction;
+
+  /// No description provided for @guideStepCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {current}/{total}'**
+  String guideStepCounter(int current, int total);
+
+  /// No description provided for @guideSectionGoalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Core goal'**
+  String get guideSectionGoalTitle;
+
+  /// No description provided for @guideSectionTurnTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn flow'**
+  String get guideSectionTurnTitle;
+
+  /// No description provided for @guideSectionTipsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Winning tips'**
+  String get guideSectionTipsTitle;
+
+  /// No description provided for @signalGuideGoalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Win rounds with higher effective power. The higher total score takes the match.'**
+  String get signalGuideGoalBody;
+
+  /// No description provided for @signalGuideTurnBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Play 1 card each round. Matching the battlefield suit grants +1, momentum stacks after winning rounds, and abilities resolve from the card trait.'**
+  String get signalGuideTurnBody;
+
+  /// No description provided for @signalGuideTipsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch the active field and your momentum. Save chain cards for same-suit turns and use counter or anchor cards to swing key rounds.'**
+  String get signalGuideTipsBody;
+
+  /// No description provided for @midnightGuideGoalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Identify the culprit before the rival does. Correct votes award points over the full case sequence.'**
+  String get midnightGuideGoalBody;
+
+  /// No description provided for @midnightGuideTurnBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Review revealed clues, spend insight to expose more evidence, then lock one suspect as your vote for the round.'**
+  String get midnightGuideTurnBody;
+
+  /// No description provided for @midnightGuideTipsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not burn all insight early. Cross-check alibis, motive, and map access before committing your last vote.'**
+  String get midnightGuideTipsBody;
+
+  /// No description provided for @orbitGuideGoalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish the contract with the highest net worth by balancing cash flow, holdings, and price swings.'**
+  String get orbitGuideGoalBody;
+
+  /// No description provided for @orbitGuideTurnBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Each turn you buy or sell exactly one resource. The market reprices after the action, so tempo matters as much as value.'**
+  String get orbitGuideTurnBody;
+
+  /// No description provided for @orbitGuideTipsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep enough cash for reversals, do not overstack one commodity, and sell into peaks instead of waiting for perfect prices.'**
+  String get orbitGuideTipsBody;
+
+  /// No description provided for @chaosGuideGoalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'String together party challenges for score and streak bonuses before the round set ends.'**
+  String get chaosGuideGoalBody;
+
+  /// No description provided for @chaosGuideTurnBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Each challenge has a timer and base score. Clear it to grow streak value or fail and reset momentum.'**
+  String get chaosGuideTurnBody;
+
+  /// No description provided for @chaosGuideTipsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Use rerolls on low-confidence prompts, protect an existing streak, and prioritize fast-completion tasks late in the run.'**
+  String get chaosGuideTipsBody;
+
+  /// No description provided for @moduleReadinessLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Readiness'**
+  String get moduleReadinessLabel;
+
+  /// No description provided for @expandDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand details'**
+  String get expandDetails;
+
+  /// No description provided for @collapseDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide details'**
+  String get collapseDetails;
+
+  /// No description provided for @enterAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter'**
+  String get enterAction;
 
   /// No description provided for @shortDateTime.
   ///

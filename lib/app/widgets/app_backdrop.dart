@@ -17,17 +17,18 @@ class AppBackdrop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
 
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
             theme.scaffoldBackgroundColor,
-            theme.colorScheme.primary.withValues(alpha: 0.05),
-            theme.colorScheme.tertiary.withValues(alpha: 0.08),
+            scheme.primary.withValues(alpha: 0.08),
+            scheme.tertiary.withValues(alpha: 0.06),
           ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          begin: const Alignment(-0.9, -1),
+          end: const Alignment(0.9, 1),
         ),
       ),
       child: Stack(
@@ -36,11 +37,17 @@ class AppBackdrop extends StatelessWidget {
             child: IgnorePointer(
               child: CustomPaint(
                 painter: _BackdropPainter(
-                  primaryColor: theme.colorScheme.secondary.withValues(alpha: 0.18),
-                  secondaryColor: theme.colorScheme.primary.withValues(alpha: 0.12),
+                  primaryColor: scheme.primary.withValues(
+                    alpha: theme.brightness == Brightness.dark ? 0.24 : 0.16,
+                  ),
+                  secondaryColor: scheme.tertiary.withValues(
+                    alpha: theme.brightness == Brightness.dark ? 0.14 : 0.1,
+                  ),
                   primaryAlignment: primaryAlignment,
                   secondaryAlignment: secondaryAlignment,
-                  gridColor: theme.colorScheme.outline.withValues(alpha: 0.18),
+                  confettiColor: scheme.secondary.withValues(
+                    alpha: theme.brightness == Brightness.dark ? 0.22 : 0.18,
+                  ),
                   showGrid: showGrid,
                 ),
               ),
@@ -59,7 +66,7 @@ class _BackdropPainter extends CustomPainter {
     required this.secondaryColor,
     required this.primaryAlignment,
     required this.secondaryAlignment,
-    required this.gridColor,
+    required this.confettiColor,
     required this.showGrid,
   });
 
@@ -67,7 +74,7 @@ class _BackdropPainter extends CustomPainter {
   final Color secondaryColor;
   final Alignment primaryAlignment;
   final Alignment secondaryAlignment;
-  final Color gridColor;
+  final Color confettiColor;
   final bool showGrid;
 
   @override
@@ -75,22 +82,74 @@ class _BackdropPainter extends CustomPainter {
     final primaryCenter = primaryAlignment.alongSize(size);
     final secondaryCenter = secondaryAlignment.alongSize(size);
 
-    canvas.drawCircle(primaryCenter, size.shortestSide * 0.44, Paint()..color = primaryColor);
-    canvas.drawCircle(secondaryCenter, size.shortestSide * 0.34, Paint()..color = secondaryColor);
+    canvas.drawCircle(
+      primaryCenter,
+      size.shortestSide * 0.44,
+      Paint()..color = primaryColor,
+    );
+    canvas.drawCircle(
+      secondaryCenter,
+      size.shortestSide * 0.34,
+      Paint()..color = secondaryColor,
+    );
+
+    final wavePaint = Paint()
+      ..color = primaryColor.withValues(alpha: 0.34)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.4;
+    final wavePath = Path()
+      ..moveTo(0, size.height * 0.2)
+      ..quadraticBezierTo(
+        size.width * 0.22,
+        size.height * 0.12,
+        size.width * 0.46,
+        size.height * 0.24,
+      )
+      ..quadraticBezierTo(
+        size.width * 0.74,
+        size.height * 0.38,
+        size.width,
+        size.height * 0.28,
+      );
+    canvas.drawPath(wavePath, wavePaint);
+
+    final wavePaintSecondary = Paint()
+      ..color = secondaryColor.withValues(alpha: 0.32)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.2;
+    final wavePathSecondary = Path()
+      ..moveTo(0, size.height * 0.78)
+      ..quadraticBezierTo(
+        size.width * 0.24,
+        size.height * 0.66,
+        size.width * 0.52,
+        size.height * 0.82,
+      )
+      ..quadraticBezierTo(
+        size.width * 0.74,
+        size.height * 0.94,
+        size.width,
+        size.height * 0.84,
+      );
+    canvas.drawPath(wavePathSecondary, wavePaintSecondary);
 
     if (!showGrid) {
       return;
     }
 
-    final gridPaint = Paint()
-      ..color = gridColor
-      ..strokeWidth = 1;
-    const spacing = 32.0;
-    for (double dx = 0; dx < size.width; dx += spacing) {
-      canvas.drawLine(Offset(dx, 0), Offset(dx, size.height), gridPaint);
-    }
-    for (double dy = 0; dy < size.height; dy += spacing) {
-      canvas.drawLine(Offset(0, dy), Offset(size.width, dy), gridPaint);
+    final confettiPaint = Paint()..color = confettiColor;
+    const density = 18;
+    for (int i = 0; i < density; i++) {
+      final x = size.width * (((i * 37) % 100) / 100);
+      final y = size.height * (((i * 53 + 17) % 100) / 100);
+      final w = size.width * 0.012;
+      final h = size.height * 0.0045;
+      final rect = Rect.fromCenter(center: Offset(x, y), width: w, height: h);
+      final rrect = RRect.fromRectAndRadius(rect, Radius.circular(h / 2));
+      canvas.drawRRect(
+        rrect,
+        confettiPaint..color = confettiColor.withValues(alpha: 0.45),
+      );
     }
   }
 
@@ -98,7 +157,7 @@ class _BackdropPainter extends CustomPainter {
   bool shouldRepaint(covariant _BackdropPainter oldDelegate) {
     return oldDelegate.primaryColor != primaryColor ||
         oldDelegate.secondaryColor != secondaryColor ||
-        oldDelegate.gridColor != gridColor ||
+        oldDelegate.confettiColor != confettiColor ||
         oldDelegate.showGrid != showGrid ||
         oldDelegate.primaryAlignment != primaryAlignment ||
         oldDelegate.secondaryAlignment != secondaryAlignment;

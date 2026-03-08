@@ -1,17 +1,19 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import '../core/data/game_seed_data.dart';
 import '../core/data/room_seed_data.dart';
 import '../core/storage/app_preference_store_factory.dart';
 import '../features/auth/application/auth_controller.dart';
-import '../features/auth/data/dev_seed_auth_repository.dart';
+import '../features/auth/data/remote/mock_auth_api_client.dart';
+import '../features/auth/data/remote/remote_auth_repository.dart';
 import '../features/home/application/game_hub_controller.dart';
 import '../features/modules/application/game_module_registry.dart';
 import '../features/rooms/application/room_lounge_controller.dart';
 import '../features/settings/application/settings_controller.dart';
 import 'localization/app_localizations.dart';
 import 'root/party_forge_root.dart';
+import 'services/app_feedback.dart';
 import 'theme/app_theme.dart';
 
 class PartyForgeApp extends StatelessWidget {
@@ -34,7 +36,7 @@ class PartyForgeApp extends StatelessWidget {
     WidgetsFlutterBinding.ensureInitialized();
     final store = createPreferenceStore();
     final authController = await AuthController.bootstrap(
-      DevSeedAuthRepository(store: store),
+      RemoteAuthRepository(client: MockAuthApiClient(), store: store),
     );
     final settingsController = await SettingsController.bootstrap(store);
     final registry = GameModuleRegistry.seeded(GameSeedData.modules);
@@ -59,6 +61,10 @@ class PartyForgeApp extends StatelessWidget {
     return AnimatedBuilder(
       animation: settingsController,
       builder: (context, _) {
+        AppFeedback.instance.configure(
+          soundEnabled: settingsController.soundEffectsEnabled,
+          hapticsEnabled: settingsController.hapticsEnabled,
+        );
         return MaterialApp(
           onGenerateTitle: (context) => context.l10n.appTitle,
           debugShowCheckedModeBanner: false,

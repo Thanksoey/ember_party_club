@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 import 'dart:io';
 
 import 'app_preference_store.dart';
@@ -6,7 +6,10 @@ import 'app_preference_store.dart';
 AppPreferenceStore createPreferenceStoreImpl() => IoAppPreferenceStore();
 
 class IoAppPreferenceStore implements AppPreferenceStore {
-  IoAppPreferenceStore() : _file = File('${Directory.systemTemp.path}${Platform.pathSeparator}ember_party_club_prefs.json');
+  IoAppPreferenceStore()
+    : _file = File(
+        '${Directory.systemTemp.path}${Platform.pathSeparator}ember_party_club_prefs.json',
+      );
 
   final File _file;
   Map<String, String>? _cache;

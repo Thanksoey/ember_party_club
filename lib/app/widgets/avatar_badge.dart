@@ -3,11 +3,7 @@ import 'package:flutter/material.dart';
 import '../../features/auth/domain/app_user.dart';
 
 class AvatarBadge extends StatelessWidget {
-  const AvatarBadge({
-    super.key,
-    required this.user,
-    this.size = 72,
-  });
+  const AvatarBadge({super.key, required this.user, this.size = 72});
 
   final AppUser user;
   final double size;

@@ -1,11 +1,11 @@
-﻿import '../../core/models/player_profile.dart';
+import '../../core/models/player_profile.dart';
 import '../../features/rooms/domain/room_summary.dart';
 
 final class RoomSeedData {
   static const rooms = <RoomSummary>[
     RoomSummary(
       id: 'room-signal-01',
-      title: '信号牌局 冲分房',
+      title: 'Signal Deck ranked room',
       gameModuleId: 'signal-deck',
       host: PlayerProfile(
         id: 'u-101',
@@ -21,7 +21,7 @@ final class RoomSeedData {
     ),
     RoomSummary(
       id: 'room-chaos-02',
-      title: '混沌派对 周五局',
+      title: 'Chaos Mixer Friday party',
       gameModuleId: 'chaos-mixer',
       host: PlayerProfile(
         id: 'u-205',
@@ -37,7 +37,7 @@ final class RoomSeedData {
     ),
     RoomSummary(
       id: 'room-vote-03',
-      title: '午夜投票 熟人局',
+      title: 'Midnight Vote friends room',
       gameModuleId: 'midnight-vote',
       host: PlayerProfile(
         id: 'u-302',

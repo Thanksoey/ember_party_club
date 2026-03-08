@@ -1,15 +1,6 @@
-﻿enum GameCategory {
-  card,
-  party,
-  bluff,
-  strategy,
-}
+enum GameCategory { card, party, bluff, strategy }
 
-enum MatchTempo {
-  quick,
-  standard,
-  deep,
-}
+enum MatchTempo { quick, standard, deep }
 
 class GameModule {
   const GameModule({

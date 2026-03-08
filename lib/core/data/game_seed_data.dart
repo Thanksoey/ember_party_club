@@ -1,12 +1,13 @@
-﻿import '../models/game_module.dart';
+import '../models/game_module.dart';
 
 final class GameSeedData {
   static const modules = <GameModule>[
     GameModule(
       id: 'signal-deck',
-      name: '信号牌局',
-      tagline: '快节奏卡牌配合',
-      summary: '围绕手牌联动和团队默契的回合制卡牌游戏，适合聚会开局热场。',
+      name: 'Signal Deck',
+      tagline: 'Fast-paced tactical card play',
+      summary:
+          'A turn-based card game built around hand combos and table chemistry.',
       category: GameCategory.card,
       tempo: MatchTempo.quick,
       minPlayers: 3,
@@ -16,9 +17,10 @@ final class GameSeedData {
     ),
     GameModule(
       id: 'midnight-vote',
-      name: '午夜投票',
-      tagline: '轻推理阵营博弈',
-      summary: '每局十分钟的隐藏身份玩法，重点在语音互动和投票节奏控制。',
+      name: 'Midnight Vote',
+      tagline: 'Social deduction with brisk votes',
+      summary:
+          'A hidden-role case file game focused on clue reveals and vote timing.',
       category: GameCategory.bluff,
       tempo: MatchTempo.quick,
       minPlayers: 4,
@@ -28,9 +30,10 @@ final class GameSeedData {
     ),
     GameModule(
       id: 'orbit-merchant',
-      name: '轨道商旅',
-      tagline: '中度策略交易',
-      summary: '资源交换和卡牌构筑结合，适合熟人长期房间和赛季排行。',
+      name: 'Orbit Merchant',
+      tagline: 'Mid-weight strategy trading',
+      summary:
+          'Trade cargo, read the market, and grow net worth across a short route.',
       category: GameCategory.strategy,
       tempo: MatchTempo.deep,
       minPlayers: 2,
@@ -40,9 +43,10 @@ final class GameSeedData {
     ),
     GameModule(
       id: 'chaos-mixer',
-      name: '混沌派对',
-      tagline: '派对小游戏合集',
-      summary: '把抢答、表演、你画我猜和惩罚轮盘整合进一个聚会房间。',
+      name: 'Chaos Mixer',
+      tagline: 'Party minigame collection',
+      summary:
+          'A rotating party challenge deck mixing acting, guessing, rhythm, and chaos.',
       category: GameCategory.party,
       tempo: MatchTempo.standard,
       minPlayers: 2,
