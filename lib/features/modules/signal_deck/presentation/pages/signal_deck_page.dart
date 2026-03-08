@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../../app/localization/app_localizations.dart';
 import '../../../../../app/services/app_feedback.dart';
-import '../../../../../app/widgets/app_card_deck_carousel.dart';
 import '../../../../../app/widgets/app_expandable_panel.dart';
 import '../../../../../app/widgets/app_fade_in_up.dart';
 import '../../../../../app/widgets/app_ornate_card.dart';
@@ -18,7 +17,7 @@ import '../../../../game_session/presentation/widgets/game_session_scaffold.dart
 import '../../application/signal_deck_controller.dart';
 import '../../domain/signal_card.dart';
 import '../../domain/signal_deck_state.dart';
-import '../widgets/signal_card_tile.dart';
+import '../widgets/signal_hand_fan.dart';
 
 class SignalDeckPage extends StatefulWidget {
   const SignalDeckPage({
@@ -43,17 +42,31 @@ class _SignalDeckPageState extends State<SignalDeckPage> {
   int _arenaCastSeed = 0;
   int _arenaOutcomeSeed = 0;
   int _arenaFinishSeed = 0;
+  int _handDrawSeed = 0;
+  int _handDiscardSeed = 0;
   int _lastLogCount = 0;
   bool _lastFinished = false;
   bool _hasCheckedAutoGuide = false;
+  List<String> _lastPlayerHandIds = const [];
   SignalSuit? _arenaCastSuit;
   int _arenaCastPower = 0;
   SignalRoundOutcome? _arenaOutcome;
   SignalMatchWinner? _arenaFinishWinner;
+  SignalCard? _drawnHandCard;
+  SignalCard? _discardedHandCard;
+  final GlobalKey _guideButtonKey = GlobalKey(
+    debugLabel: 'signal-guide-button',
+  );
+  final GlobalKey _arenaGuideKey = GlobalKey(debugLabel: 'signal-arena');
+  final GlobalKey _handGuideKey = GlobalKey(debugLabel: 'signal-hand');
+  final GlobalKey _logGuideKey = GlobalKey(debugLabel: 'signal-log');
 
   @override
   void initState() {
     super.initState();
+    _lastPlayerHandIds = widget.controller.state.player.hand
+        .map((card) => card.id)
+        .toList(growable: false);
     widget.controller.addListener(_handleStateChange);
     _handleStateChange();
     widget.roomSessionController?.startSession();
@@ -93,6 +106,16 @@ class _SignalDeckPageState extends State<SignalDeckPage> {
     }
 
     if (_lastLogCount != state.logs.length) {
+      final currentHandIds = state.player.hand
+          .map((card) => card.id)
+          .toList(growable: false);
+      SignalCard? drawnCard;
+      for (final card in state.player.hand) {
+        if (!_lastPlayerHandIds.contains(card.id)) {
+          drawnCard = card;
+          break;
+        }
+      }
       _lastLogCount = state.logs.length;
       if (mounted && state.logs.isNotEmpty) {
         final latestLog = state.logs.first;
@@ -100,10 +123,19 @@ class _SignalDeckPageState extends State<SignalDeckPage> {
           _arenaPulseSeed += 1;
           _arenaOutcomeSeed += 1;
           _arenaOutcome = latestLog.outcome;
+          _discardedHandCard = latestLog.playerCard;
+          _handDiscardSeed += 1;
+          _drawnHandCard = drawnCard;
+          if (drawnCard != null) {
+            _handDrawSeed += 1;
+          }
         });
       }
       if (state.logs.isNotEmpty && !state.isFinished) {
         final latestLog = state.logs.first;
+        if (drawnCard != null) {
+          unawaited(AppFeedback.instance.play(AppFeedbackType.cardDraw));
+        }
         switch (latestLog.outcome) {
           case SignalRoundOutcome.playerWin:
             unawaited(AppFeedback.instance.play(AppFeedbackType.roundWin));
@@ -113,6 +145,7 @@ class _SignalDeckPageState extends State<SignalDeckPage> {
             unawaited(AppFeedback.instance.play(AppFeedbackType.tap));
         }
       }
+      _lastPlayerHandIds = currentHandIds;
     }
 
     if (!_lastFinished && state.isFinished) {
@@ -172,16 +205,27 @@ class _SignalDeckPageState extends State<SignalDeckPage> {
           icon: Icons.flag_rounded,
           title: l10n.guideSectionGoalTitle,
           body: l10n.signalGuideGoalBody,
+          targetKey: _arenaGuideKey,
         ),
         GameGuideSectionData(
           icon: Icons.play_circle_outline_rounded,
           title: l10n.guideSectionTurnTitle,
           body: l10n.signalGuideTurnBody,
+          targetKey: _handGuideKey,
+        ),
+        GameGuideSectionData(
+          icon: Icons.auto_awesome_rounded,
+          title: l10n.guideSectionReopenTitle,
+          body: l10n.guideReopenBody,
+          targetKey: _guideButtonKey,
+          spotlightPadding: const EdgeInsets.all(10),
+          spotlightShape: GameGuideSpotlightShape.circle,
         ),
         GameGuideSectionData(
           icon: Icons.tips_and_updates_outlined,
           title: l10n.guideSectionTipsTitle,
           body: l10n.signalGuideTipsBody,
+          targetKey: _logGuideKey,
         ),
       ],
     );
@@ -256,23 +300,29 @@ class _SignalDeckPageState extends State<SignalDeckPage> {
               accentColor: const Color(0xFF3A8D7F),
             ),
           ],
-          primaryPanel: _BattleArenaPanel(
-            state: state,
-            pulseSeed: _arenaPulseSeed,
-            castSeed: _arenaCastSeed,
-            castSuit: _arenaCastSuit,
-            castPower: _arenaCastPower,
-            outcomeSeed: _arenaOutcomeSeed,
-            outcome: _arenaOutcome,
-            finishSeed: _arenaFinishSeed,
-            finishWinner: _arenaFinishWinner,
+          primaryPanel: KeyedSubtree(
+            key: _arenaGuideKey,
+            child: _BattleArenaPanel(
+              state: state,
+              pulseSeed: _arenaPulseSeed,
+              castSeed: _arenaCastSeed,
+              castSuit: _arenaCastSuit,
+              castPower: _arenaCastPower,
+              outcomeSeed: _arenaOutcomeSeed,
+              outcome: _arenaOutcome,
+              finishSeed: _arenaFinishSeed,
+              finishWinner: _arenaFinishWinner,
+            ),
           ),
           appBarActions: [
-            IconButton(
-              key: const ValueKey('game-guide-open'),
-              tooltip: l10n.howToPlayAction,
-              onPressed: _showGuide,
-              icon: const Icon(Icons.auto_awesome_rounded),
+            KeyedSubtree(
+              key: _guideButtonKey,
+              child: IconButton(
+                key: const ValueKey('game-guide-open'),
+                tooltip: l10n.howToPlayAction,
+                onPressed: _showGuide,
+                icon: const Icon(Icons.auto_awesome_rounded),
+              ),
             ),
           ],
           resultPanel: state.isFinished
@@ -290,81 +340,57 @@ class _SignalDeckPageState extends State<SignalDeckPage> {
               : null,
           onReset: _handleReplay,
           content: [
-            AppExpandablePanel(
-              icon: Icons.info_outline_rounded,
-              title: l10n.signalDeckSubtitle,
-              subtitle: l10n.signalDeckIntro,
-              accentColor: theme.colorScheme.primary,
-              child: Text(
-                l10n.signalDeckIntro,
-                style: theme.textTheme.bodyLarge,
-              ),
-            ),
-            const SizedBox(height: 20),
             AppFadeInUp(
               order: 0,
-              child: AppCardDeckCarousel(
-                title: l10n.yourHand,
-                subtitle: l10n.signalDeckIntro,
-                icon: Icons.style_rounded,
-                accentColor: theme.colorScheme.primary,
-                itemLabels: state.player.hand
-                    .map((card) => l10n.signalCardTitle(card.id))
-                    .toList(growable: false),
-                expandedHeight: 388,
-                collapsedHeight: 214,
-                itemBuilder: (context, index) {
-                  final card = state.player.hand[index];
-                  return SignalCardTile(
-                    card: card,
-                    battleSuit: state.battleSuit,
-                    momentum: state.player.momentum,
-                    enabled: !state.isFinished,
-                    onPlay: () async {
-                      _triggerCastFx(card, state);
-                      unawaited(
-                        AppFeedback.instance.play(AppFeedbackType.cardPlay),
-                      );
-                      final round = state.round;
-                      widget.controller.playCard(card);
-                      widget.roomSessionController?.handleMatchState(
-                        hasAnyRound: true,
-                        isFinished: widget.controller.state.isFinished,
-                      );
-                      await widget.roomSessionController?.sendCardPlayed(
-                        cardId: card.id,
-                        round: round,
-                      );
-                    },
-                  );
-                },
+              child: KeyedSubtree(
+                key: _handGuideKey,
+                child: SignalHandFan(
+                  title: l10n.yourHand,
+                  subtitle: l10n.signalHandSubtitle,
+                  accentColor: theme.colorScheme.primary,
+                  hand: state.player.hand,
+                  battleSuit: state.battleSuit,
+                  momentum: state.player.momentum,
+                  enabled: !state.isFinished,
+                  drawSeed: _handDrawSeed,
+                  discardSeed: _handDiscardSeed,
+                  drawnCard: _drawnHandCard,
+                  discardedCard: _discardedHandCard,
+                  onPlay: (card) => _handlePlayCard(card, state),
+                ),
               ),
             ),
             const SizedBox(height: 12),
-            AppExpandablePanel(
-              icon: Icons.history_rounded,
-              title: l10n.roundLog,
-              subtitle: state.logs.isEmpty ? l10n.noRoundsPlayed : null,
-              accentColor: theme.colorScheme.secondary,
-              child: state.logs.isEmpty
-                  ? Text(l10n.noRoundsPlayed, style: theme.textTheme.bodyLarge)
-                  : Column(
-                      children: state.logs
-                          .asMap()
-                          .entries
-                          .map((entry) {
-                            final index = entry.key;
-                            final log = entry.value;
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 12),
-                              child: AppFadeInUp(
-                                order: index,
-                                child: _RoundLogCard(log: log),
-                              ),
-                            );
-                          })
-                          .toList(growable: false),
-                    ),
+            KeyedSubtree(
+              key: _logGuideKey,
+              child: AppExpandablePanel(
+                icon: Icons.history_rounded,
+                title: l10n.roundLog,
+                subtitle: state.logs.isEmpty ? l10n.noRoundsPlayed : null,
+                accentColor: theme.colorScheme.secondary,
+                child: state.logs.isEmpty
+                    ? Text(
+                        l10n.noRoundsPlayed,
+                        style: theme.textTheme.bodyLarge,
+                      )
+                    : Column(
+                        children: state.logs
+                            .asMap()
+                            .entries
+                            .map((entry) {
+                              final index = entry.key;
+                              final log = entry.value;
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: AppFadeInUp(
+                                  order: index,
+                                  child: _RoundLogCard(log: log),
+                                ),
+                              );
+                            })
+                            .toList(growable: false),
+                      ),
+              ),
             ),
           ],
         );
@@ -377,6 +403,9 @@ class _SignalDeckPageState extends State<SignalDeckPage> {
     widget.roomSessionController?.resetMatch();
     widget.controller.reset();
     _lastFinished = false;
+    _lastPlayerHandIds = widget.controller.state.player.hand
+        .map((card) => card.id)
+        .toList(growable: false);
     if (!mounted) {
       return;
     }
@@ -385,7 +414,24 @@ class _SignalDeckPageState extends State<SignalDeckPage> {
       _arenaCastPower = 0;
       _arenaOutcome = null;
       _arenaFinishWinner = null;
+      _drawnHandCard = null;
+      _discardedHandCard = null;
     });
+  }
+
+  Future<void> _handlePlayCard(SignalCard card, SignalDeckState state) async {
+    _triggerCastFx(card, state);
+    unawaited(AppFeedback.instance.play(AppFeedbackType.cardPlay));
+    final round = state.round;
+    widget.controller.playCard(card);
+    widget.roomSessionController?.handleMatchState(
+      hasAnyRound: true,
+      isFinished: widget.controller.state.isFinished,
+    );
+    await widget.roomSessionController?.sendCardPlayed(
+      cardId: card.id,
+      round: round,
+    );
   }
 
   void _triggerCastFx(SignalCard card, SignalDeckState state) {
@@ -587,6 +633,52 @@ class _BattleArenaPanelState extends State<_BattleArenaPanel>
             ],
           ),
           const SizedBox(height: 14),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final panelWidth = constraints.maxWidth < 560
+                  ? constraints.maxWidth
+                  : (constraints.maxWidth - 24) / 3;
+
+              return Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: [
+                  SizedBox(
+                    width: panelWidth,
+                    child: _TablePileCard(
+                      title: l10n.signalPileDraw,
+                      count: state.deck.length,
+                      icon: Icons.auto_stories_rounded,
+                      accent: palette.highlight,
+                      highlight: palette.accent,
+                    ),
+                  ),
+                  SizedBox(
+                    width: panelWidth,
+                    child: _BattleCoreSeal(
+                      title: l10n.signalBattleConsoleTitle,
+                      suitLabel: l10n.signalSuitLabel(state.battleSuit),
+                      roundLabel: '${state.round} / ${state.maxRounds}',
+                      accent: palette.accent,
+                      highlight: palette.highlight,
+                      icon: palette.icon,
+                    ),
+                  ),
+                  SizedBox(
+                    width: panelWidth,
+                    child: _TablePileCard(
+                      title: l10n.signalPileDiscard,
+                      count: state.logs.length * 2,
+                      icon: Icons.layers_clear_rounded,
+                      accent: theme.colorScheme.secondary,
+                      highlight: palette.highlight,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+          const SizedBox(height: 14),
           Row(
             children: [
               Expanded(
@@ -617,14 +709,53 @@ class _BattleArenaPanelState extends State<_BattleArenaPanel>
           ),
           if (topLog != null) ...[
             const SizedBox(height: 14),
-            Text(
-              l10n.signalRoundSummary(topLog),
-              style: theme.textTheme.bodyLarge,
-            ),
-            const SizedBox(height: 6),
-            Text(
-              l10n.signalPowerCheck(topLog.playerPower, topLog.rivalPower),
-              style: theme.textTheme.bodyMedium,
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surface.withValues(alpha: 0.76),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: palette.highlight.withValues(alpha: 0.18),
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: palette.accent.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Icon(Icons.flash_on_rounded, color: palette.accent),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.signalRoundSummary(topLog),
+                          style: theme.textTheme.bodyLarge,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          l10n.signalPowerCheck(
+                            topLog.playerPower,
+                            topLog.rivalPower,
+                          ),
+                          style: theme.textTheme.bodyMedium,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ],
@@ -671,6 +802,215 @@ class _BattlePalette {
   final Color highlight;
   final AppOrnateCardAura aura;
   final IconData icon;
+}
+
+class _TablePileCard extends StatelessWidget {
+  const _TablePileCard({
+    required this.title,
+    required this.count,
+    required this.icon,
+    required this.accent,
+    required this.highlight,
+  });
+
+  final String title;
+  final int count;
+  final IconData icon;
+  final Color accent;
+  final Color highlight;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      height: 132,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            theme.colorScheme.surface.withValues(alpha: 0.94),
+            accent.withValues(alpha: 0.14),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: accent.withValues(alpha: 0.2)),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            right: 8,
+            top: 4,
+            child: Icon(icon, color: accent, size: 20),
+          ),
+          Positioned(
+            right: 12,
+            bottom: 10,
+            child: _PileStackGlow(accent: accent, highlight: highlight),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: theme.textTheme.titleMedium?.copyWith(color: accent),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const Spacer(),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 220),
+                child: Text(
+                  '$count',
+                  key: ValueKey('$title-$count'),
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PileStackGlow extends StatelessWidget {
+  const _PileStackGlow({required this.accent, required this.highlight});
+
+  final Color accent;
+  final Color highlight;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget buildLayer(double angle, double opacity) {
+      return Transform.rotate(
+        angle: angle,
+        child: Container(
+          width: 58,
+          height: 76,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                accent.withValues(alpha: opacity),
+                highlight.withValues(alpha: opacity * 0.86),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: highlight.withValues(alpha: opacity)),
+          ),
+        ),
+      );
+    }
+
+    return SizedBox(
+      width: 84,
+      height: 86,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(bottom: 4, child: buildLayer(-0.16, 0.14)),
+          Positioned(bottom: 10, child: buildLayer(0.08, 0.18)),
+          Positioned(bottom: 16, child: buildLayer(-0.02, 0.22)),
+        ],
+      ),
+    );
+  }
+}
+
+class _BattleCoreSeal extends StatelessWidget {
+  const _BattleCoreSeal({
+    required this.title,
+    required this.suitLabel,
+    required this.roundLabel,
+    required this.accent,
+    required this.highlight,
+    required this.icon,
+  });
+
+  final String title;
+  final String suitLabel;
+  final String roundLabel;
+  final Color accent;
+  final Color highlight;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      height: 132,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface.withValues(alpha: 0.8),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: accent.withValues(alpha: 0.22)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 72,
+            height: 72,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                colors: [
+                  highlight.withValues(alpha: 0.94),
+                  accent,
+                  accent.withValues(alpha: 0.72),
+                ],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: highlight.withValues(alpha: 0.22),
+                  blurRadius: 18,
+                  spreadRadius: 1,
+                ),
+              ],
+            ),
+            child: Icon(icon, color: Colors.white, size: 30),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  style: theme.textTheme.titleMedium?.copyWith(color: accent),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  suitLabel,
+                  style: theme.textTheme.titleLarge,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  roundLabel,
+                  style: theme.textTheme.bodyMedium,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _ArenaSeatCard extends StatelessWidget {

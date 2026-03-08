@@ -26,7 +26,6 @@ class SignalCardTile extends StatefulWidget {
 
 class _SignalCardTileState extends State<SignalCardTile>
     with SingleTickerProviderStateMixin {
-  bool _expanded = false;
   late final AnimationController _fxController;
 
   @override
@@ -86,13 +85,28 @@ class _SignalCardTileState extends State<SignalCardTile>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      l10n.signalCardTitle(widget.card.id),
-                      style: theme.textTheme.titleLarge,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            l10n.signalCardTitle(widget.card.id),
+                            style: theme.textTheme.titleLarge,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        IconButton(
+                          tooltip: l10n.viewAbilityAction,
+                          visualDensity: VisualDensity.compact,
+                          onPressed: _showAbilityDialog,
+                          icon: Icon(
+                            Icons.help_outline_rounded,
+                            color: palette.highlight,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
@@ -125,8 +139,15 @@ class _SignalCardTileState extends State<SignalCardTile>
               ),
             ],
           ),
+          const SizedBox(height: 10),
+          Text(
+            l10n.signalCardNote(widget.card.id),
+            style: theme.textTheme.bodyMedium,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
           if (isBattleSuit || widget.momentum > 0) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -146,60 +167,91 @@ class _SignalCardTileState extends State<SignalCardTile>
               ],
             ),
           ],
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              TextButton.icon(
-                onPressed: () {
-                  setState(() {
-                    _expanded = !_expanded;
-                  });
-                },
-                icon: Icon(
-                  _expanded
-                      ? Icons.keyboard_arrow_up_rounded
-                      : Icons.keyboard_arrow_down_rounded,
-                ),
-                label: Text(
-                  _expanded ? l10n.collapseDetails : l10n.expandDetails,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+          const Spacer(),
+          Align(
+            alignment: Alignment.centerRight,
+            child: FilledButton.icon(
+              key: ValueKey('signal-play-${widget.card.id}'),
+              onPressed: widget.enabled ? widget.onPlay : null,
+              style: FilledButton.styleFrom(
+                backgroundColor: palette.primary,
+                foregroundColor: Colors.white,
               ),
-              const Spacer(),
-              FilledButton.icon(
-                key: ValueKey('signal-play-${widget.card.id}'),
-                onPressed: widget.enabled ? widget.onPlay : null,
-                style: FilledButton.styleFrom(
-                  backgroundColor: palette.primary,
-                  foregroundColor: Colors.white,
-                ),
-                icon: const Icon(Icons.flash_on_rounded),
-                label: Text(
-                  l10n.play,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-          AnimatedCrossFade(
-            firstChild: const SizedBox.shrink(),
-            secondChild: Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text(
-                l10n.signalCardNote(widget.card.id),
-                style: theme.textTheme.bodyLarge,
+              icon: const Icon(Icons.flash_on_rounded),
+              label: Text(
+                l10n.play,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
-            crossFadeState: _expanded
-                ? CrossFadeState.showSecond
-                : CrossFadeState.showFirst,
-            duration: const Duration(milliseconds: 220),
-            sizeCurve: Curves.easeOutCubic,
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _showAbilityDialog() {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final palette = _palette(widget.card.suit);
+
+    return showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: theme.colorScheme.surface,
+          titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+          contentPadding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+          actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          title: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  l10n.signalCardAbilityDialogTitle(
+                    l10n.signalCardTitle(widget.card.id),
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: palette.primary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(palette.suitIcon, size: 18, color: palette.primary),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.signalCardMeta(widget.card),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: palette.primary,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                l10n.signalCardNote(widget.card.id),
+                style: theme.textTheme.bodyLarge,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(l10n.closeAction),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -371,19 +423,30 @@ class _SignalChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(999),
         border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 16, color: color),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: color,
-              fontWeight: FontWeight.w700,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: constraints.maxWidth),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Icon(icon, size: 16, color: color),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    label,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: color,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -430,6 +493,88 @@ class _PowerCore extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class SignalCardBackTile extends StatelessWidget {
+  const SignalCardBackTile({
+    super.key,
+    required this.accent,
+    required this.highlight,
+    this.label,
+  });
+
+  final Color accent;
+  final Color highlight;
+  final String? label;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            const Color(0xFF101822),
+            accent.withValues(alpha: 0.8),
+            highlight.withValues(alpha: 0.78),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: highlight.withValues(alpha: 0.32)),
+        boxShadow: [
+          BoxShadow(
+            color: highlight.withValues(alpha: 0.16),
+            blurRadius: 16,
+            spreadRadius: 1,
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.white.withValues(alpha: 0.08),
+                    Colors.transparent,
+                    Colors.black.withValues(alpha: 0.08),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            ),
+          ),
+          Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.auto_awesome_rounded,
+                  color: Colors.white,
+                  size: 34,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  label ?? 'SIGNAL',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.6,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

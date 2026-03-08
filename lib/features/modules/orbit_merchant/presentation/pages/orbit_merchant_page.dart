@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../../app/localization/app_localizations.dart';
 import '../../../../../app/services/app_feedback.dart';
-import '../../../../../app/widgets/app_card_deck_carousel.dart';
 import '../../../../../app/widgets/app_expandable_panel.dart';
 import '../../../../../app/widgets/app_fade_in_up.dart';
 import '../../../../../app/widgets/app_ornate_card.dart';
@@ -35,8 +34,13 @@ class OrbitMerchantPage extends StatefulWidget {
 class _OrbitMerchantPageState extends State<OrbitMerchantPage> {
   static const _guideId = 'orbit_merchant';
 
+  OrbitResource _selectedResource = OrbitResource.ore;
   bool _lastFinished = false;
   bool _hasCheckedAutoGuide = false;
+  final GlobalKey _guideButtonKey = GlobalKey(debugLabel: 'orbit-guide-button');
+  final GlobalKey _boardGuideKey = GlobalKey(debugLabel: 'orbit-board');
+  final GlobalKey _terminalGuideKey = GlobalKey(debugLabel: 'orbit-terminal');
+  final GlobalKey _timelineGuideKey = GlobalKey(debugLabel: 'orbit-timeline');
 
   @override
   void initState() {
@@ -123,16 +127,27 @@ class _OrbitMerchantPageState extends State<OrbitMerchantPage> {
           icon: Icons.flag_rounded,
           title: l10n.guideSectionGoalTitle,
           body: l10n.orbitGuideGoalBody,
+          targetKey: _boardGuideKey,
         ),
         GameGuideSectionData(
           icon: Icons.play_circle_outline_rounded,
           title: l10n.guideSectionTurnTitle,
           body: l10n.orbitGuideTurnBody,
+          targetKey: _terminalGuideKey,
         ),
         GameGuideSectionData(
           icon: Icons.tips_and_updates_outlined,
           title: l10n.guideSectionTipsTitle,
           body: l10n.orbitGuideTipsBody,
+          targetKey: _timelineGuideKey,
+        ),
+        GameGuideSectionData(
+          icon: Icons.auto_awesome_rounded,
+          title: l10n.guideSectionReopenTitle,
+          body: l10n.guideReopenBody,
+          targetKey: _guideButtonKey,
+          spotlightPadding: const EdgeInsets.all(10),
+          spotlightShape: GameGuideSpotlightShape.circle,
         ),
       ],
     );
@@ -194,50 +209,58 @@ class _OrbitMerchantPageState extends State<OrbitMerchantPage> {
             widget.controller.reset();
             widget.roomSessionController?.resetMatch();
             _lastFinished = false;
+            _selectedResource = OrbitResource.ore;
           },
-          primaryPanel: AppOrnateCard(
-            aura: AppOrnateCardAura.solar,
-            accentColor: const Color(0xFF2B7188),
-            highlightColor: const Color(0xFF95E1EB),
-            borderRadius: 28,
-            overlay: const IgnorePointer(
-              child: CustomPaint(
-                painter: _OrbitStageAuraPainter(
-                  accent: Color(0xFF2B7188),
-                  highlight: Color(0xFF95E1EB),
+          primaryPanel: KeyedSubtree(
+            key: _boardGuideKey,
+            child: AppOrnateCard(
+              aura: AppOrnateCardAura.solar,
+              accentColor: const Color(0xFF2B7188),
+              highlightColor: const Color(0xFF95E1EB),
+              borderRadius: 28,
+              overlay: const IgnorePointer(
+                child: CustomPaint(
+                  painter: _OrbitStageAuraPainter(
+                    accent: Color(0xFF2B7188),
+                    highlight: Color(0xFF95E1EB),
+                  ),
                 ),
               ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.orbitMarketBoardTitle,
-                  style: theme.textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  l10n.orbitMarketBoardSubtitle,
-                  style: theme.textTheme.bodyLarge,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 14),
-                _OrbitMarketStage(
-                  prices: state.prices,
-                  cargo: state.cargo,
-                  cash: state.cash,
-                  netWorth: netWorth,
-                ),
-              ],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.orbitMarketBoardTitle,
+                    style: theme.textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    l10n.orbitMarketBoardSubtitle,
+                    style: theme.textTheme.bodyLarge,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 14),
+                  _OrbitMarketStage(
+                    prices: state.prices,
+                    cargo: state.cargo,
+                    cash: state.cash,
+                    netWorth: netWorth,
+                    focusedResource: _selectedResource,
+                  ),
+                ],
+              ),
             ),
           ),
           appBarActions: [
-            IconButton(
-              key: const ValueKey('game-guide-open'),
-              tooltip: l10n.howToPlayAction,
-              onPressed: _showGuide,
-              icon: const Icon(Icons.auto_awesome_rounded),
+            KeyedSubtree(
+              key: _guideButtonKey,
+              child: IconButton(
+                key: const ValueKey('game-guide-open'),
+                tooltip: l10n.howToPlayAction,
+                onPressed: _showGuide,
+                icon: const Icon(Icons.auto_awesome_rounded),
+              ),
             ),
           ],
           resultPanel: state.isFinished
@@ -250,74 +273,80 @@ class _OrbitMerchantPageState extends State<OrbitMerchantPage> {
                     widget.controller.reset();
                     widget.roomSessionController?.resetMatch();
                     _lastFinished = false;
+                    _selectedResource = OrbitResource.ore;
                   },
                 )
               : null,
           content: [
-            AppCardDeckCarousel(
-              title: l10n.orbitMarketBoardTitle,
-              subtitle: l10n.orbitMarketBoardSubtitle,
-              icon: Icons.view_carousel_outlined,
-              accentColor: theme.colorScheme.primary,
-              itemLabels: OrbitResource.values
-                  .map(l10n.orbitResourceLabel)
-                  .toList(growable: false),
-              expandedHeight: 312,
-              collapsedHeight: 196,
-              itemBuilder: (context, index) {
-                final resource = OrbitResource.values[index];
-                return _ResourceCard(
-                  resource: resource,
-                  price: state.prices[resource] ?? 0,
-                  cargo: state.cargo[resource] ?? 0,
-                  cash: state.cash,
-                  enabled: !state.isFinished,
-                  onBuy: () {
-                    unawaited(AppFeedback.instance.play(AppFeedbackType.tap));
-                    widget.controller.buy(resource);
-                  },
-                  onSell: () {
-                    unawaited(
-                      AppFeedback.instance.play(AppFeedbackType.cardPlay),
-                    );
-                    widget.controller.sell(resource);
-                  },
-                );
-              },
+            KeyedSubtree(
+              key: _terminalGuideKey,
+              child: _TradeTerminalPanel(
+                selectedResource: _selectedResource,
+                prices: state.prices,
+                cargo: state.cargo,
+                cash: state.cash,
+                enabled: !state.isFinished,
+                onSelectResource: _focusResource,
+                onBuy: () {
+                  unawaited(
+                    AppFeedback.instance.play(AppFeedbackType.tradeBuy),
+                  );
+                  widget.controller.buy(_selectedResource);
+                },
+                onSell: () {
+                  unawaited(
+                    AppFeedback.instance.play(AppFeedbackType.tradeSell),
+                  );
+                  widget.controller.sell(_selectedResource);
+                },
+              ),
             ),
             const SizedBox(height: 16),
-            AppExpandablePanel(
-              icon: Icons.history_rounded,
-              title: l10n.orbitTimelineTitle,
-              subtitle: state.logs.isEmpty ? l10n.orbitTimelineEmpty : null,
-              accentColor: theme.colorScheme.secondary,
-              child: state.logs.isEmpty
-                  ? Text(
-                      l10n.orbitTimelineEmpty,
-                      style: theme.textTheme.bodyLarge,
-                    )
-                  : Column(
-                      children: state.logs
-                          .asMap()
-                          .entries
-                          .map((entry) {
-                            final index = entry.key;
-                            final log = entry.value;
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 12),
-                              child: AppFadeInUp(
-                                order: index,
-                                child: _OrbitLogCard(log: log),
-                              ),
-                            );
-                          })
-                          .toList(growable: false),
-                    ),
+            KeyedSubtree(
+              key: _timelineGuideKey,
+              child: AppExpandablePanel(
+                icon: Icons.history_rounded,
+                title: l10n.orbitTimelineTitle,
+                subtitle: state.logs.isEmpty ? l10n.orbitTimelineEmpty : null,
+                accentColor: theme.colorScheme.secondary,
+                child: state.logs.isEmpty
+                    ? Text(
+                        l10n.orbitTimelineEmpty,
+                        style: theme.textTheme.bodyLarge,
+                      )
+                    : Column(
+                        children: state.logs
+                            .asMap()
+                            .entries
+                            .map((entry) {
+                              final index = entry.key;
+                              final log = entry.value;
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: AppFadeInUp(
+                                  order: index,
+                                  child: _OrbitLogCard(log: log),
+                                ),
+                              );
+                            })
+                            .toList(growable: false),
+                      ),
+              ),
             ),
           ],
         );
       },
     );
+  }
+
+  void _focusResource(OrbitResource resource) {
+    if (_selectedResource == resource) {
+      return;
+    }
+    unawaited(AppFeedback.instance.play(AppFeedbackType.tradeFocus));
+    setState(() {
+      _selectedResource = resource;
+    });
   }
 }
 
@@ -327,12 +356,14 @@ class _OrbitMarketStage extends StatelessWidget {
     required this.cargo,
     required this.cash,
     required this.netWorth,
+    required this.focusedResource,
   });
 
   final Map<OrbitResource, int> prices;
   final Map<OrbitResource, int> cargo;
   final int cash;
   final int netWorth;
+  final OrbitResource focusedResource;
 
   @override
   Widget build(BuildContext context) {
@@ -404,6 +435,7 @@ class _OrbitMarketStage extends StatelessWidget {
                 cargo: cargo[resource] ?? 0,
                 icon: palette.icon,
                 accent: palette.accent,
+                highlighted: resource == focusedResource,
               ),
             );
           }),
@@ -455,6 +487,7 @@ class _OrbitResourceNode extends StatelessWidget {
     required this.cargo,
     required this.icon,
     required this.accent,
+    required this.highlighted,
   });
 
   final String label;
@@ -462,46 +495,193 @@ class _OrbitResourceNode extends StatelessWidget {
   final int cargo;
   final IconData icon;
   final Color accent;
+  final bool highlighted;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
-      width: 116,
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface.withValues(alpha: 0.78),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: accent.withValues(alpha: 0.18)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, size: 18, color: accent),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: theme.textTheme.titleMedium?.copyWith(color: accent),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+    return AnimatedScale(
+      duration: const Duration(milliseconds: 180),
+      scale: highlighted ? 1.04 : 1,
+      child: Container(
+        width: highlighted ? 122 : 116,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface.withValues(alpha: 0.78),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: accent.withValues(alpha: highlighted ? 0.3 : 0.18),
+            width: highlighted ? 1.6 : 1,
           ),
-          const SizedBox(height: 4),
-          Text(
-            '$price / $cargo',
-            style: theme.textTheme.bodySmall,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+          boxShadow: highlighted
+              ? [
+                  BoxShadow(
+                    color: accent.withValues(alpha: 0.18),
+                    blurRadius: 16,
+                    spreadRadius: 1,
+                  ),
+                ]
+              : null,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 18, color: accent),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: theme.textTheme.titleMedium?.copyWith(color: accent),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '$price / $cargo',
+              style: theme.textTheme.bodySmall,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _ResourceCard extends StatelessWidget {
-  const _ResourceCard({
+class _TradeTerminalPanel extends StatelessWidget {
+  const _TradeTerminalPanel({
+    required this.selectedResource,
+    required this.prices,
+    required this.cargo,
+    required this.cash,
+    required this.enabled,
+    required this.onSelectResource,
+    required this.onBuy,
+    required this.onSell,
+  });
+
+  final OrbitResource selectedResource;
+  final Map<OrbitResource, int> prices;
+  final Map<OrbitResource, int> cargo;
+  final int cash;
+  final bool enabled;
+  final ValueChanged<OrbitResource> onSelectResource;
+  final VoidCallback onBuy;
+  final VoidCallback onSell;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = context.l10n;
+
+    final listSection = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: OrbitResource.values
+          .map(
+            (resource) => Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: _QuoteRow(
+                resource: resource,
+                selected: resource == selectedResource,
+                price: prices[resource] ?? 0,
+                cargo: cargo[resource] ?? 0,
+                onTap: () => onSelectResource(resource),
+              ),
+            ),
+          )
+          .toList(growable: false),
+    );
+
+    return AppPanel(
+      tint: theme.colorScheme.primary,
+      borderOpacity: 0.18,
+      padding: const EdgeInsets.all(16),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final wide = constraints.maxWidth >= 760;
+          final header = Row(
+            children: [
+              Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2B7188).withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Icon(Icons.tune_rounded, color: Color(0xFF2B7188)),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.orbitTerminalTitle,
+                      style: theme.textTheme.headlineSmall,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      l10n.orbitTerminalSubtitle,
+                      style: theme.textTheme.bodyMedium,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+
+          final focusSection = _TradeFocusPanel(
+            resource: selectedResource,
+            price: prices[selectedResource] ?? 0,
+            cargo: cargo[selectedResource] ?? 0,
+            cash: cash,
+            enabled: enabled,
+            onBuy: onBuy,
+            onSell: onSell,
+          );
+
+          if (!wide) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                header,
+                const SizedBox(height: 14),
+                focusSection,
+                const SizedBox(height: 16),
+                listSection,
+              ],
+            );
+          }
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              header,
+              const SizedBox(height: 14),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(flex: 4, child: focusSection),
+                  const SizedBox(width: 16),
+                  Expanded(flex: 5, child: listSection),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _TradeFocusPanel extends StatelessWidget {
+  const _TradeFocusPanel({
     required this.resource,
     required this.price,
     required this.cargo,
@@ -523,74 +703,139 @@ class _ResourceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = context.l10n;
-    final palette = _palette(resource);
+    final palette = _orbitNodePalette(resource);
+    final signalLabel = switch (price) {
+      >= 8 => l10n.orbitSignalHot,
+      <= 4 => l10n.orbitSignalCool,
+      _ => l10n.orbitSignalStable,
+    };
 
-    return AppOrnateCard(
-      aura: palette.aura,
-      accentColor: palette.accent,
-      highlightColor: palette.highlight,
-      borderRadius: 24,
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            theme.colorScheme.surface.withValues(alpha: 0.98),
+            palette.highlight.withValues(alpha: 0.16),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: palette.accent.withValues(alpha: 0.24)),
+      ),
+      child: Stack(
         children: [
-          Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: palette.accent.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: palette.accent.withValues(alpha: 0.2),
-                  ),
-                ),
-                child: Icon(palette.icon, color: palette.accent),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  l10n.orbitResourceLabel(resource),
-                  style: theme.textTheme.titleLarge,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+          Positioned.fill(
+            child: IgnorePointer(
+              child: CustomPaint(
+                painter: _TerminalGridPainter(
+                  accent: palette.accent,
+                  highlight: palette.highlight,
                 ),
               ),
-            ],
+            ),
           ),
-          const SizedBox(height: 10),
-          Text(
-            l10n.orbitResourceStats(price, cargo),
-            style: theme.textTheme.bodyLarge,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const Spacer(),
-          Row(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: FilledButton.tonalIcon(
-                  onPressed: enabled && cash >= price ? onBuy : null,
-                  icon: const Icon(Icons.add_shopping_cart_rounded),
-                  label: Text(
-                    l10n.orbitBuy,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+              Row(
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: palette.accent.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Icon(palette.icon, color: palette.accent),
                   ),
-                ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      l10n.orbitResourceLabel(resource),
+                      style: theme.textTheme.headlineSmall,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: FilledButton.icon(
-                  onPressed: enabled && cargo > 0 ? onSell : null,
-                  icon: const Icon(Icons.sell_rounded),
-                  label: Text(
-                    l10n.orbitSell,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+              const SizedBox(height: 14),
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: [
+                  _TerminalStat(
+                    label: l10n.orbitPriceLabel,
+                    value: '$price',
+                    color: palette.accent,
                   ),
-                ),
+                  _TerminalStat(
+                    label: l10n.orbitHoldingsLabel,
+                    value: '$cargo',
+                    color: const Color(0xFFB06E28),
+                  ),
+                  _TradeSignalChip(
+                    label: signalLabel,
+                    color: palette.highlight,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  _TradeSignalDial(
+                    value: price / 12,
+                    accent: palette.accent,
+                    highlight: palette.highlight,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _MiniTrendStrip(
+                      seed: price + cargo + resource.index * 3,
+                      accent: palette.accent,
+                      highlight: palette.highlight,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Text(
+                l10n.orbitResourceStats(price, cargo),
+                style: theme.textTheme.bodyLarge,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  Expanded(
+                    child: FilledButton.tonalIcon(
+                      key: const ValueKey('orbit-buy'),
+                      onPressed: enabled && cash >= price ? onBuy : null,
+                      icon: const Icon(Icons.add_shopping_cart_rounded),
+                      label: Text(
+                        l10n.orbitBuy,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: FilledButton.icon(
+                      key: const ValueKey('orbit-sell'),
+                      onPressed: enabled && cargo > 0 ? onSell : null,
+                      icon: const Icon(Icons.sell_rounded),
+                      label: Text(
+                        l10n.orbitSell,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -598,28 +843,417 @@ class _ResourceCard extends StatelessWidget {
       ),
     );
   }
+}
 
-  _ResourcePalette _palette(OrbitResource resource) {
-    return switch (resource) {
-      OrbitResource.ore => const _ResourcePalette(
-        accent: Color(0xFFB36A24),
-        highlight: Color(0xFFFFD787),
-        aura: AppOrnateCardAura.solar,
-        icon: Icons.landscape_rounded,
+class _QuoteRow extends StatelessWidget {
+  const _QuoteRow({
+    required this.resource,
+    required this.selected,
+    required this.price,
+    required this.cargo,
+    required this.onTap,
+  });
+
+  final OrbitResource resource;
+  final bool selected;
+  final int price;
+  final int cargo;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = context.l10n;
+    final palette = _orbitNodePalette(resource);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                theme.colorScheme.surface.withValues(alpha: 0.96),
+                palette.highlight.withValues(alpha: selected ? 0.16 : 0.08),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: palette.accent.withValues(alpha: selected ? 0.3 : 0.14),
+              width: selected ? 1.5 : 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: palette.accent.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(palette.icon, color: palette.accent),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.orbitResourceLabel(resource),
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: palette.accent,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      l10n.orbitResourceStats(price, cargo),
+                      style: theme.textTheme.bodyMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 6),
+                    _InlineQuoteBar(value: price / 12, accent: palette.accent),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              Icon(
+                selected
+                    ? Icons.radio_button_checked_rounded
+                    : Icons.chevron_right_rounded,
+                color: selected ? palette.accent : theme.colorScheme.outline,
+              ),
+            ],
+          ),
+        ),
       ),
-      OrbitResource.crystal => const _ResourcePalette(
-        accent: Color(0xFF3F7FB2),
-        highlight: Color(0xFFADEAF7),
-        aura: AppOrnateCardAura.tide,
-        icon: Icons.diamond_outlined,
+    );
+  }
+}
+
+class _TerminalStat extends StatelessWidget {
+  const _TerminalStat({
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
+  final String label;
+  final String value;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(18),
       ),
-      OrbitResource.gas => const _ResourcePalette(
-        accent: Color(0xFF4F9360),
-        highlight: Color(0xFFB8F2C2),
-        aura: AppOrnateCardAura.aurora,
-        icon: Icons.cloud_outlined,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            label,
+            style: theme.textTheme.bodySmall?.copyWith(color: color),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: theme.textTheme.titleLarge,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
-    };
+    );
+  }
+}
+
+class _TradeSignalDial extends StatelessWidget {
+  const _TradeSignalDial({
+    required this.value,
+    required this.accent,
+    required this.highlight,
+  });
+
+  final double value;
+  final Color accent;
+  final Color highlight;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 72,
+      height: 72,
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0, end: value.clamp(0, 1)),
+        duration: const Duration(milliseconds: 360),
+        curve: Curves.easeOutCubic,
+        builder: (context, animatedValue, _) {
+          return CustomPaint(
+            painter: _TradeSignalDialPainter(
+              value: animatedValue,
+              accent: accent,
+              highlight: highlight,
+            ),
+            child: Center(
+              child: Text(
+                '${(animatedValue * 100).round()}%',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: accent,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _MiniTrendStrip extends StatelessWidget {
+  const _MiniTrendStrip({
+    required this.seed,
+    required this.accent,
+    required this.highlight,
+  });
+
+  final int seed;
+  final Color accent;
+  final Color highlight;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 72,
+      child: TweenAnimationBuilder<double>(
+        key: ValueKey('trend-$seed'),
+        tween: Tween(begin: 0.72, end: 1),
+        duration: const Duration(milliseconds: 420),
+        curve: Curves.easeOutCubic,
+        builder: (context, animatedValue, _) {
+          return CustomPaint(
+            painter: _MiniTrendStripPainter(
+              seed: seed,
+              progress: animatedValue,
+              accent: accent,
+              highlight: highlight,
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _InlineQuoteBar extends StatelessWidget {
+  const _InlineQuoteBar({required this.value, required this.accent});
+
+  final double value;
+  final Color accent;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(999),
+      child: LinearProgressIndicator(
+        value: value.clamp(0, 1),
+        minHeight: 6,
+        backgroundColor: accent.withValues(alpha: 0.12),
+        valueColor: AlwaysStoppedAnimation<Color>(accent),
+      ),
+    );
+  }
+}
+
+class _TradeSignalChip extends StatelessWidget {
+  const _TradeSignalChip({required this.label, required this.color});
+
+  final String label;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.16),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        label,
+        style: theme.textTheme.bodyMedium?.copyWith(
+          color: const Color(0xFF1A5164),
+          fontWeight: FontWeight.w700,
+        ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+}
+
+class _TradeSignalDialPainter extends CustomPainter {
+  const _TradeSignalDialPainter({
+    required this.value,
+    required this.accent,
+    required this.highlight,
+  });
+
+  final double value;
+  final Color accent;
+  final Color highlight;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+    final center = rect.center;
+    final radius = size.shortestSide * 0.34;
+    final base = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 8
+      ..strokeCap = StrokeCap.round
+      ..color = accent.withValues(alpha: 0.14);
+    final active = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 8
+      ..strokeCap = StrokeCap.round
+      ..shader = SweepGradient(
+        colors: [accent, highlight, accent],
+      ).createShader(rect);
+
+    canvas.drawArc(
+      Rect.fromCircle(center: center, radius: radius),
+      2.3,
+      4.8,
+      false,
+      base,
+    );
+    canvas.drawArc(
+      Rect.fromCircle(center: center, radius: radius),
+      2.3,
+      4.8 * value,
+      false,
+      active,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _TradeSignalDialPainter oldDelegate) {
+    return oldDelegate.value != value ||
+        oldDelegate.accent != accent ||
+        oldDelegate.highlight != highlight;
+  }
+}
+
+class _MiniTrendStripPainter extends CustomPainter {
+  const _MiniTrendStripPainter({
+    required this.seed,
+    required this.progress,
+    required this.accent,
+    required this.highlight,
+  });
+
+  final int seed;
+  final double progress;
+  final Color accent;
+  final Color highlight;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final grid = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1
+      ..color = accent.withValues(alpha: 0.08);
+    for (var index = 1; index < 4; index += 1) {
+      final y = size.height * index / 4;
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), grid);
+    }
+
+    final path = Path();
+    for (var index = 0; index < 7; index += 1) {
+      final x = size.width * index / 6;
+      final wave = ((seed + index * 3) % 7) / 6;
+      final y = size.height * (0.74 - wave * 0.42 * progress);
+      if (index == 0) {
+        path.moveTo(x, y);
+      } else {
+        path.lineTo(x, y);
+      }
+    }
+
+    final stroke = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.4
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round
+      ..shader = LinearGradient(
+        colors: [accent, highlight],
+      ).createShader(Offset.zero & size);
+    canvas.drawPath(path, stroke);
+  }
+
+  @override
+  bool shouldRepaint(covariant _MiniTrendStripPainter oldDelegate) {
+    return oldDelegate.seed != seed ||
+        oldDelegate.progress != progress ||
+        oldDelegate.accent != accent ||
+        oldDelegate.highlight != highlight;
+  }
+}
+
+class _TerminalGridPainter extends CustomPainter {
+  const _TerminalGridPainter({required this.accent, required this.highlight});
+
+  final Color accent;
+  final Color highlight;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final grid = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1
+      ..color = accent.withValues(alpha: 0.1);
+    for (var index = 1; index < 5; index += 1) {
+      final y = size.height * (index / 5);
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), grid);
+    }
+    for (var index = 1; index < 4; index += 1) {
+      final x = size.width * (index / 4);
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), grid);
+    }
+
+    final pulse = Paint()
+      ..color = highlight.withValues(alpha: 0.08)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 14);
+    canvas.drawCircle(
+      Offset(size.width * 0.82, size.height * 0.22),
+      size.shortestSide * 0.12,
+      pulse,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _TerminalGridPainter oldDelegate) {
+    return oldDelegate.accent != accent || oldDelegate.highlight != highlight;
   }
 }
 

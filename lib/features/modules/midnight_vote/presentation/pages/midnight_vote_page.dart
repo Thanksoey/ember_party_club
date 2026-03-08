@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../../app/localization/app_localizations.dart';
 import '../../../../../app/services/app_feedback.dart';
-import '../../../../../app/widgets/app_card_deck_carousel.dart';
 import '../../../../../app/widgets/app_expandable_panel.dart';
 import '../../../../../app/widgets/app_fade_in_up.dart';
 import '../../../../../app/widgets/app_ornate_card.dart';
@@ -35,8 +34,15 @@ class MidnightVotePage extends StatefulWidget {
 class _MidnightVotePageState extends State<MidnightVotePage> {
   static const _guideId = 'midnight_vote';
 
+  String? _selectedSuspectId;
   bool _lastFinished = false;
   bool _hasCheckedAutoGuide = false;
+  final GlobalKey _guideButtonKey = GlobalKey(
+    debugLabel: 'midnight-guide-button',
+  );
+  final GlobalKey _boardGuideKey = GlobalKey(debugLabel: 'midnight-board');
+  final GlobalKey _revealGuideKey = GlobalKey(debugLabel: 'midnight-reveal');
+  final GlobalKey _deskGuideKey = GlobalKey(debugLabel: 'midnight-desk');
 
   @override
   void initState() {
@@ -127,16 +133,28 @@ class _MidnightVotePageState extends State<MidnightVotePage> {
           icon: Icons.flag_rounded,
           title: l10n.guideSectionGoalTitle,
           body: l10n.midnightGuideGoalBody,
+          targetKey: _boardGuideKey,
         ),
         GameGuideSectionData(
           icon: Icons.play_circle_outline_rounded,
           title: l10n.guideSectionTurnTitle,
           body: l10n.midnightGuideTurnBody,
+          targetKey: _revealGuideKey,
+          spotlightShape: GameGuideSpotlightShape.circle,
         ),
         GameGuideSectionData(
           icon: Icons.tips_and_updates_outlined,
           title: l10n.guideSectionTipsTitle,
           body: l10n.midnightGuideTipsBody,
+          targetKey: _deskGuideKey,
+        ),
+        GameGuideSectionData(
+          icon: Icons.auto_awesome_rounded,
+          title: l10n.guideSectionReopenTitle,
+          body: l10n.guideReopenBody,
+          targetKey: _guideButtonKey,
+          spotlightPadding: const EdgeInsets.all(10),
+          spotlightShape: GameGuideSpotlightShape.circle,
         ),
       ],
     );
@@ -158,6 +176,9 @@ class _MidnightVotePageState extends State<MidnightVotePage> {
         final visibleClues = state.currentCase.clueIds
             .take(state.revealedClueCount)
             .toList(growable: false);
+        final selectedSuspectId = _resolvedSelectedSuspect(
+          state.currentCase.suspects,
+        );
 
         return GameSessionScaffold(
           title: l10n.moduleNameMidnightVote,
@@ -199,110 +220,125 @@ class _MidnightVotePageState extends State<MidnightVotePage> {
             widget.controller.reset();
             widget.roomSessionController?.resetMatch();
             _lastFinished = false;
+            _selectedSuspectId = null;
           },
-          primaryPanel: AppOrnateCard(
-            aura: AppOrnateCardAura.noir,
-            accentColor: const Color(0xFF6D4D7E),
-            highlightColor: const Color(0xFFCEB7EA),
-            borderRadius: 28,
-            overlay: const IgnorePointer(
-              child: CustomPaint(
-                painter: _EvidenceBoardAuraPainter(
-                  accent: Color(0xFF6D4D7E),
-                  highlight: Color(0xFFCEB7EA),
+          primaryPanel: KeyedSubtree(
+            key: _boardGuideKey,
+            child: AppOrnateCard(
+              aura: AppOrnateCardAura.noir,
+              accentColor: const Color(0xFF6D4D7E),
+              highlightColor: const Color(0xFFCEB7EA),
+              borderRadius: 28,
+              overlay: const IgnorePointer(
+                child: CustomPaint(
+                  painter: _EvidenceBoardAuraPainter(
+                    accent: Color(0xFF6D4D7E),
+                    highlight: Color(0xFFCEB7EA),
+                  ),
                 ),
               ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF6D4D7E).withValues(alpha: 0.16),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
                           color: const Color(
-                            0xFFCEB7EA,
-                          ).withValues(alpha: 0.24),
+                            0xFF6D4D7E,
+                          ).withValues(alpha: 0.16),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: const Color(
+                              0xFFCEB7EA,
+                            ).withValues(alpha: 0.24),
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.menu_book_rounded,
+                          color: Color(0xFF6D4D7E),
                         ),
                       ),
-                      child: const Icon(
-                        Icons.menu_book_rounded,
-                        color: Color(0xFF6D4D7E),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            l10n.midnightCaseLabel(
-                              l10n.midnightCaseTitle(state.currentCase.id),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.midnightCaseLabel(
+                                l10n.midnightCaseTitle(state.currentCase.id),
+                              ),
+                              style: theme.textTheme.headlineSmall,
                             ),
-                            style: theme.textTheme.headlineSmall,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            l10n.midnightStatusPlaying(state.round),
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                        ],
+                            const SizedBox(height: 4),
+                            Text(
+                              l10n.midnightStatusPlaying(state.round),
+                              style: theme.textTheme.bodyMedium,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    OutlinedButton.icon(
-                      onPressed:
-                          state.isFinished ||
-                              state.insightTokens <= 0 ||
-                              state.revealedClueCount >=
-                                  state.currentCase.clueIds.length
-                          ? null
-                          : () {
-                              unawaited(
-                                AppFeedback.instance.play(AppFeedbackType.tap),
-                              );
-                              widget.controller.revealClue();
-                            },
-                      icon: const Icon(Icons.visibility_outlined),
-                      label: Text(l10n.midnightRevealClue),
+                      KeyedSubtree(
+                        key: _revealGuideKey,
+                        child: OutlinedButton.icon(
+                          onPressed:
+                              state.isFinished ||
+                                  state.insightTokens <= 0 ||
+                                  state.revealedClueCount >=
+                                      state.currentCase.clueIds.length
+                              ? null
+                              : () {
+                                  unawaited(
+                                    AppFeedback.instance.play(
+                                      AppFeedbackType.investigate,
+                                    ),
+                                  );
+                                  widget.controller.revealClue();
+                                },
+                          icon: const Icon(Icons.visibility_outlined),
+                          label: Text(l10n.midnightRevealClue),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  _EvidenceBoardPreview(
+                    caseId: state.currentCase.id,
+                    visibleClues: visibleClues,
+                    selectedSuspectId: selectedSuspectId,
+                  ),
+                  if (visibleClues.isNotEmpty) ...[
+                    const SizedBox(height: 14),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: visibleClues
+                          .map(
+                            (clueId) => _ClueChip(
+                              text: l10n.midnightClue(
+                                state.currentCase.id,
+                                clueId,
+                              ),
+                            ),
+                          )
+                          .toList(growable: false),
                     ),
                   ],
-                ),
-                const SizedBox(height: 16),
-                _EvidenceBoardPreview(
-                  caseId: state.currentCase.id,
-                  visibleClues: visibleClues,
-                ),
-                if (visibleClues.isNotEmpty) ...[
-                  const SizedBox(height: 14),
-                  Wrap(
-                    spacing: 10,
-                    runSpacing: 10,
-                    children: visibleClues
-                        .map(
-                          (clueId) => _ClueChip(
-                            text: l10n.midnightClue(
-                              state.currentCase.id,
-                              clueId,
-                            ),
-                          ),
-                        )
-                        .toList(growable: false),
-                  ),
                 ],
-              ],
+              ),
             ),
           ),
           appBarActions: [
-            IconButton(
-              key: const ValueKey('game-guide-open'),
-              tooltip: l10n.howToPlayAction,
-              onPressed: _showGuide,
-              icon: const Icon(Icons.auto_awesome_rounded),
+            KeyedSubtree(
+              key: _guideButtonKey,
+              child: IconButton(
+                key: const ValueKey('game-guide-open'),
+                tooltip: l10n.howToPlayAction,
+                onPressed: _showGuide,
+                icon: const Icon(Icons.auto_awesome_rounded),
+              ),
             ),
           ],
           resultPanel: state.isFinished
@@ -316,33 +352,28 @@ class _MidnightVotePageState extends State<MidnightVotePage> {
                     widget.controller.reset();
                     widget.roomSessionController?.resetMatch();
                     _lastFinished = false;
+                    _selectedSuspectId = null;
                   },
                 )
               : null,
           content: [
-            AppCardDeckCarousel(
-              title: l10n.midnightSuspectsTitle,
-              subtitle: l10n.midnightSelectSuspect,
-              icon: Icons.people_alt_outlined,
-              accentColor: theme.colorScheme.primary,
-              itemLabels: state.currentCase.suspects
-                  .map(l10n.midnightSuspectName)
-                  .toList(growable: false),
-              expandedHeight: 296,
-              collapsedHeight: 190,
-              itemBuilder: (context, index) {
-                final suspectId = state.currentCase.suspects[index];
-                return _SuspectCard(
-                  suspectId: suspectId,
-                  enabled: !state.isFinished,
-                  onVote: () {
-                    unawaited(
-                      AppFeedback.instance.play(AppFeedbackType.cardPlay),
-                    );
-                    widget.controller.vote(suspectId);
-                  },
-                );
-              },
+            KeyedSubtree(
+              key: _deskGuideKey,
+              child: _InvestigationDesk(
+                caseId: state.currentCase.id,
+                suspects: state.currentCase.suspects,
+                selectedSuspectId: selectedSuspectId,
+                visibleClues: visibleClues,
+                insightTokens: state.insightTokens,
+                enabled: !state.isFinished,
+                onSelectSuspect: _selectSuspect,
+                onVote: () {
+                  unawaited(
+                    AppFeedback.instance.play(AppFeedbackType.cardPlay),
+                  );
+                  widget.controller.vote(selectedSuspectId);
+                },
+              ),
             ),
             const SizedBox(height: 16),
             AppExpandablePanel(
@@ -378,16 +409,36 @@ class _MidnightVotePageState extends State<MidnightVotePage> {
       },
     );
   }
+
+  String _resolvedSelectedSuspect(List<String> suspects) {
+    final selected = _selectedSuspectId;
+    if (selected != null && suspects.contains(selected)) {
+      return selected;
+    }
+    return suspects.first;
+  }
+
+  void _selectSuspect(String suspectId) {
+    if (_selectedSuspectId == suspectId) {
+      return;
+    }
+    unawaited(AppFeedback.instance.play(AppFeedbackType.investigate));
+    setState(() {
+      _selectedSuspectId = suspectId;
+    });
+  }
 }
 
 class _EvidenceBoardPreview extends StatelessWidget {
   const _EvidenceBoardPreview({
     required this.caseId,
     required this.visibleClues,
+    required this.selectedSuspectId,
   });
 
   final String caseId;
   final List<String> visibleClues;
+  final String selectedSuspectId;
 
   @override
   Widget build(BuildContext context) {
@@ -420,6 +471,14 @@ class _EvidenceBoardPreview extends StatelessWidget {
                   ? l10n.midnightClue(caseId, visibleClues[1])
                   : l10n.midnightSelectSuspect,
               angle: 0.06,
+            ),
+          ),
+          Positioned(
+            right: 26,
+            bottom: 18,
+            child: _SuspectPortraitBadge(
+              suspectId: selectedSuspectId,
+              size: 72,
             ),
           ),
           Positioned(
@@ -476,6 +535,80 @@ class _EvidenceBoardPreview extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SuspectPortraitBadge extends StatelessWidget {
+  const _SuspectPortraitBadge({required this.suspectId, required this.size});
+
+  final String suspectId;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = context.l10n;
+    final palette = _suspectPalette(suspectId);
+    final initials = l10n.midnightSuspectName(suspectId).characters.first;
+
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(
+          colors: [
+            palette.highlight.withValues(alpha: 0.94),
+            palette.accent,
+            palette.accent.withValues(alpha: 0.78),
+          ],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: palette.highlight.withValues(alpha: 0.22),
+            blurRadius: 18,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            top: 10,
+            child: Container(
+              width: size * 0.28,
+              height: size * 0.28,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.9),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 12,
+            child: Container(
+              width: size * 0.54,
+              height: size * 0.28,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.86),
+                borderRadius: BorderRadius.circular(size * 0.16),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 6,
+            child: Text(
+              initials,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
               ),
             ),
           ),
@@ -631,14 +764,224 @@ class _EvidenceBoardAuraPainter extends CustomPainter {
   }
 }
 
-class _SuspectCard extends StatelessWidget {
-  const _SuspectCard({
+class _InvestigationDesk extends StatelessWidget {
+  const _InvestigationDesk({
+    required this.caseId,
+    required this.suspects,
+    required this.selectedSuspectId,
+    required this.visibleClues,
+    required this.insightTokens,
+    required this.enabled,
+    required this.onSelectSuspect,
+    required this.onVote,
+  });
+
+  final String caseId;
+  final List<String> suspects;
+  final String selectedSuspectId;
+  final List<String> visibleClues;
+  final int insightTokens;
+  final bool enabled;
+  final ValueChanged<String> onSelectSuspect;
+  final VoidCallback onVote;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    return AppPanel(
+      tint: const Color(0xFF6D4D7E),
+      borderOpacity: 0.18,
+      padding: const EdgeInsets.all(16),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final wide = constraints.maxWidth >= 780;
+          final listSection = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF6D4D7E).withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Icon(
+                      Icons.folder_special_rounded,
+                      color: Color(0xFF6D4D7E),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.midnightDossierTitle,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          l10n.midnightDossierSubtitle,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              ...suspects.map(
+                (suspectId) => Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: _SuspectDossierRow(
+                    suspectId: suspectId,
+                    selected: suspectId == selectedSuspectId,
+                    revealedClues: visibleClues.length,
+                    totalClues: 3,
+                    onTap: () => onSelectSuspect(suspectId),
+                  ),
+                ),
+              ),
+            ],
+          );
+
+          final focusSection = _SuspectFocusPanel(
+            caseId: caseId,
+            suspectId: selectedSuspectId,
+            visibleClues: visibleClues,
+            insightTokens: insightTokens,
+            enabled: enabled,
+            onVote: onVote,
+          );
+
+          if (!wide) {
+            return Column(
+              children: [listSection, const SizedBox(height: 16), focusSection],
+            );
+          }
+
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(flex: 5, child: listSection),
+              const SizedBox(width: 16),
+              Expanded(flex: 4, child: focusSection),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _SuspectDossierRow extends StatelessWidget {
+  const _SuspectDossierRow({
     required this.suspectId,
+    required this.selected,
+    required this.revealedClues,
+    required this.totalClues,
+    required this.onTap,
+  });
+
+  final String suspectId;
+  final bool selected;
+  final int revealedClues;
+  final int totalClues;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = context.l10n;
+    final palette = _suspectPalette(suspectId);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        key: ValueKey('midnight-suspect-$suspectId'),
+        borderRadius: BorderRadius.circular(20),
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                theme.colorScheme.surface.withValues(alpha: 0.96),
+                palette.highlight.withValues(alpha: selected ? 0.18 : 0.08),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: (selected ? palette.accent : palette.highlight).withValues(
+                alpha: selected ? 0.32 : 0.16,
+              ),
+            ),
+          ),
+          child: Row(
+            children: [
+              _SuspectPortraitBadge(suspectId: suspectId, size: 44),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.midnightSuspectName(suspectId),
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: palette.accent,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      l10n.midnightEvidenceProgress(revealedClues, totalClues),
+                      style: theme.textTheme.bodyMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              Icon(
+                selected
+                    ? Icons.radio_button_checked_rounded
+                    : Icons.chevron_right_rounded,
+                color: selected ? palette.accent : theme.colorScheme.outline,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SuspectFocusPanel extends StatelessWidget {
+  const _SuspectFocusPanel({
+    required this.caseId,
+    required this.suspectId,
+    required this.visibleClues,
+    required this.insightTokens,
     required this.enabled,
     required this.onVote,
   });
 
+  final String caseId;
   final String suspectId;
+  final List<String> visibleClues;
+  final int insightTokens;
   final bool enabled;
   final VoidCallback onVote;
 
@@ -646,105 +989,278 @@ class _SuspectCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = context.l10n;
-    final palette = _palette(suspectId);
+    final palette = _suspectPalette(suspectId);
 
-    return AppOrnateCard(
-      aura: palette.aura,
-      accentColor: palette.accent,
-      highlightColor: palette.highlight,
-      borderRadius: 24,
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            theme.colorScheme.surface.withValues(alpha: 0.98),
+            palette.highlight.withValues(alpha: 0.18),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: palette.accent.withValues(alpha: 0.24)),
+      ),
+      child: Stack(
         children: [
-          Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              color: palette.accent.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: palette.accent.withValues(alpha: 0.2)),
+          Positioned.fill(
+            child: IgnorePointer(
+              child: CustomPaint(
+                painter: _DossierFlowPainter(
+                  accent: palette.accent,
+                  highlight: palette.highlight,
+                ),
+              ),
             ),
-            child: Icon(Icons.person_search_rounded, color: palette.accent),
           ),
-          const SizedBox(height: 12),
-          Text(
-            l10n.midnightSuspectName(suspectId),
-            style: theme.textTheme.titleLarge,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 6),
-          Text(
-            l10n.midnightSelectSuspect,
-            style: theme.textTheme.bodyMedium,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const Spacer(),
-          FilledButton.icon(
-            onPressed: enabled ? onVote : null,
-            icon: const Icon(Icons.how_to_vote_outlined),
-            label: Text(
-              l10n.midnightLockVote,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  _SuspectPortraitBadge(suspectId: suspectId, size: 64),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.midnightFocusLabel,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: palette.accent,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          l10n.midnightSuspectName(suspectId),
+                          style: theme.textTheme.headlineSmall,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                l10n.midnightCaseLabel(l10n.midnightCaseTitle(caseId)),
+                style: theme.textTheme.bodyLarge,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  _DeskChip(
+                    icon: Icons.visibility_outlined,
+                    text: l10n.midnightEvidenceProgress(visibleClues.length, 3),
+                    color: palette.accent,
+                  ),
+                  _DeskChip(
+                    icon: Icons.lightbulb_outline_rounded,
+                    text: '${l10n.midnightInsightLabel}: $insightTokens',
+                    color: const Color(0xFFB57A24),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                l10n.midnightVisibleCluesTitle,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: palette.accent,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 10),
+              ...visibleClues.map(
+                (clueId) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.push_pin_rounded,
+                        size: 16,
+                        color: palette.accent,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          l10n.midnightClue(caseId, clueId),
+                          style: theme.textTheme.bodyMedium,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              FilledButton.icon(
+                key: const ValueKey('midnight-lock-vote'),
+                onPressed: enabled ? onVote : null,
+                icon: const Icon(Icons.how_to_vote_outlined),
+                label: Text(
+                  l10n.midnightLockVote,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
+}
 
-  _SuspectPalette _palette(String suspectId) {
-    return switch (suspectId) {
-      'vex' => const _SuspectPalette(
-        accent: Color(0xFFD45E37),
-        highlight: Color(0xFFFFC46D),
-        aura: AppOrnateCardAura.ember,
+class _DeskChip extends StatelessWidget {
+  const _DeskChip({
+    required this.icon,
+    required this.text,
+    required this.color,
+  });
+
+  final IconData icon;
+  final String text;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
-      'lyra' => const _SuspectPalette(
-        accent: Color(0xFF7550B7),
-        highlight: Color(0xFFD6BEFF),
-        aura: AppOrnateCardAura.noir,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: color),
+          const SizedBox(width: 6),
+          Text(
+            text,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: color,
+              fontWeight: FontWeight.w700,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
-      'kade' => const _SuspectPalette(
-        accent: Color(0xFF2D74A7),
-        highlight: Color(0xFF9ADDE8),
-        aura: AppOrnateCardAura.tide,
-      ),
-      'mina' => const _SuspectPalette(
-        accent: Color(0xFFAF5A74),
-        highlight: Color(0xFFF5C3D0),
-        aura: AppOrnateCardAura.aurora,
-      ),
-      'nox' => const _SuspectPalette(
-        accent: Color(0xFF616B79),
-        highlight: Color(0xFFD4DBE6),
-        aura: AppOrnateCardAura.noir,
-      ),
-      'sora' => const _SuspectPalette(
-        accent: Color(0xFF377F68),
-        highlight: Color(0xFFAEE7D4),
-        aura: AppOrnateCardAura.aurora,
-      ),
-      'dax' => const _SuspectPalette(
-        accent: Color(0xFFAD7A24),
-        highlight: Color(0xFFFFD985),
-        aura: AppOrnateCardAura.solar,
-      ),
-      'yuri' => const _SuspectPalette(
-        accent: Color(0xFF438AA9),
-        highlight: Color(0xFFAFEAF5),
-        aura: AppOrnateCardAura.tide,
-      ),
-      _ => const _SuspectPalette(
-        accent: Color(0xFF7550B7),
-        highlight: Color(0xFFD6BEFF),
-        aura: AppOrnateCardAura.noir,
-      ),
-    };
+    );
   }
+}
+
+class _DossierFlowPainter extends CustomPainter {
+  const _DossierFlowPainter({required this.accent, required this.highlight});
+
+  final Color accent;
+  final Color highlight;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final glow = Paint()
+      ..color = highlight.withValues(alpha: 0.08)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 14);
+    canvas.drawCircle(
+      Offset(size.width * 0.82, size.height * 0.18),
+      size.shortestSide * 0.12,
+      glow,
+    );
+
+    final line = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.6
+      ..color = accent.withValues(alpha: 0.16);
+    final path = Path()
+      ..moveTo(size.width * 0.1, size.height * 0.2)
+      ..lineTo(size.width * 0.68, size.height * 0.2)
+      ..lineTo(size.width * 0.52, size.height * 0.56)
+      ..lineTo(size.width * 0.86, size.height * 0.7);
+    canvas.drawPath(path, line);
+
+    final node = Paint()..color = accent.withValues(alpha: 0.2);
+    for (final offset in <Offset>[
+      Offset(size.width * 0.1, size.height * 0.2),
+      Offset(size.width * 0.68, size.height * 0.2),
+      Offset(size.width * 0.52, size.height * 0.56),
+      Offset(size.width * 0.86, size.height * 0.7),
+    ]) {
+      canvas.drawCircle(offset, 4, node);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _DossierFlowPainter oldDelegate) {
+    return oldDelegate.accent != accent || oldDelegate.highlight != highlight;
+  }
+}
+
+_SuspectPalette _suspectPalette(String suspectId) {
+  return switch (suspectId) {
+    'vex' => const _SuspectPalette(
+      accent: Color(0xFFD45E37),
+      highlight: Color(0xFFFFC46D),
+      aura: AppOrnateCardAura.ember,
+    ),
+    'lyra' => const _SuspectPalette(
+      accent: Color(0xFF7550B7),
+      highlight: Color(0xFFD6BEFF),
+      aura: AppOrnateCardAura.noir,
+    ),
+    'kade' => const _SuspectPalette(
+      accent: Color(0xFF2D74A7),
+      highlight: Color(0xFF9ADDE8),
+      aura: AppOrnateCardAura.tide,
+    ),
+    'mina' => const _SuspectPalette(
+      accent: Color(0xFFAF5A74),
+      highlight: Color(0xFFF5C3D0),
+      aura: AppOrnateCardAura.aurora,
+    ),
+    'nox' => const _SuspectPalette(
+      accent: Color(0xFF616B79),
+      highlight: Color(0xFFD4DBE6),
+      aura: AppOrnateCardAura.noir,
+    ),
+    'sora' => const _SuspectPalette(
+      accent: Color(0xFF377F68),
+      highlight: Color(0xFFAEE7D4),
+      aura: AppOrnateCardAura.aurora,
+    ),
+    'dax' => const _SuspectPalette(
+      accent: Color(0xFFAD7A24),
+      highlight: Color(0xFFFFD985),
+      aura: AppOrnateCardAura.solar,
+    ),
+    'yuri' => const _SuspectPalette(
+      accent: Color(0xFF438AA9),
+      highlight: Color(0xFFAFEAF5),
+      aura: AppOrnateCardAura.tide,
+    ),
+    _ => const _SuspectPalette(
+      accent: Color(0xFF7550B7),
+      highlight: Color(0xFFD6BEFF),
+      aura: AppOrnateCardAura.noir,
+    ),
+  };
 }
 
 class _SuspectPalette {

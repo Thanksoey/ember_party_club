@@ -37,6 +37,9 @@ class _ChaosMixerPageState extends State<ChaosMixerPage> {
   int _spinSeed = 0;
   String? _lastChallengeId;
   bool _hasCheckedAutoGuide = false;
+  final GlobalKey _guideButtonKey = GlobalKey(debugLabel: 'chaos-guide-button');
+  final GlobalKey _arenaGuideKey = GlobalKey(debugLabel: 'chaos-arena');
+  final GlobalKey _timelineGuideKey = GlobalKey(debugLabel: 'chaos-timeline');
 
   @override
   void initState() {
@@ -129,16 +132,27 @@ class _ChaosMixerPageState extends State<ChaosMixerPage> {
           icon: Icons.flag_rounded,
           title: l10n.guideSectionGoalTitle,
           body: l10n.chaosGuideGoalBody,
+          targetKey: _arenaGuideKey,
         ),
         GameGuideSectionData(
           icon: Icons.play_circle_outline_rounded,
           title: l10n.guideSectionTurnTitle,
           body: l10n.chaosGuideTurnBody,
+          targetKey: _arenaGuideKey,
         ),
         GameGuideSectionData(
           icon: Icons.tips_and_updates_outlined,
           title: l10n.guideSectionTipsTitle,
           body: l10n.chaosGuideTipsBody,
+          targetKey: _timelineGuideKey,
+        ),
+        GameGuideSectionData(
+          icon: Icons.auto_awesome_rounded,
+          title: l10n.guideSectionReopenTitle,
+          body: l10n.guideReopenBody,
+          targetKey: _guideButtonKey,
+          spotlightPadding: const EdgeInsets.all(10),
+          spotlightShape: GameGuideSpotlightShape.circle,
         ),
       ],
     );
@@ -200,54 +214,65 @@ class _ChaosMixerPageState extends State<ChaosMixerPage> {
               accentColor: const Color(0xFF9456AF),
             ),
           ],
-          primaryPanel: _ChaosChallengeArena(
-            title: challengeTitle,
-            detail: challengeDetail,
-            scoreValue: challenge.basePoints,
-            timeLimitSec: challenge.timeLimitSec,
-            iconCode: challenge.iconCode,
-            spinSeed: _spinSeed,
-            footer: state.isFinished
-                ? null
-                : Wrap(
-                    spacing: 10,
-                    runSpacing: 10,
-                    children: [
-                      FilledButton.icon(
-                        onPressed: () {
-                          AppFeedback.instance.play(AppFeedbackType.success);
-                          widget.controller.completeRound(success: true);
-                        },
-                        icon: const Icon(Icons.check_circle_outline),
-                        label: Text(l10n.chaosActionSuccess),
-                      ),
-                      FilledButton.tonalIcon(
-                        onPressed: () {
-                          AppFeedback.instance.play(AppFeedbackType.failure);
-                          widget.controller.completeRound(success: false);
-                        },
-                        icon: const Icon(Icons.close),
-                        label: Text(l10n.chaosActionFail),
-                      ),
-                      OutlinedButton.icon(
-                        onPressed: state.rerollCharges > 0
-                            ? () {
-                                AppFeedback.instance.play(AppFeedbackType.tap);
-                                widget.controller.rerollChallenge();
-                              }
-                            : null,
-                        icon: const Icon(Icons.casino_outlined),
-                        label: Text(l10n.chaosActionReroll),
-                      ),
-                    ],
-                  ),
+          primaryPanel: KeyedSubtree(
+            key: _arenaGuideKey,
+            child: _ChaosChallengeArena(
+              title: challengeTitle,
+              detail: challengeDetail,
+              scoreValue: challenge.basePoints,
+              timeLimitSec: challenge.timeLimitSec,
+              iconCode: challenge.iconCode,
+              spinSeed: _spinSeed,
+              footer: state.isFinished
+                  ? null
+                  : Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: [
+                        FilledButton.icon(
+                          key: const ValueKey('chaos-success'),
+                          onPressed: () {
+                            AppFeedback.instance.play(AppFeedbackType.success);
+                            widget.controller.completeRound(success: true);
+                          },
+                          icon: const Icon(Icons.check_circle_outline),
+                          label: Text(l10n.chaosActionSuccess),
+                        ),
+                        FilledButton.tonalIcon(
+                          key: const ValueKey('chaos-fail'),
+                          onPressed: () {
+                            AppFeedback.instance.play(AppFeedbackType.failure);
+                            widget.controller.completeRound(success: false);
+                          },
+                          icon: const Icon(Icons.close),
+                          label: Text(l10n.chaosActionFail),
+                        ),
+                        OutlinedButton.icon(
+                          key: const ValueKey('chaos-reroll'),
+                          onPressed: state.rerollCharges > 0
+                              ? () {
+                                  AppFeedback.instance.play(
+                                    AppFeedbackType.chaosSpin,
+                                  );
+                                  widget.controller.rerollChallenge();
+                                }
+                              : null,
+                          icon: const Icon(Icons.casino_outlined),
+                          label: Text(l10n.chaosActionReroll),
+                        ),
+                      ],
+                    ),
+            ),
           ),
           appBarActions: [
-            IconButton(
-              key: const ValueKey('game-guide-open'),
-              tooltip: l10n.howToPlayAction,
-              onPressed: _showGuide,
-              icon: const Icon(Icons.auto_awesome_rounded),
+            KeyedSubtree(
+              key: _guideButtonKey,
+              child: IconButton(
+                key: const ValueKey('game-guide-open'),
+                tooltip: l10n.howToPlayAction,
+                onPressed: _showGuide,
+                icon: const Icon(Icons.auto_awesome_rounded),
+              ),
             ),
           ],
           onReset: () {
@@ -275,30 +300,36 @@ class _ChaosMixerPageState extends State<ChaosMixerPage> {
               child: Text(l10n.chaosIntro, style: theme.textTheme.bodyLarge),
             ),
             const SizedBox(height: 16),
-            AppExpandablePanel(
-              icon: Icons.history_rounded,
-              title: l10n.chaosRoundTimeline,
-              subtitle: state.logs.isEmpty ? l10n.chaosRoundEmpty : null,
-              accentColor: theme.colorScheme.primary,
-              child: state.logs.isEmpty
-                  ? Text(l10n.chaosRoundEmpty, style: theme.textTheme.bodyLarge)
-                  : Column(
-                      children: state.logs
-                          .asMap()
-                          .entries
-                          .map((entry) {
-                            final index = entry.key;
-                            final log = entry.value;
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 12),
-                              child: AppFadeInUp(
-                                order: index,
-                                child: _ChaosLogCard(log: log),
-                              ),
-                            );
-                          })
-                          .toList(growable: false),
-                    ),
+            KeyedSubtree(
+              key: _timelineGuideKey,
+              child: AppExpandablePanel(
+                icon: Icons.history_rounded,
+                title: l10n.chaosRoundTimeline,
+                subtitle: state.logs.isEmpty ? l10n.chaosRoundEmpty : null,
+                accentColor: theme.colorScheme.primary,
+                child: state.logs.isEmpty
+                    ? Text(
+                        l10n.chaosRoundEmpty,
+                        style: theme.textTheme.bodyLarge,
+                      )
+                    : Column(
+                        children: state.logs
+                            .asMap()
+                            .entries
+                            .map((entry) {
+                              final index = entry.key;
+                              final log = entry.value;
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: AppFadeInUp(
+                                  order: index,
+                                  child: _ChaosLogCard(log: log),
+                                ),
+                              );
+                            })
+                            .toList(growable: false),
+                      ),
+              ),
             ),
           ],
         );
