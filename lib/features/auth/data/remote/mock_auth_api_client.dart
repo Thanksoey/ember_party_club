@@ -19,8 +19,10 @@ class MockAuthApiClient implements AuthApiClient {
     DevSeedAuthRepository.seededPasswords,
   );
   final Map<String, String> _sessionByRefreshToken = <String, String>{};
-  final Map<String, AuthApiSessionPayload> _sessions = <String, AuthApiSessionPayload>{};
-  final Map<String, List<AuthDeviceSession>> _devicesByUser = <String, List<AuthDeviceSession>>{};
+  final Map<String, AuthApiSessionPayload> _sessions =
+      <String, AuthApiSessionPayload>{};
+  final Map<String, List<AuthDeviceSession>> _devicesByUser =
+      <String, List<AuthDeviceSession>>{};
   final Random _random = Random(23);
 
   @override
@@ -34,6 +36,36 @@ class MockAuthApiClient implements AuthApiClient {
     if (user == null || _passwords[username] != password) {
       throw const AuthApiException(AuthFailure.invalidCredentials);
     }
+
+    final payload = _issueSession(user);
+    _registerDevice(user, payload.tokens.sessionId);
+    return payload;
+  }
+
+  @override
+  Future<AuthApiSessionPayload> register({
+    required String username,
+    required String password,
+    required String displayName,
+  }) async {
+    await Future<void>.delayed(const Duration(milliseconds: 240));
+    final normalizedUsername = username.trim().toLowerCase();
+    if (normalizedUsername.length < 3) {
+      throw const AuthApiException(AuthFailure.invalidCredentials);
+    }
+    if (_users.containsKey(normalizedUsername)) {
+      throw const AuthApiException(AuthFailure.usernameTaken);
+    }
+    if (password.length < 8) {
+      throw const AuthApiException(AuthFailure.weakPassword);
+    }
+
+    final user = _buildPlayer(
+      username: normalizedUsername,
+      displayName: displayName.trim(),
+    );
+    _users[normalizedUsername] = user;
+    _passwords[normalizedUsername] = password;
 
     final payload = _issueSession(user);
     _registerDevice(user, payload.tokens.sessionId);
@@ -132,7 +164,11 @@ class MockAuthApiClient implements AuthApiClient {
     final session = _resolveSession(accessToken);
     final devices = _devicesByUser[session.user.id] ?? <AuthDeviceSession>[];
     _devicesByUser[session.user.id] = devices
-        .where((device) => device.id == session.tokens.sessionId || device.id != deviceSessionId)
+        .where(
+          (device) =>
+              device.id == session.tokens.sessionId ||
+              device.id != deviceSessionId,
+        )
         .toList(growable: false);
   }
 
@@ -149,7 +185,9 @@ class MockAuthApiClient implements AuthApiClient {
   }
 
   AuthApiSessionPayload _issueSession(AppUser user, {String? sessionId}) {
-    final resolvedSessionId = sessionId ?? 'session-${user.id}-${DateTime.now().millisecondsSinceEpoch}-${_random.nextInt(999)}';
+    final resolvedSessionId =
+        sessionId ??
+        'session-${user.id}-${DateTime.now().millisecondsSinceEpoch}-${_random.nextInt(999)}';
     final tokens = AuthApiTokenPayload(
       accessToken: 'access-$resolvedSessionId',
       refreshToken: 'refresh-$resolvedSessionId',
@@ -167,15 +205,17 @@ class MockAuthApiClient implements AuthApiClient {
   }
 
   void _registerDevice(AppUser user, String sessionId) {
-    final devices = _devicesByUser[user.id] ?? <AuthDeviceSession>[
-      AuthDeviceSession(
-        id: 'device-ios-shadow',
-        deviceName: 'Xiaomi 15',
-        platformLabel: 'Android',
-        lastActiveAt: DateTime.now().subtract(const Duration(minutes: 18)),
-        isCurrent: false,
-      ),
-    ];
+    final devices =
+        _devicesByUser[user.id] ??
+        <AuthDeviceSession>[
+          AuthDeviceSession(
+            id: 'device-ios-shadow',
+            deviceName: 'Xiaomi 15',
+            platformLabel: 'Android',
+            lastActiveAt: DateTime.now().subtract(const Duration(minutes: 18)),
+            isCurrent: false,
+          ),
+        ];
     final updatedDevices = <AuthDeviceSession>[
       AuthDeviceSession(
         id: sessionId,
@@ -187,5 +227,25 @@ class MockAuthApiClient implements AuthApiClient {
       ...devices.where((device) => device.id != sessionId),
     ];
     _devicesByUser[user.id] = updatedDevices;
+  }
+
+  AppUser _buildPlayer({
+    required String username,
+    required String displayName,
+  }) {
+    final now = DateTime.now();
+    final uidTail = now.microsecondsSinceEpoch.remainder(9000) + 1000;
+    return AppUser(
+      id: 'player-${now.microsecondsSinceEpoch}',
+      username: username,
+      displayName: displayName.isEmpty ? username : displayName,
+      role: AppUserRole.player,
+      uid: 'EPC-$uidTail',
+      level: 1,
+      bio: 'New party player',
+      avatarSeed: uidTail % 8,
+      email: '$username@ember.club',
+      provider: AuthProvider.usernamePassword,
+    );
   }
 }

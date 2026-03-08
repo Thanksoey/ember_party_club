@@ -1,11 +1,6 @@
-enum AppUserRole {
-  admin,
-  player,
-}
+enum AppUserRole { admin, player }
 
-enum AuthProvider {
-  usernamePassword,
-}
+enum AuthProvider { usernamePassword }
 
 class AppUser {
   const AppUser({

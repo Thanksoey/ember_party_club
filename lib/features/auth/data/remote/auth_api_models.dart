@@ -50,9 +50,7 @@ class AuthApiChangePasswordPayload {
 }
 
 class AuthApiDeviceListPayload {
-  const AuthApiDeviceListPayload({
-    required this.devices,
-  });
+  const AuthApiDeviceListPayload({required this.devices});
 
   final List<AuthDeviceSession> devices;
 }

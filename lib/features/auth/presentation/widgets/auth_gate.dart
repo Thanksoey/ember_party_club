@@ -64,7 +64,11 @@ class _BlockedState extends StatelessWidget {
                   const SizedBox(height: 14),
                   Text(title, style: theme.textTheme.headlineSmall),
                   const SizedBox(height: 8),
-                  Text(body, style: theme.textTheme.bodyLarge, textAlign: TextAlign.center),
+                  Text(
+                    body,
+                    style: theme.textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
+                  ),
                 ],
               ),
             ),

@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations.dart';
 import '../../../../app/widgets/app_backdrop.dart';
-import '../../../../app/widgets/brand_mark.dart';
+import '../../../../app/widgets/app_fade_in_up.dart';
+import '../../../../app/widgets/app_loading_indicator.dart';
+import '../../../../app/widgets/brand_lockup.dart';
 import '../../application/auth_controller.dart';
 import '../../domain/auth_failure.dart';
+import 'auth_guide_page.dart';
+
+enum _AuthMode { signIn, register }
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({
-    super.key,
-    required this.authController,
-  });
+  const LoginPage({super.key, required this.authController});
 
   final AuthController authController;
 
@@ -19,21 +21,38 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late final TextEditingController _usernameController;
-  late final TextEditingController _passwordController;
-  bool _obscurePassword = true;
+  late final TextEditingController _loginUsernameController;
+  late final TextEditingController _loginPasswordController;
+  late final TextEditingController _registerDisplayNameController;
+  late final TextEditingController _registerUsernameController;
+  late final TextEditingController _registerPasswordController;
+  late final TextEditingController _registerConfirmPasswordController;
+
+  _AuthMode _mode = _AuthMode.signIn;
+  bool _obscureLoginPassword = true;
+  bool _obscureRegisterPassword = true;
+  bool _obscureRegisterConfirmPassword = true;
+  String? _registerLocalError;
 
   @override
   void initState() {
     super.initState();
-    _usernameController = TextEditingController(text: 'captain_demo');
-    _passwordController = TextEditingController(text: 'Captain#2026!');
+    _loginUsernameController = TextEditingController(text: 'captain_demo');
+    _loginPasswordController = TextEditingController(text: 'Captain#2026!');
+    _registerDisplayNameController = TextEditingController();
+    _registerUsernameController = TextEditingController();
+    _registerPasswordController = TextEditingController();
+    _registerConfirmPasswordController = TextEditingController();
   }
 
   @override
   void dispose() {
-    _usernameController.dispose();
-    _passwordController.dispose();
+    _loginUsernameController.dispose();
+    _loginPasswordController.dispose();
+    _registerDisplayNameController.dispose();
+    _registerUsernameController.dispose();
+    _registerPasswordController.dispose();
+    _registerConfirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -41,11 +60,18 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = context.l10n;
+    final compactHeader = MediaQuery.of(context).size.width < 460;
 
     return AnimatedBuilder(
       animation: widget.authController,
       builder: (context, _) {
-        final error = _errorText(l10n, widget.authController.loginError);
+        final authError = _authErrorText(
+          l10n,
+          widget.authController.loginError,
+        );
+        final shownError = _mode == _AuthMode.register
+            ? (_registerLocalError ?? authError)
+            : authError;
 
         return Scaffold(
           body: AppBackdrop(
@@ -57,122 +83,225 @@ class _LoginPageState extends State<LoginPage> {
                   return SingleChildScrollView(
                     padding: const EdgeInsets.all(24),
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight - 48,
+                      ),
                       child: Center(
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 1080),
-                          child: Wrap(
-                            spacing: 20,
-                            runSpacing: 20,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 460,
-                                child: _HeroPanel(
-                                  onFillDemo: () => _fillAccount('captain_demo', 'Captain#2026!'),
-                                  onFillAdmin: () => _fillAccount('ember_admin', 'Ember#2026!'),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 460,
-                                child: Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(24),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                        child: AppFadeInUp(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 520),
+                            child: Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(24),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
                                       children: [
-                                        Text(l10n.loginHeadline, style: theme.textTheme.displaySmall),
-                                        const SizedBox(height: 10),
-                                        Text(l10n.loginBody, style: theme.textTheme.bodyLarge),
-                                        const SizedBox(height: 22),
-                                        TextField(
-                                          key: const ValueKey('login-username'),
-                                          controller: _usernameController,
-                                          decoration: InputDecoration(
-                                            labelText: l10n.loginUsernameLabel,
-                                            prefixIcon: const Icon(Icons.person_outline),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 14),
-                                        TextField(
-                                          key: const ValueKey('login-password'),
-                                          controller: _passwordController,
-                                          obscureText: _obscurePassword,
-                                          decoration: InputDecoration(
-                                            labelText: l10n.loginPasswordLabel,
-                                            prefixIcon: const Icon(Icons.lock_outline),
-                                            suffixIcon: IconButton(
-                                              onPressed: () {
-                                                setState(() {
-                                                  _obscurePassword = !_obscurePassword;
-                                                });
-                                              },
-                                              icon: Icon(_obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined),
-                                            ),
-                                          ),
-                                        ),
-                                        if (error != null) ...[
-                                          const SizedBox(height: 12),
-                                          Text(
-                                            error,
-                                            style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.secondary),
-                                          ),
-                                        ],
-                                        const SizedBox(height: 20),
-                                        SizedBox(
-                                          width: double.infinity,
-                                          child: FilledButton(
-                                            key: const ValueKey('login-submit'),
-                                            onPressed: widget.authController.isSubmitting
+                                        Expanded(
+                                          child: BrandLockup(
+                                            badgeSize: 50,
+                                            compact: compactHeader,
+                                            caption: compactHeader
                                                 ? null
-                                                : () {
-                                                    widget.authController.login(
-                                                      username: _usernameController.text.trim(),
-                                                      password: _passwordController.text,
-                                                    );
-                                                  },
-                                            child: widget.authController.isSubmitting
-                                                ? const SizedBox(
-                                                    width: 22,
-                                                    height: 22,
-                                                    child: CircularProgressIndicator(strokeWidth: 2),
-                                                  )
-                                                : Text(l10n.loginAction),
+                                                : l10n.loginHeadline,
                                           ),
                                         ),
-                                        const SizedBox(height: 16),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: _QuickSeedButton(
-                                                label: l10n.loginFillDemo,
-                                                onTap: () => _fillAccount('captain_demo', 'Captain#2026!'),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 12),
-                                            Expanded(
-                                              child: _QuickSeedButton(
-                                                label: l10n.loginFillAdmin,
-                                                onTap: () => _fillAccount('ember_admin', 'Ember#2026!'),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 16),
-                                        Container(
-                                          padding: const EdgeInsets.all(16),
-                                          decoration: BoxDecoration(
-                                            color: theme.colorScheme.secondary.withValues(alpha: 0.08),
-                                            borderRadius: BorderRadius.circular(20),
+                                        IconButton(
+                                          key: const ValueKey(
+                                            'open-auth-guide',
                                           ),
-                                          child: Text(l10n.loginDemoHint, style: theme.textTheme.bodyMedium),
+                                          tooltip: l10n.authGuideAction,
+                                          icon: const Icon(Icons.info_outline),
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute<void>(
+                                                builder: (_) =>
+                                                    const AuthGuidePage(),
+                                              ),
+                                            );
+                                          },
                                         ),
                                       ],
                                     ),
-                                  ),
+                                    const SizedBox(height: 14),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 14,
+                                        vertical: 10,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: theme.colorScheme.primary
+                                            .withValues(alpha: 0.08),
+                                        borderRadius: BorderRadius.circular(16),
+                                        border: Border.all(
+                                          color: theme.colorScheme.primary
+                                              .withValues(alpha: 0.14),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        l10n.loginHeadline,
+                                        style: theme.textTheme.bodyMedium
+                                            ?.copyWith(
+                                              color: theme.colorScheme.onSurface
+                                                  .withValues(alpha: 0.82),
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 14),
+                                    Text(
+                                      l10n.loginBody,
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
+                                    const SizedBox(height: 18),
+                                    SegmentedButton<_AuthMode>(
+                                      segments: [
+                                        ButtonSegment(
+                                          value: _AuthMode.signIn,
+                                          label: Text(l10n.authModeSignIn),
+                                          icon: const Icon(
+                                            Icons.login_outlined,
+                                          ),
+                                        ),
+                                        ButtonSegment(
+                                          value: _AuthMode.register,
+                                          label: Text(l10n.authModeRegister),
+                                          icon: const Icon(
+                                            Icons.person_add_alt_1_outlined,
+                                          ),
+                                        ),
+                                      ],
+                                      selected: {_mode},
+                                      onSelectionChanged: (value) {
+                                        setState(() {
+                                          _mode = value.first;
+                                          _registerLocalError = null;
+                                        });
+                                      },
+                                    ),
+                                    const SizedBox(height: 18),
+                                    AnimatedSwitcher(
+                                      duration: const Duration(
+                                        milliseconds: 220,
+                                      ),
+                                      child: _mode == _AuthMode.signIn
+                                          ? _SignInForm(
+                                              usernameController:
+                                                  _loginUsernameController,
+                                              passwordController:
+                                                  _loginPasswordController,
+                                              obscurePassword:
+                                                  _obscureLoginPassword,
+                                              isSubmitting: widget
+                                                  .authController
+                                                  .isSubmitting,
+                                              onTogglePassword: () {
+                                                setState(() {
+                                                  _obscureLoginPassword =
+                                                      !_obscureLoginPassword;
+                                                });
+                                              },
+                                              onSubmit: () {
+                                                widget.authController.login(
+                                                  username:
+                                                      _loginUsernameController
+                                                          .text
+                                                          .trim(),
+                                                  password:
+                                                      _loginPasswordController
+                                                          .text,
+                                                );
+                                              },
+                                            )
+                                          : _RegisterForm(
+                                              displayNameController:
+                                                  _registerDisplayNameController,
+                                              usernameController:
+                                                  _registerUsernameController,
+                                              passwordController:
+                                                  _registerPasswordController,
+                                              confirmPasswordController:
+                                                  _registerConfirmPasswordController,
+                                              obscurePassword:
+                                                  _obscureRegisterPassword,
+                                              obscureConfirmPassword:
+                                                  _obscureRegisterConfirmPassword,
+                                              isSubmitting: widget
+                                                  .authController
+                                                  .isSubmitting,
+                                              onTogglePassword: () {
+                                                setState(() {
+                                                  _obscureRegisterPassword =
+                                                      !_obscureRegisterPassword;
+                                                });
+                                              },
+                                              onToggleConfirmPassword: () {
+                                                setState(() {
+                                                  _obscureRegisterConfirmPassword =
+                                                      !_obscureRegisterConfirmPassword;
+                                                });
+                                              },
+                                              onSubmit: () async {
+                                                final password =
+                                                    _registerPasswordController
+                                                        .text;
+                                                if (password !=
+                                                    _registerConfirmPasswordController
+                                                        .text) {
+                                                  setState(() {
+                                                    _registerLocalError = l10n
+                                                        .registerPasswordMismatch;
+                                                  });
+                                                  return;
+                                                }
+                                                setState(() {
+                                                  _registerLocalError = null;
+                                                });
+                                                await widget.authController.register(
+                                                  username:
+                                                      _registerUsernameController
+                                                          .text
+                                                          .trim(),
+                                                  password: password,
+                                                  displayName:
+                                                      _registerDisplayNameController
+                                                          .text
+                                                          .trim(),
+                                                );
+                                              },
+                                            ),
+                                    ),
+                                    if (shownError != null) ...[
+                                      const SizedBox(height: 12),
+                                      Text(
+                                        shownError,
+                                        style: theme.textTheme.bodyMedium
+                                            ?.copyWith(
+                                              color:
+                                                  theme.colorScheme.secondary,
+                                            ),
+                                      ),
+                                    ],
+                                    const SizedBox(height: 8),
+                                    TextButton.icon(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute<void>(
+                                            builder: (_) =>
+                                                const AuthGuidePage(),
+                                          ),
+                                        );
+                                      },
+                                      icon: const Icon(
+                                        Icons.menu_book_outlined,
+                                      ),
+                                      label: Text(l10n.authGuideAction),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
@@ -187,147 +316,190 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _fillAccount(String username, String password) {
-    _usernameController.text = username;
-    _passwordController.text = password;
-  }
-
-  String? _errorText(AppLocalizations l10n, AuthFailure? failure) {
+  String? _authErrorText(AppLocalizations l10n, AuthFailure? failure) {
     switch (failure) {
       case null:
         return null;
       case AuthFailure.invalidCredentials:
         return l10n.loginInvalidCredentials;
+      case AuthFailure.usernameTaken:
+        return l10n.registerUsernameTaken;
       case AuthFailure.sessionExpired:
         return l10n.loginSessionExpired;
-      case AuthFailure.unauthorized:
       case AuthFailure.weakPassword:
+        return l10n.securityWeakPassword;
+      case AuthFailure.unauthorized:
       case AuthFailure.incorrectPassword:
         return l10n.guardLoginBody;
     }
   }
 }
 
-class _HeroPanel extends StatelessWidget {
-  const _HeroPanel({
-    required this.onFillDemo,
-    required this.onFillAdmin,
+class _SignInForm extends StatelessWidget {
+  const _SignInForm({
+    required this.usernameController,
+    required this.passwordController,
+    required this.obscurePassword,
+    required this.isSubmitting,
+    required this.onTogglePassword,
+    required this.onSubmit,
   });
 
-  final VoidCallback onFillDemo;
-  final VoidCallback onFillAdmin;
+  final TextEditingController usernameController;
+  final TextEditingController passwordController;
+  final bool obscurePassword;
+  final bool isSubmitting;
+  final VoidCallback onTogglePassword;
+  final VoidCallback onSubmit;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final l10n = context.l10n;
 
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              theme.colorScheme.primary,
-              theme.colorScheme.secondary,
-              theme.colorScheme.tertiary,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+    return Column(
+      key: const ValueKey('sign-in-form'),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextField(
+          key: const ValueKey('login-username'),
+          controller: usernameController,
+          decoration: InputDecoration(
+            labelText: l10n.loginUsernameLabel,
+            prefixIcon: const Icon(Icons.person_outline),
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const BrandMark(size: 88, showWordmark: true),
-            const SizedBox(height: 28),
-            Text(
-              l10n.loginHeroTitle,
-              style: theme.textTheme.displaySmall?.copyWith(color: Colors.white),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              l10n.loginHeroBody,
-              style: theme.textTheme.bodyLarge?.copyWith(color: Colors.white.withValues(alpha: 0.92)),
-            ),
-            const SizedBox(height: 20),
-            _SeedAccountCard(
-              title: l10n.loginSeedPlayerTitle,
-              subtitle: 'captain_demo',
-              onTap: onFillDemo,
-            ),
-            const SizedBox(height: 12),
-            _SeedAccountCard(
-              title: l10n.loginSeedAdminTitle,
-              subtitle: 'ember_admin',
-              onTap: onFillAdmin,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _SeedAccountCard extends StatelessWidget {
-  const _SeedAccountCard({
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-  });
-
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(20),
-      onTap: onTap,
-      child: Ink(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.14),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          children: [
-            const Icon(Icons.vpn_key_outlined, color: Colors.white),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white)),
-                  const SizedBox(height: 4),
-                  Text(subtitle, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white.withValues(alpha: 0.88))),
-                ],
+        const SizedBox(height: 14),
+        TextField(
+          key: const ValueKey('login-password'),
+          controller: passwordController,
+          obscureText: obscurePassword,
+          decoration: InputDecoration(
+            labelText: l10n.loginPasswordLabel,
+            prefixIcon: const Icon(Icons.lock_outline),
+            suffixIcon: IconButton(
+              onPressed: onTogglePassword,
+              icon: Icon(
+                obscurePassword
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
               ),
             ),
-            const Icon(Icons.chevron_right_rounded, color: Colors.white),
-          ],
+          ),
         ),
-      ),
+        const SizedBox(height: 18),
+        SizedBox(
+          width: double.infinity,
+          child: FilledButton(
+            key: const ValueKey('login-submit'),
+            onPressed: isSubmitting ? null : onSubmit,
+            child: isSubmitting
+                ? const AppLoadingIndicator(size: 22, strokeWidth: 2.2)
+                : Text(l10n.loginAction),
+          ),
+        ),
+      ],
     );
   }
 }
 
-class _QuickSeedButton extends StatelessWidget {
-  const _QuickSeedButton({
-    required this.label,
-    required this.onTap,
+class _RegisterForm extends StatelessWidget {
+  const _RegisterForm({
+    required this.displayNameController,
+    required this.usernameController,
+    required this.passwordController,
+    required this.confirmPasswordController,
+    required this.obscurePassword,
+    required this.obscureConfirmPassword,
+    required this.isSubmitting,
+    required this.onTogglePassword,
+    required this.onToggleConfirmPassword,
+    required this.onSubmit,
   });
 
-  final String label;
-  final VoidCallback onTap;
+  final TextEditingController displayNameController;
+  final TextEditingController usernameController;
+  final TextEditingController passwordController;
+  final TextEditingController confirmPasswordController;
+  final bool obscurePassword;
+  final bool obscureConfirmPassword;
+  final bool isSubmitting;
+  final VoidCallback onTogglePassword;
+  final VoidCallback onToggleConfirmPassword;
+  final VoidCallback onSubmit;
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
-      onPressed: onTap,
-      child: Text(label),
+    final l10n = context.l10n;
+
+    return Column(
+      key: const ValueKey('register-form'),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextField(
+          key: const ValueKey('register-display-name'),
+          controller: displayNameController,
+          decoration: InputDecoration(
+            labelText: l10n.registerDisplayNameLabel,
+            prefixIcon: const Icon(Icons.badge_outlined),
+          ),
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          key: const ValueKey('register-username'),
+          controller: usernameController,
+          decoration: InputDecoration(
+            labelText: l10n.loginUsernameLabel,
+            prefixIcon: const Icon(Icons.alternate_email_outlined),
+          ),
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          key: const ValueKey('register-password'),
+          controller: passwordController,
+          obscureText: obscurePassword,
+          decoration: InputDecoration(
+            labelText: l10n.loginPasswordLabel,
+            prefixIcon: const Icon(Icons.lock_outline),
+            suffixIcon: IconButton(
+              onPressed: onTogglePassword,
+              icon: Icon(
+                obscurePassword
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          key: const ValueKey('register-confirm-password'),
+          controller: confirmPasswordController,
+          obscureText: obscureConfirmPassword,
+          decoration: InputDecoration(
+            labelText: l10n.registerConfirmPasswordLabel,
+            prefixIcon: const Icon(Icons.verified_user_outlined),
+            suffixIcon: IconButton(
+              onPressed: onToggleConfirmPassword,
+              icon: Icon(
+                obscureConfirmPassword
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 18),
+        SizedBox(
+          width: double.infinity,
+          child: FilledButton.tonal(
+            key: const ValueKey('register-submit'),
+            onPressed: isSubmitting ? null : onSubmit,
+            child: isSubmitting
+                ? const AppLoadingIndicator(size: 22, strokeWidth: 2.2)
+                : Text(l10n.registerAction),
+          ),
+        ),
+      ],
     );
   }
 }

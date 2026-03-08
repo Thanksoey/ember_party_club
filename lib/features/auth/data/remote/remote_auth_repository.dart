@@ -1,4 +1,4 @@
-import '../../../core/storage/app_preference_store.dart';
+import '../../../../core/storage/app_preference_store.dart';
 import '../../domain/app_user.dart';
 import '../../domain/auth_device_session.dart';
 import '../../domain/auth_failure.dart';
@@ -13,8 +13,8 @@ class RemoteAuthRepository implements AuthRepository {
   RemoteAuthRepository({
     required AuthApiClient client,
     required AppPreferenceStore store,
-  })  : _client = client,
-        _store = store;
+  }) : _client = client,
+       _store = store;
 
   static const _refreshTokenKey = 'auth.refresh.token';
   static const _sessionIdKey = 'auth.session.id';
@@ -56,6 +56,27 @@ class RemoteAuthRepository implements AuthRepository {
       final payload = await _client.login(
         username: username,
         password: password,
+      );
+      final session = _mapSession(payload);
+      await _persistSession(session);
+      _activeSession = session;
+      return AuthResponse.success(session);
+    } on AuthApiException catch (error) {
+      return AuthResponse.failure(error.failure);
+    }
+  }
+
+  @override
+  Future<AuthResponse> register({
+    required String username,
+    required String password,
+    required String displayName,
+  }) async {
+    try {
+      final payload = await _client.register(
+        username: username,
+        password: password,
+        displayName: displayName,
       );
       final session = _mapSession(payload);
       await _persistSession(session);
@@ -167,7 +188,10 @@ class RemoteAuthRepository implements AuthRepository {
 
   Future<void> _persistSession(AuthSession session) async {
     await _store.writeString(_sessionIdKey, session.tokens.sessionId);
-    await _store.writeSecretString(_refreshTokenKey, session.tokens.refreshToken);
+    await _store.writeSecretString(
+      _refreshTokenKey,
+      session.tokens.refreshToken,
+    );
     await _store.writeSecretString(_accessTokenKey, session.tokens.accessToken);
   }
 

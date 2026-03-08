@@ -8,8 +8,8 @@
     "playAgain":  "Play again",
     "viewPlan":  "View plan",
     "playPrototype":  "Play prototype",
-    "homeHeroTitle":  "A mobile game hub designed for friend groups, not solo play.",
-    "homeHeroBody":  "The product focuses on low-latency rooms, pluggable game modules, stable voice interaction, and an enterprise-ready codebase.",
+    "homeHeroTitle":  "Open a room, start the party.",
+    "homeHeroBody":  "Bring friends into one room first, then switch between card, bluff, and party game modes as the vibe changes.",
     "modulesLabel":  "Modules",
     "featuredLabel":  "Featured",
     "launchStrategy":  "Launch Strategy",
@@ -336,15 +336,18 @@
                                                        }
                                   },
     "loginPasswordLabel":  "Password",
-    "settingsBody":  "Theme mode is already wired globally and persists across launches.",
+    "settingsBody":  "Theme and language preferences are saved automatically and restored on next launch.",
     "launchLoadingBody":  "Preparing rooms, modules, and session state...",
-    "loginBody":  "Use a seeded local account first. Once the auth shell is stable, replacing it with a real backend becomes straightforward.",
+    "loginBody":  "Sign in to create rooms and start matches instantly. New here? Register in one step.",
     "profileBody":  "Manage account state, visual preferences, and developer-facing controls from one place.",
     "loginUsernameLabel":  "Username",
+    "registerDisplayNameLabel":  "Display name",
+    "registerConfirmPasswordLabel":  "Confirm password",
     "themeTitle":  "Theme",
     "profileRolePlayer":  "Player",
     "localeBody":  "Default is Chinese. If the system language is English, the app switches automatically.",
     "loginAction":  "Sign in",
+    "registerAction":  "Create account",
     "themeDark":  "Dark",
     "loginDemoHint":  "Default demo account is pre-filled for quick development. Admin account is seeded separately and kept for delivery notes.",
     "settingsTitle":  "System settings",
@@ -352,13 +355,31 @@
     "localeTitle":  "Language",
     "themeSystem":  "System",
     "loginInvalidCredentials":  "Username or password is incorrect.",
+    "registerUsernameTaken":  "This username is already taken.",
+    "registerPasswordMismatch":  "The two passwords do not match.",
     "logoutAction":  "Log out",
     "themeLight":  "Light",
     "themeModeDescription":  "Current mode: {mode}",
-    "loginHeadline":  "Sign in to your party hub",
+    "loginHeadline":  "Sign in and join tonight's party run",
+    "authModeSignIn":  "Sign in",
+    "authModeRegister":  "Register",
     "profileTab":  "Profile",
     "profileTitle":  "User center",
     "profileRoleAdmin":  "Administrator",
+    "authGuideAction":  "App intro & rules",
+    "authGuideTitle":  "App Intro & Rules",
+    "authGuideIntroTitle":  "What is Ember Party Club?",
+    "authGuideIntroBody":  "Ember Party Club is built for group game nights. Enter one shared room, then swap play modes without breaking the session.",
+    "authGuideRulesTitle":  "Core Rules",
+    "authGuideRuleSignalTitle":  "Signal Deck Basics",
+    "authGuideRuleSignalBody":  "Each round, both sides pick one card. Higher effective power wins the round. Most points after the match wins.",
+    "authGuideRuleRoomTitle":  "Room Flow",
+    "authGuideRuleRoomBody":  "Host creates a room, configures seats and voice, then starts the game module. Session state is shared with all participants.",
+    "authGuideRuleFairTitle":  "Fair Play",
+    "authGuideRuleFairBody":  "Respect other players, avoid abusive language, and keep the game pace moving so everyone can participate.",
+    "headerSubtitleDiscover":  "Pick tonight's game mode",
+    "headerSubtitleRooms":  "Create rooms and prep the match",
+    "headerSubtitleProfile":  "Account, preferences, security",
     "@themeModeDescription":  {
                                   "placeholders":  {
                                                        "mode":  {
@@ -445,6 +466,384 @@
     "adminOpsItemBanner":  "Drive homepage banners and module ordering from config.",
     "adminOpsItemFeatureFlag":  "Reserve entry points for module toggles and experiments.",
     "authProviderUsernamePassword":  "Username & password",
+    "gameSessionTimelineTitle":  "Sync timeline",
+    "gameSessionTimelineEmpty":  "No sync event has arrived yet.",
+    "gameSessionCommandConnect":  "Connect sync channel",
+    "gameSessionCommandStartGame":  "Start match",
+    "gameSessionCommandPlayCard":  "Broadcast play",
+    "gameSessionCommandResetMatch":  "Reset match",
+    "gameSessionEventSyncConnected":  "Realtime channel connected.",
+    "gameSessionEventSyncReady":  "Sync ready. The room has entered multiplayer mode.",
+    "gameSessionEventCommandDispatched":  "Command dispatched: {command}",
+    "@gameSessionEventCommandDispatched":  {
+                                               "placeholders":  {
+                                                                    "command":  {
+
+                                                                                }
+                                                                }
+                                           },
+    "gameSessionEventCommandAcknowledged":  "Server acknowledged command: {command}",
+    "@gameSessionEventCommandAcknowledged":  {
+                                                 "placeholders":  {
+                                                                      "command":  {
+
+                                                                                  }
+                                                                  }
+                                             },
+    "gameSessionEventPhaseChanged":  "Session phase switched to {phase}",
+    "@gameSessionEventPhaseChanged":  {
+                                         "placeholders":  {
+                                                              "phase":  {
+
+                                                                         }
+                                                          }
+                                     },
+    "gameSessionEventParticipantSynced":  "Seat {seat} completed sync.",
+    "@gameSessionEventParticipantSynced":  {
+                                               "placeholders":  {
+                                                                    "seat":  {
+                                                                                 "type":  "int"
+                                                                             }
+                                                                }
+                                           },
+    "gameSessionEventSignalCard":  "Round card broadcast: {cardTitle}",
+    "@gameSessionEventSignalCard":  {
+                                        "placeholders":  {
+                                                             "cardTitle":  {
+
+                                                                           }
+                                                         }
+                                    },
+    "gameSessionEventMatchReset":  "Room match reset and ready for the next round.",
+    "feedbackTitle": "Feedback",
+    "feedbackSoundEffects": "Sound Effects",
+    "feedbackHaptics": "Haptics",
+    "feedbackOn": "On",
+    "feedbackOff": "Off",
+    "chaosIntro": "Each round gives a random party challenge. Success grants points and streak multipliers.",
+    "chaosScoreLabel": "Score",
+    "chaosStreakLabel": "Streak",
+    "chaosBestLabel": "Best",
+    "chaosRerollLabel": "Reroll",
+    "chaosStatusPlaying": "Round {round}: complete the challenge to keep your streak bonus.",
+    "@chaosStatusPlaying": {
+      "placeholders": {
+        "round": {
+          "type": "int"
+        }
+      }
+    },
+    "chaosStatusFinished": "Challenge complete. Score {score}, best streak {bestStreak}.",
+    "@chaosStatusFinished": {
+      "placeholders": {
+        "score": {
+          "type": "int"
+        },
+        "bestStreak": {
+          "type": "int"
+        }
+      }
+    },
+    "chaosActionSuccess": "Success",
+    "chaosActionFail": "Fail",
+    "chaosActionReroll": "Reroll",
+    "chaosRoundTimeline": "Round Timeline",
+    "chaosRoundEmpty": "Finish one challenge to populate logs.",
+    "chaosBasePointsLabel": "Base +{points}",
+    "@chaosBasePointsLabel": {
+      "placeholders": {
+        "points": {
+          "type": "int"
+        }
+      }
+    },
+    "chaosTimerLabel": "Timer {seconds}s",
+    "@chaosTimerLabel": {
+      "placeholders": {
+        "seconds": {
+          "type": "int"
+        }
+      }
+    },
+    "chaosRoundTitle": "Round {round} - {title}",
+    "@chaosRoundTitle": {
+      "placeholders": {
+        "round": {
+          "type": "int"
+        },
+        "title": {}
+      }
+    },
+    "chaosRoundSuccess": "Success, +{points} points",
+    "@chaosRoundSuccess": {
+      "placeholders": {
+        "points": {
+          "type": "int"
+        }
+      }
+    },
+    "chaosRoundFailed": "Failed, streak reset",
+    "chaosStreakAfterRound": "Streak after round: {streak}",
+    "@chaosStreakAfterRound": {
+      "placeholders": {
+        "streak": {
+          "type": "int"
+        }
+      }
+    },
+    "chaosSummaryTitle": "Chaos Summary",
+    "chaosSummaryBody": "Final score {score}, best streak {bestStreak}.",
+    "@chaosSummaryBody": {
+      "placeholders": {
+        "score": {
+          "type": "int"
+        },
+        "bestStreak": {
+          "type": "int"
+        }
+      }
+    },
+    "chaosRunAgain": "Run Again",
+    "chaosChallengeTitleMimic": "Mirror Mimic",
+    "chaosChallengeTitleRapidQa": "Rapid Triple",
+    "chaosChallengeTitleRhythm": "Rhythm Relay",
+    "chaosChallengeTitleDrawAndGuess": "Sketch Sprint",
+    "chaosChallengeTitleSoundOnly": "Sound Only",
+    "chaosChallengeTitleFrozenPose": "Freeze Frame",
+    "chaosChallengeTitleReverseStory": "Reverse Story",
+    "chaosChallengeTitleEmojiSpeak": "Emoji Translate",
+    "chaosChallengeDetailMimic": "Mimic a profession for 30 seconds and get one correct guess.",
+    "chaosChallengeDetailRapidQa": "Answer 3 random prompts, each within 5 seconds.",
+    "chaosChallengeDetailRhythm": "Follow the clap pattern and chant correctly with no misses.",
+    "chaosChallengeDetailDrawAndGuess": "Sketch a keyword in 20 seconds and have teammates guess it.",
+    "chaosChallengeDetailSoundOnly": "No words from the answer, only sound effects are allowed.",
+    "chaosChallengeDetailFrozenPose": "Hold a pose for 10 seconds and let teammates name the scene.",
+    "chaosChallengeDetailReverseStory": "Tell the ending first, then the beginning, still making sense.",
+    "chaosChallengeDetailEmojiSpeak": "Describe a movie or song title using only 3 emojis.",
+    "midnightStatusPlaying": "Round {round}: vote before the trail goes cold.",
+    "@midnightStatusPlaying": {
+      "placeholders": {
+        "round": {
+          "type": "int"
+        }
+      }
+    },
+    "midnightStatusFinished": "Case files closed. You {playerScore} - Rival {aiScore}.",
+    "@midnightStatusFinished": {
+      "placeholders": {
+        "playerScore": {
+          "type": "int"
+        },
+        "aiScore": {
+          "type": "int"
+        }
+      }
+    },
+    "midnightInsightLabel": "Insight",
+    "midnightCaseLabel": "Case: {title}",
+    "@midnightCaseLabel": {
+      "placeholders": {
+        "title": {}
+      }
+    },
+    "midnightRevealClue": "Reveal clue",
+    "midnightSuspectsTitle": "Suspects",
+    "midnightTimelineTitle": "Investigation Timeline",
+    "midnightTimelineEmpty": "No votes yet. Lock a suspect to log this round.",
+    "midnightSelectSuspect": "Choose this suspect as your prime lead.",
+    "midnightLockVote": "Lock vote",
+    "midnightTimelineRound": "Round {round} - {caseTitle}",
+    "@midnightTimelineRound": {
+      "placeholders": {
+        "round": {
+          "type": "int"
+        },
+        "caseTitle": {}
+      }
+    },
+    "midnightTimelineVotes": "You voted {playerVote}; rival voted {aiVote}; culprit was {culpritVote}.",
+    "@midnightTimelineVotes": {
+      "placeholders": {
+        "playerVote": {},
+        "aiVote": {},
+        "culpritVote": {}
+      }
+    },
+    "midnightTimelineResult": "Points: you +{playerPoints}, rival +{aiPoints}.",
+    "@midnightTimelineResult": {
+      "placeholders": {
+        "playerPoints": {
+          "type": "int"
+        },
+        "aiPoints": {
+          "type": "int"
+        }
+      }
+    },
+    "midnightResultWin": "Investigation Dominance",
+    "midnightResultLose": "Rival Takes the Case",
+    "midnightResultScore": "Final score: you {playerScore} - rival {aiScore}.",
+    "@midnightResultScore": {
+      "placeholders": {
+        "playerScore": {
+          "type": "int"
+        },
+        "aiScore": {
+          "type": "int"
+        }
+      }
+    },
+    "midnightCaseTitleCaseA": "Echoes in the Lantern Street",
+    "midnightCaseTitleCaseB": "Cloud Deck Signal Theft",
+    "midnightCaseTitleCaseC": "Harbor District Missing Cargo",
+    "midnightClueA1": "Witness heard a silver whistle near the north alley.",
+    "midnightClueA2": "A glove with dye marks was found behind the stage.",
+    "midnightClueA3": "The culprit knew the lamp schedule to avoid patrols.",
+    "midnightClueB1": "Security logs show one forged cargo badge at midnight.",
+    "midnightClueB2": "The stolen crate was too heavy for a single courier.",
+    "midnightClueB3": "A cracked comms chip points to someone in signal control.",
+    "midnightClueC1": "Wet boot prints came from berth C before dawn.",
+    "midnightClueC2": "The lock was opened with an old customs override code.",
+    "midnightClueC3": "Only one suspect knew the blind spot of camera seven.",
+    "midnightSuspectVex": "Vex",
+    "midnightSuspectLyra": "Lyra",
+    "midnightSuspectKade": "Kade",
+    "midnightSuspectMina": "Mina",
+    "midnightSuspectNox": "Nox",
+    "midnightSuspectSora": "Sora",
+    "midnightSuspectDax": "Dax",
+    "midnightSuspectYuri": "Yuri",
+    "orbitStatusFinished": "Contract complete. Final net worth: {netWorth}.",
+    "@orbitStatusFinished": {
+      "placeholders": {
+        "netWorth": {
+          "type": "int"
+        }
+      }
+    },
+    "orbitStatusPlaying": "Trade one resource each turn and stay ahead of market swings.",
+    "orbitMetricCash": "Cash",
+    "orbitMetricNetWorth": "Net Worth",
+    "orbitMetricCargo": "Cargo",
+    "orbitMarketBoardTitle": "Market Board",
+    "orbitMarketBoardSubtitle": "Tap a commodity card to trade.",
+    "orbitTimelineTitle": "Trade Timeline",
+    "orbitTimelineEmpty": "No deals yet. Buy or sell one resource to begin.",
+    "orbitResourceStats": "Price {price} | Cargo {cargo}",
+    "@orbitResourceStats": {
+      "placeholders": {
+        "price": {
+          "type": "int"
+        },
+        "cargo": {
+          "type": "int"
+        }
+      }
+    },
+    "orbitBuy": "Buy",
+    "orbitSell": "Sell",
+    "orbitRoundLogTitle": "Round {round} - {action} {resource} @ {price}",
+    "@orbitRoundLogTitle": {
+      "placeholders": {
+        "round": {
+          "type": "int"
+        },
+        "action": {},
+        "resource": {},
+        "price": {
+          "type": "int"
+        }
+      }
+    },
+    "orbitRoundLogStats": "Cash {cash} | Net {netWorth}",
+    "@orbitRoundLogStats": {
+      "placeholders": {
+        "cash": {
+          "type": "int"
+        },
+        "netWorth": {
+          "type": "int"
+        }
+      }
+    },
+    "orbitResultTitle": "Trade Settlement",
+    "orbitResultBody": "Final net worth: {netWorth}",
+    "@orbitResultBody": {
+      "placeholders": {
+        "netWorth": {
+          "type": "int"
+        }
+      }
+    },
+    "orbitTradeAgain": "Trade Again",
+    "orbitActionBuy": "BUY",
+    "orbitActionSell": "SELL",
+    "orbitResourceOre": "Ore",
+    "orbitResourceCrystal": "Crystal",
+    "orbitResourceGas": "Gas",
+    "signalMetricBattlefield": "Battlefield",
+    "signalMetricMomentum": "Momentum",
+    "signalFieldChip": "Field: {suit}",
+    "@signalFieldChip": {
+      "placeholders": {
+        "suit": {}
+      }
+    },
+    "signalMomentumChip": "Momentum {playerMomentum}-{rivalMomentum}",
+    "@signalMomentumChip": {
+      "placeholders": {
+        "playerMomentum": {
+          "type": "int"
+        },
+        "rivalMomentum": {
+          "type": "int"
+        }
+      }
+    },
+    "signalBattleBonus": "Battle +1",
+    "signalMomentumBonus": "Momentum +{bonus}",
+    "@signalMomentumBonus": {
+      "placeholders": {
+        "bonus": {
+          "type": "int"
+        }
+      }
+    },
+    "howToPlayAction": "How to play",
+    "guideReadyAction": "Start match",
+    "guideBackAction": "Back",
+    "guideNextAction": "Next",
+    "guideSkipAction": "Skip for now",
+    "guideStepCounter": "Step {current}/{total}",
+    "@guideStepCounter": {
+        "placeholders": {
+            "current": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "guideSectionGoalTitle": "Core goal",
+    "guideSectionTurnTitle": "Turn flow",
+    "guideSectionTipsTitle": "Winning tips",
+    "signalGuideGoalBody": "Win rounds with higher effective power. The higher total score takes the match.",
+    "signalGuideTurnBody": "Play 1 card each round. Matching the battlefield suit grants +1, momentum stacks after winning rounds, and abilities resolve from the card trait.",
+    "signalGuideTipsBody": "Watch the active field and your momentum. Save chain cards for same-suit turns and use counter or anchor cards to swing key rounds.",
+    "midnightGuideGoalBody": "Identify the culprit before the rival does. Correct votes award points over the full case sequence.",
+    "midnightGuideTurnBody": "Review revealed clues, spend insight to expose more evidence, then lock one suspect as your vote for the round.",
+    "midnightGuideTipsBody": "Do not burn all insight early. Cross-check alibis, motive, and map access before committing your last vote.",
+    "orbitGuideGoalBody": "Finish the contract with the highest net worth by balancing cash flow, holdings, and price swings.",
+    "orbitGuideTurnBody": "Each turn you buy or sell exactly one resource. The market reprices after the action, so tempo matters as much as value.",
+    "orbitGuideTipsBody": "Keep enough cash for reversals, do not overstack one commodity, and sell into peaks instead of waiting for perfect prices.",
+    "chaosGuideGoalBody": "String together party challenges for score and streak bonuses before the round set ends.",
+    "chaosGuideTurnBody": "Each challenge has a timer and base score. Clear it to grow streak value or fail and reset momentum.",
+    "chaosGuideTipsBody": "Use rerolls on low-confidence prompts, protect an existing streak, and prioritize fast-completion tasks late in the run.",
+    "moduleReadinessLabel": "Readiness",
+    "expandDetails": "Expand details",
+    "collapseDetails": "Hide details",
+    "enterAction": "Enter",
     "shortDateTime":  "{year}-{month}-{day} {hour}:{minute}",
     "@shortDateTime":  {
                            "placeholders":  {

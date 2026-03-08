@@ -13,6 +13,12 @@ abstract class AuthApiClient {
     required String password,
   });
 
+  Future<AuthApiSessionPayload> register({
+    required String username,
+    required String password,
+    required String displayName,
+  });
+
   Future<AuthApiSessionPayload> refreshSession({
     required String refreshToken,
     required String sessionId,
@@ -28,9 +34,7 @@ abstract class AuthApiClient {
     required AuthApiChangePasswordPayload payload,
   });
 
-  Future<AuthApiDeviceListPayload> fetchDevices({
-    required String accessToken,
-  });
+  Future<AuthApiDeviceListPayload> fetchDevices({required String accessToken});
 
   Future<void> revokeDevice({
     required String accessToken,

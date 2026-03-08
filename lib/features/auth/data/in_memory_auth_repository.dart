@@ -11,9 +11,11 @@ class InMemoryAuthRepository implements AuthRepository {
     required List<AppUser> users,
     Map<String, String>? passwords,
     AuthSession? initialSession,
-  })  : _users = <String, AppUser>{for (final user in users) user.username: user},
-        _passwords = passwords ?? DevPasswords.defaults,
-        _session = initialSession;
+  }) : _users = <String, AppUser>{
+         for (final user in users) user.username: user,
+       },
+       _passwords = passwords ?? DevPasswords.defaults,
+       _session = initialSession;
 
   final Map<String, AppUser> _users;
   final Map<String, String> _passwords;
@@ -49,6 +51,56 @@ class InMemoryAuthRepository implements AuthRepository {
         refreshToken: 'memory-refresh-$username',
         expiresAt: DateTime(2026, 3, 7, 20),
         sessionId: 'memory-session-$username',
+      ),
+    );
+    return AuthResponse.success(_session!);
+  }
+
+  @override
+  Future<AuthResponse> register({
+    required String username,
+    required String password,
+    required String displayName,
+  }) async {
+    final normalizedUsername = username.trim().toLowerCase();
+    if (normalizedUsername.length < 3) {
+      return const AuthResponse.failure(AuthFailure.invalidCredentials);
+    }
+    if (_users.containsKey(normalizedUsername)) {
+      return const AuthResponse.failure(AuthFailure.usernameTaken);
+    }
+    if (password.length < 8) {
+      return const AuthResponse.failure(AuthFailure.weakPassword);
+    }
+
+    final now = DateTime.now();
+    final uidTail = now.microsecondsSinceEpoch.remainder(9000) + 1000;
+    final created = AppUser(
+      id: 'player-${now.microsecondsSinceEpoch}',
+      username: normalizedUsername,
+      displayName: displayName.trim().isEmpty
+          ? normalizedUsername
+          : displayName.trim(),
+      role: AppUserRole.player,
+      uid: 'EPC-$uidTail',
+      level: 1,
+      bio: 'New player',
+      avatarSeed: uidTail % 8,
+      email: '$normalizedUsername@ember.club',
+      provider: AuthProvider.usernamePassword,
+    );
+
+    _users[normalizedUsername] = created;
+    _passwords[normalizedUsername] = password;
+
+    _session = AuthSession(
+      user: created,
+      signedInAt: now,
+      tokens: AuthTokenBundle(
+        accessToken: 'memory-access-$normalizedUsername',
+        refreshToken: 'memory-refresh-$normalizedUsername',
+        expiresAt: now.add(const Duration(hours: 8)),
+        sessionId: 'memory-session-$normalizedUsername',
       ),
     );
     return AuthResponse.success(_session!);

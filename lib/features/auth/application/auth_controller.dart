@@ -13,7 +13,8 @@ class AuthController extends ChangeNotifier {
   AuthController._(this._repository, this._session, this._deviceSessions);
 
   factory AuthController.test({AuthSession? session}) {
-    final seededSession = session ??
+    final seededSession =
+        session ??
         AuthSession(
           user: DevSeedAuthRepository.seededUsers[1],
           signedInAt: DateTime(2026, 3, 7, 12),
@@ -83,6 +84,35 @@ class AuthController extends ChangeNotifier {
     final response = await _repository.login(
       username: username,
       password: password,
+    );
+
+    _isSubmitting = false;
+    if (!response.isSuccess) {
+      _loginError = response.failure;
+      notifyListeners();
+      return false;
+    }
+
+    _session = response.session;
+    _deviceSessions = await _repository.fetchDeviceSessions();
+    notifyListeners();
+    return true;
+  }
+
+  Future<bool> register({
+    required String username,
+    required String password,
+    required String displayName,
+  }) async {
+    _loginError = null;
+    _isSubmitting = true;
+    notifyListeners();
+
+    await Future<void>.delayed(const Duration(milliseconds: 420));
+    final response = await _repository.register(
+      username: username,
+      password: password,
+      displayName: displayName,
     );
 
     _isSubmitting = false;

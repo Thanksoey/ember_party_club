@@ -8,8 +8,8 @@
     "playAgain":  "再来一局",
     "viewPlan":  "查看规划",
     "playPrototype":  "试玩原型",
-    "homeHeroTitle":  "给朋友局而不是单机局设计的移动游戏中心",
-    "homeHeroBody":  "核心方向是低延迟房间、可插拔游戏模块、稳定语音互动，以及能长期演进的企业级代码结构。",
+    "homeHeroTitle":  "今晚开房，马上开玩。",
+    "homeHeroBody":  "先把朋友拉进同一个房间，再按气氛切换卡牌、推理或派对小游戏。",
     "modulesLabel":  "模块数",
     "featuredLabel":  "精选",
     "launchStrategy":  "首发策略",
@@ -336,15 +336,18 @@
                                                        }
                                   },
     "loginPasswordLabel":  "密码",
-    "settingsBody":  "主题模式已经接到全局壳层，并且会在下次启动时保留。",
+    "settingsBody":  "主题和语言会自动保存，下次打开保持你上次的选择。",
     "launchLoadingBody":  "正在准备房间、模块和会话状态...",
-    "loginBody":  "先用本地种子账号打通登录壳层。后面替换成真实后端时，不需要重写整个应用入口。",
+    "loginBody":  "登录后就能直接建房、组队、开局。没账号的话在这里一键注册。",
     "profileBody":  "账号状态、界面偏好和开发期控制项统一放在这里管理。",
     "loginUsernameLabel":  "用户名",
+    "registerDisplayNameLabel":  "昵称",
+    "registerConfirmPasswordLabel":  "确认密码",
     "themeTitle":  "界面风格",
     "profileRolePlayer":  "普通玩家",
     "localeBody":  "默认中文；如果系统语言是英文，应用会自动切换到英文。",
     "loginAction":  "登录",
+    "registerAction":  "注册",
     "themeDark":  "深色",
     "loginDemoHint":  "当前默认填充的是开发演示账号，方便你直接进入应用。管理员账号我会在交付说明里单独给你。",
     "settingsTitle":  "系统设置",
@@ -352,13 +355,31 @@
     "localeTitle":  "语言",
     "themeSystem":  "跟随系统",
     "loginInvalidCredentials":  "用户名或密码错误。",
+    "registerUsernameTaken":  "该用户名已被占用。",
+    "registerPasswordMismatch":  "两次输入的密码不一致。",
     "logoutAction":  "退出登录",
     "themeLight":  "浅色",
     "themeModeDescription":  "当前模式：{mode}",
-    "loginHeadline":  "登录你的派对中枢",
+    "loginHeadline":  "登录后加入今晚的派对局",
+    "authModeSignIn":  "登录",
+    "authModeRegister":  "注册",
     "profileTab":  "我的",
     "profileTitle":  "用户中心",
     "profileRoleAdmin":  "管理员",
+    "authGuideAction":  "App 介绍与规则",
+    "authGuideTitle":  "App 介绍与规则",
+    "authGuideIntroTitle":  "这是什么应用？",
+    "authGuideIntroBody":  "余烬派对社是朋友聚会用的开局工具。先进同一个房间，再选择要玩的模式，整场不用反复切页面。",
+    "authGuideRulesTitle":  "核心规则",
+    "authGuideRuleSignalTitle":  "信号牌局基础规则",
+    "authGuideRuleSignalBody":  "每回合双方各出一张牌，按有效强度判胜负。整局结束时分数更高的一方获胜。",
+    "authGuideRuleRoomTitle":  "房间流程",
+    "authGuideRuleRoomBody":  "由房主创建房间并设置人数、语音后开局。房间状态会同步给所有参与者。",
+    "authGuideRuleFairTitle":  "公平游戏",
+    "authGuideRuleFairBody":  "请尊重其他玩家，避免辱骂与恶意行为，保持对局节奏，让所有人都能参与。",
+    "headerSubtitleDiscover":  "挑今晚要玩的模式",
+    "headerSubtitleRooms":  "开房、组队、准备开局",
+    "headerSubtitleProfile":  "账号、偏好和安全设置",
     "@themeModeDescription":  {
                                   "placeholders":  {
                                                        "mode":  {
@@ -445,6 +466,384 @@
     "adminOpsItemBanner":  "首页 Banner 与模块排序统一由配置驱动。",
     "adminOpsItemFeatureFlag":  "预留游戏模块开关与实验分流入口。",
     "authProviderUsernamePassword":  "账号密码",
+    "gameSessionTimelineTitle":  "同步时间线",
+    "gameSessionTimelineEmpty":  "尚未收到同步事件。",
+    "gameSessionCommandConnect":  "连接同步通道",
+    "gameSessionCommandStartGame":  "开始对局",
+    "gameSessionCommandPlayCard":  "广播出牌",
+    "gameSessionCommandResetMatch":  "重置对局",
+    "gameSessionEventSyncConnected":  "实时通道已连接。",
+    "gameSessionEventSyncReady":  "同步准备就绪，房间已进入多人模式。",
+    "gameSessionEventCommandDispatched":  "已发送指令：{command}",
+    "@gameSessionEventCommandDispatched":  {
+                                               "placeholders":  {
+                                                                    "command":  {
+
+                                                                                }
+                                                                }
+                                           },
+    "gameSessionEventCommandAcknowledged":  "服务端已确认指令：{command}",
+    "@gameSessionEventCommandAcknowledged":  {
+                                                 "placeholders":  {
+                                                                      "command":  {
+
+                                                                                  }
+                                                                  }
+                                             },
+    "gameSessionEventPhaseChanged":  "会话阶段切换为：{phase}",
+    "@gameSessionEventPhaseChanged":  {
+                                         "placeholders":  {
+                                                              "phase":  {
+
+                                                                         }
+                                                          }
+                                     },
+    "gameSessionEventParticipantSynced":  "{seat} 号位已完成同步。",
+    "@gameSessionEventParticipantSynced":  {
+                                               "placeholders":  {
+                                                                    "seat":  {
+                                                                                 "type":  "int"
+                                                                             }
+                                                                }
+                                           },
+    "gameSessionEventSignalCard":  "已广播本回合卡牌：{cardTitle}",
+    "@gameSessionEventSignalCard":  {
+                                        "placeholders":  {
+                                                             "cardTitle":  {
+
+                                                                           }
+                                                         }
+                                    },
+    "gameSessionEventMatchReset":  "房间对局已重置，等待下一轮开始。",
+    "feedbackTitle": "系统反馈",
+    "feedbackSoundEffects": "音效",
+    "feedbackHaptics": "震动",
+    "feedbackOn": "已开启",
+    "feedbackOff": "已关闭",
+    "chaosIntro": "每回合会抽取一个派对挑战。完成后可得分，并叠加连胜倍率。",
+    "chaosScoreLabel": "得分",
+    "chaosStreakLabel": "连胜",
+    "chaosBestLabel": "最佳连胜",
+    "chaosRerollLabel": "重抽",
+    "chaosStatusPlaying": "第 {round} 回合：完成挑战以保住连胜加成。",
+    "@chaosStatusPlaying": {
+      "placeholders": {
+        "round": {
+          "type": "int"
+        }
+      }
+    },
+    "chaosStatusFinished": "挑战结束，总分 {score}，最佳连胜 {bestStreak}。",
+    "@chaosStatusFinished": {
+      "placeholders": {
+        "score": {
+          "type": "int"
+        },
+        "bestStreak": {
+          "type": "int"
+        }
+      }
+    },
+    "chaosActionSuccess": "完成",
+    "chaosActionFail": "失败",
+    "chaosActionReroll": "重抽",
+    "chaosRoundTimeline": "回合时间线",
+    "chaosRoundEmpty": "完成至少一个挑战后，这里会记录回合进展。",
+    "chaosBasePointsLabel": "基础 +{points}",
+    "@chaosBasePointsLabel": {
+      "placeholders": {
+        "points": {
+          "type": "int"
+        }
+      }
+    },
+    "chaosTimerLabel": "倒计时 {seconds} 秒",
+    "@chaosTimerLabel": {
+      "placeholders": {
+        "seconds": {
+          "type": "int"
+        }
+      }
+    },
+    "chaosRoundTitle": "第 {round} 回合 · {title}",
+    "@chaosRoundTitle": {
+      "placeholders": {
+        "round": {
+          "type": "int"
+        },
+        "title": {}
+      }
+    },
+    "chaosRoundSuccess": "成功，+{points} 分",
+    "@chaosRoundSuccess": {
+      "placeholders": {
+        "points": {
+          "type": "int"
+        }
+      }
+    },
+    "chaosRoundFailed": "失败，连胜重置",
+    "chaosStreakAfterRound": "本回合后连胜：{streak}",
+    "@chaosStreakAfterRound": {
+      "placeholders": {
+        "streak": {
+          "type": "int"
+        }
+      }
+    },
+    "chaosSummaryTitle": "混沌总结",
+    "chaosSummaryBody": "最终得分 {score}，最佳连胜 {bestStreak}。",
+    "@chaosSummaryBody": {
+      "placeholders": {
+        "score": {
+          "type": "int"
+        },
+        "bestStreak": {
+          "type": "int"
+        }
+      }
+    },
+    "chaosRunAgain": "再开一轮",
+    "chaosChallengeTitleMimic": "镜像模仿",
+    "chaosChallengeTitleRapidQa": "极速三连答",
+    "chaosChallengeTitleRhythm": "节奏接力",
+    "chaosChallengeTitleDrawAndGuess": "速写猜题",
+    "chaosChallengeTitleSoundOnly": "纯音效",
+    "chaosChallengeTitleFrozenPose": "冻结定格",
+    "chaosChallengeTitleReverseStory": "倒叙故事",
+    "chaosChallengeTitleEmojiSpeak": "表情翻译",
+    "chaosChallengeDetailMimic": "模仿一个职业 30 秒，并让队友至少猜中一次。",
+    "chaosChallengeDetailRapidQa": "连续回答 3 个随机问题，每题限时 5 秒。",
+    "chaosChallengeDetailRhythm": "准确跟上拍手节奏和口号，中途不能失误。",
+    "chaosChallengeDetailDrawAndGuess": "20 秒内画出关键词，并让队友猜中。",
+    "chaosChallengeDetailSoundOnly": "不能说答案相关词，只能用音效表达。",
+    "chaosChallengeDetailFrozenPose": "保持一个定格姿势 10 秒，让队友说出场景。",
+    "chaosChallengeDetailReverseStory": "先讲结尾，再讲开头，仍要自圆其说。",
+    "chaosChallengeDetailEmojiSpeak": "只用 3 个表情描述电影名或歌名。",
+    "midnightStatusPlaying": "第 {round} 回合：在热度消散前锁定投票。",
+    "@midnightStatusPlaying": {
+      "placeholders": {
+        "round": {
+          "type": "int"
+        }
+      }
+    },
+    "midnightStatusFinished": "案卷关闭。你 {playerScore} - 对手 {aiScore}。",
+    "@midnightStatusFinished": {
+      "placeholders": {
+        "playerScore": {
+          "type": "int"
+        },
+        "aiScore": {
+          "type": "int"
+        }
+      }
+    },
+    "midnightInsightLabel": "洞察",
+    "midnightCaseLabel": "案件：{title}",
+    "@midnightCaseLabel": {
+      "placeholders": {
+        "title": {}
+      }
+    },
+    "midnightRevealClue": "揭示线索",
+    "midnightSuspectsTitle": "嫌疑人",
+    "midnightTimelineTitle": "调查时间线",
+    "midnightTimelineEmpty": "还没有投票记录。锁定一名嫌疑人后会记录在这里。",
+    "midnightSelectSuspect": "将其设为本回合首要嫌疑人。",
+    "midnightLockVote": "锁定投票",
+    "midnightTimelineRound": "第 {round} 回合 · {caseTitle}",
+    "@midnightTimelineRound": {
+      "placeholders": {
+        "round": {
+          "type": "int"
+        },
+        "caseTitle": {}
+      }
+    },
+    "midnightTimelineVotes": "你投给了 {playerVote}；对手投给了 {aiVote}；真凶是 {culpritVote}。",
+    "@midnightTimelineVotes": {
+      "placeholders": {
+        "playerVote": {},
+        "aiVote": {},
+        "culpritVote": {}
+      }
+    },
+    "midnightTimelineResult": "得分：你 +{playerPoints}，对手 +{aiPoints}。",
+    "@midnightTimelineResult": {
+      "placeholders": {
+        "playerPoints": {
+          "type": "int"
+        },
+        "aiPoints": {
+          "type": "int"
+        }
+      }
+    },
+    "midnightResultWin": "调查压制",
+    "midnightResultLose": "对手拿下案子",
+    "midnightResultScore": "最终比分：你 {playerScore} - 对手 {aiScore}。",
+    "@midnightResultScore": {
+      "placeholders": {
+        "playerScore": {
+          "type": "int"
+        },
+        "aiScore": {
+          "type": "int"
+        }
+      }
+    },
+    "midnightCaseTitleCaseA": "灯街回声案",
+    "midnightCaseTitleCaseB": "云港信号失窃案",
+    "midnightCaseTitleCaseC": "港区失踪货箱案",
+    "midnightClueA1": "目击者在北侧小巷听到了一声银哨。",
+    "midnightClueA2": "舞台后方发现了一只沾有染料的手套。",
+    "midnightClueA3": "凶手熟悉点灯时间表，才能避开巡逻。",
+    "midnightClueB1": "安保记录显示，午夜有一张伪造货运通行证被刷入。",
+    "midnightClueB2": "失窃的货箱太重，一个人根本搬不走。",
+    "midnightClueB3": "一枚裂开的通讯芯片指向了信号控制岗位。",
+    "midnightClueC1": "天亮前，C 泊位附近留下了潮湿的靴印。",
+    "midnightClueC2": "锁是用一组旧海关覆盖码打开的。",
+    "midnightClueC3": "只有一名嫌疑人知道七号摄像头的盲区。",
+    "midnightSuspectVex": "维克斯",
+    "midnightSuspectLyra": "莱拉",
+    "midnightSuspectKade": "凯德",
+    "midnightSuspectMina": "米娜",
+    "midnightSuspectNox": "诺克斯",
+    "midnightSuspectSora": "索拉",
+    "midnightSuspectDax": "达克斯",
+    "midnightSuspectYuri": "尤里",
+    "orbitStatusFinished": "合约结束，最终净值 {netWorth}。",
+    "@orbitStatusFinished": {
+      "placeholders": {
+        "netWorth": {
+          "type": "int"
+        }
+      }
+    },
+    "orbitStatusPlaying": "每回合只交易一项资源，领先市场波动。",
+    "orbitMetricCash": "现金",
+    "orbitMetricNetWorth": "净值",
+    "orbitMetricCargo": "货舱",
+    "orbitMarketBoardTitle": "市场面板",
+    "orbitMarketBoardSubtitle": "点击资源卡进行买卖。",
+    "orbitTimelineTitle": "交易时间线",
+    "orbitTimelineEmpty": "还没有成交记录。先买入或卖出一项资源。",
+    "orbitResourceStats": "价格 {price} ｜ 持仓 {cargo}",
+    "@orbitResourceStats": {
+      "placeholders": {
+        "price": {
+          "type": "int"
+        },
+        "cargo": {
+          "type": "int"
+        }
+      }
+    },
+    "orbitBuy": "买入",
+    "orbitSell": "卖出",
+    "orbitRoundLogTitle": "第 {round} 回合 · {action} {resource} @ {price}",
+    "@orbitRoundLogTitle": {
+      "placeholders": {
+        "round": {
+          "type": "int"
+        },
+        "action": {},
+        "resource": {},
+        "price": {
+          "type": "int"
+        }
+      }
+    },
+    "orbitRoundLogStats": "现金 {cash} ｜ 净值 {netWorth}",
+    "@orbitRoundLogStats": {
+      "placeholders": {
+        "cash": {
+          "type": "int"
+        },
+        "netWorth": {
+          "type": "int"
+        }
+      }
+    },
+    "orbitResultTitle": "贸易结算",
+    "orbitResultBody": "最终净值：{netWorth}",
+    "@orbitResultBody": {
+      "placeholders": {
+        "netWorth": {
+          "type": "int"
+        }
+      }
+    },
+    "orbitTradeAgain": "再跑一轮",
+    "orbitActionBuy": "买入",
+    "orbitActionSell": "卖出",
+    "orbitResourceOre": "矿石",
+    "orbitResourceCrystal": "晶矿",
+    "orbitResourceGas": "气体",
+    "signalMetricBattlefield": "战场属性",
+    "signalMetricMomentum": "动能",
+    "signalFieldChip": "场域：{suit}",
+    "@signalFieldChip": {
+      "placeholders": {
+        "suit": {}
+      }
+    },
+    "signalMomentumChip": "动能 {playerMomentum}-{rivalMomentum}",
+    "@signalMomentumChip": {
+      "placeholders": {
+        "playerMomentum": {
+          "type": "int"
+        },
+        "rivalMomentum": {
+          "type": "int"
+        }
+      }
+    },
+    "signalBattleBonus": "战场 +1",
+    "signalMomentumBonus": "动能 +{bonus}",
+    "@signalMomentumBonus": {
+      "placeholders": {
+        "bonus": {
+          "type": "int"
+        }
+      }
+    },
+    "howToPlayAction": "玩法说明",
+    "guideReadyAction": "开始对局",
+    "guideBackAction": "上一步",
+    "guideNextAction": "下一步",
+    "guideSkipAction": "先跳过",
+    "guideStepCounter": "步骤 {current}/{total}",
+    "@guideStepCounter": {
+        "placeholders": {
+            "current": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "guideSectionGoalTitle": "核心目标",
+    "guideSectionTurnTitle": "回合流程",
+    "guideSectionTipsTitle": "上手重点",
+    "signalGuideGoalBody": "用更高的有效强度赢下回合。整局结束时，总分更高的一方获胜。",
+    "signalGuideTurnBody": "每回合打出 1 张牌。同属性战场会提供 +1，加上连胜动能与牌面技能后结算强度。",
+    "signalGuideTipsBody": "优先观察当前场域和自身动能。连携牌尽量留给同系回合，关键回合再用克制或压阵牌抢分。",
+    "midnightGuideGoalBody": "比对手更快锁定真凶。每次正确投票都会累计分数，整套案卷结束后结算胜负。",
+    "midnightGuideTurnBody": "先阅读已公开线索，再消耗洞察揭示更多证据，最后锁定一名嫌疑人作为本回合投票。",
+    "midnightGuideTipsBody": "不要过早把洞察全部花完。把不在场证明、动机和行动路线对上，再做最后一票。",
+    "orbitGuideGoalBody": "在合约结束前，通过现金、持仓和价格波动管理，做出最高净值。",
+    "orbitGuideTurnBody": "每回合只能买入或卖出一种资源。你行动后市场会重新报价，节奏和价格同样重要。",
+    "orbitGuideTipsBody": "手里要始终留出回旋现金，不要把仓位压在单一资源上，涨到峰值时及时兑现。",
+    "chaosGuideGoalBody": "在一轮轮派对挑战中拉高总分，并用连胜倍率把分数滚起来。",
+    "chaosGuideTurnBody": "每个挑战都有时限和基础分。完成则继续叠连胜，失败就会把当前连胜清空。",
+    "chaosGuideTipsBody": "低把握题目优先用重抽保护连胜，后半段更适合选择完成速度快的任务。",
+    "moduleReadinessLabel": "完成度",
+    "expandDetails": "展开详情",
+    "collapseDetails": "收起详情",
+    "enterAction": "进入",
     "shortDateTime":  "{year}年{month}月{day}日 {hour}:{minute}",
     "@shortDateTime":  {
                            "placeholders":  {
