@@ -1,4 +1,4 @@
-﻿import 'dart:math';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 
@@ -6,7 +6,9 @@ import '../domain/signal_card.dart';
 import '../domain/signal_deck_state.dart';
 
 class SignalDeckController extends ChangeNotifier {
-  SignalDeckController() : _random = Random(7), _state = _buildInitialState(Random(7));
+  SignalDeckController()
+    : _random = Random(7),
+      _state = _buildInitialState(Random(7));
 
   static const int _maxRounds = 6;
 
@@ -25,15 +27,18 @@ class SignalDeckController extends ChangeNotifier {
     return SignalDeckState(
       round: 1,
       maxRounds: _maxRounds,
+      battleSuit: SignalSuit.values[random.nextInt(SignalSuit.values.length)],
       player: SignalPlayerState(
         score: 0,
         roundsWon: 0,
+        momentum: 0,
         hand: playerHand,
         playedCard: null,
       ),
       rival: SignalPlayerState(
         score: 0,
         roundsWon: 0,
+        momentum: 0,
         hand: rivalHand,
         playedCard: null,
       ),
@@ -46,18 +51,78 @@ class SignalDeckController extends ChangeNotifier {
 
   static List<SignalCard> _buildDeck() {
     return <SignalCard>[
-      const SignalCard(id: 'e1', suit: SignalSuit.ember, power: 3, ability: SignalAbility.chain),
-      const SignalCard(id: 'e2', suit: SignalSuit.ember, power: 4, ability: SignalAbility.surge),
-      const SignalCard(id: 'e3', suit: SignalSuit.ember, power: 5, ability: SignalAbility.chain),
-      const SignalCard(id: 'e4', suit: SignalSuit.ember, power: 2, ability: SignalAbility.anchor),
-      const SignalCard(id: 't1', suit: SignalSuit.tide, power: 3, ability: SignalAbility.counter),
-      const SignalCard(id: 't2', suit: SignalSuit.tide, power: 4, ability: SignalAbility.anchor),
-      const SignalCard(id: 't3', suit: SignalSuit.tide, power: 5, ability: SignalAbility.counter),
-      const SignalCard(id: 't4', suit: SignalSuit.tide, power: 2, ability: SignalAbility.surge),
-      const SignalCard(id: 's1', suit: SignalSuit.spark, power: 3, ability: SignalAbility.surge),
-      const SignalCard(id: 's2', suit: SignalSuit.spark, power: 4, ability: SignalAbility.chain),
-      const SignalCard(id: 's3', suit: SignalSuit.spark, power: 5, ability: SignalAbility.surge),
-      const SignalCard(id: 's4', suit: SignalSuit.spark, power: 2, ability: SignalAbility.anchor),
+      const SignalCard(
+        id: 'e1',
+        suit: SignalSuit.ember,
+        power: 3,
+        ability: SignalAbility.chain,
+      ),
+      const SignalCard(
+        id: 'e2',
+        suit: SignalSuit.ember,
+        power: 4,
+        ability: SignalAbility.surge,
+      ),
+      const SignalCard(
+        id: 'e3',
+        suit: SignalSuit.ember,
+        power: 5,
+        ability: SignalAbility.chain,
+      ),
+      const SignalCard(
+        id: 'e4',
+        suit: SignalSuit.ember,
+        power: 2,
+        ability: SignalAbility.anchor,
+      ),
+      const SignalCard(
+        id: 't1',
+        suit: SignalSuit.tide,
+        power: 3,
+        ability: SignalAbility.counter,
+      ),
+      const SignalCard(
+        id: 't2',
+        suit: SignalSuit.tide,
+        power: 4,
+        ability: SignalAbility.anchor,
+      ),
+      const SignalCard(
+        id: 't3',
+        suit: SignalSuit.tide,
+        power: 5,
+        ability: SignalAbility.counter,
+      ),
+      const SignalCard(
+        id: 't4',
+        suit: SignalSuit.tide,
+        power: 2,
+        ability: SignalAbility.surge,
+      ),
+      const SignalCard(
+        id: 's1',
+        suit: SignalSuit.spark,
+        power: 3,
+        ability: SignalAbility.surge,
+      ),
+      const SignalCard(
+        id: 's2',
+        suit: SignalSuit.spark,
+        power: 4,
+        ability: SignalAbility.chain,
+      ),
+      const SignalCard(
+        id: 's3',
+        suit: SignalSuit.spark,
+        power: 5,
+        ability: SignalAbility.surge,
+      ),
+      const SignalCard(
+        id: 's4',
+        suit: SignalSuit.spark,
+        power: 2,
+        ability: SignalAbility.anchor,
+      ),
     ];
   }
 
@@ -73,6 +138,8 @@ class SignalDeckController extends ChangeNotifier {
       opponentScore: _state.player.score,
       previousCard: _state.rival.playedCard,
       round: _state.round,
+      battleSuit: _state.battleSuit,
+      momentum: _state.rival.momentum,
     );
 
     final playerPower = _resolvePower(
@@ -82,6 +149,8 @@ class SignalDeckController extends ChangeNotifier {
       selfScore: _state.player.score,
       opponentScore: _state.rival.score,
       round: _state.round,
+      battleSuit: _state.battleSuit,
+      momentum: _state.player.momentum,
     );
     final rivalPower = _resolvePower(
       card: rivalCard,
@@ -90,25 +159,35 @@ class SignalDeckController extends ChangeNotifier {
       selfScore: _state.rival.score,
       opponentScore: _state.player.score,
       round: _state.round,
+      battleSuit: _state.battleSuit,
+      momentum: _state.rival.momentum,
     );
 
     var playerScore = _state.player.score;
     var rivalScore = _state.rival.score;
     var playerRoundsWon = _state.player.roundsWon;
     var rivalRoundsWon = _state.rival.roundsWon;
+    var playerMomentum = _state.player.momentum;
+    var rivalMomentum = _state.rival.momentum;
     late final SignalRoundOutcome outcome;
 
     if (playerPower > rivalPower) {
       playerScore += 3;
       playerRoundsWon += 1;
+      playerMomentum = _nextMomentum(playerMomentum + 1);
+      rivalMomentum = 0;
       outcome = SignalRoundOutcome.playerWin;
     } else if (playerPower < rivalPower) {
       rivalScore += 3;
       rivalRoundsWon += 1;
+      rivalMomentum = _nextMomentum(rivalMomentum + 1);
+      playerMomentum = 0;
       outcome = SignalRoundOutcome.rivalWin;
     } else {
       playerScore += 1;
       rivalScore += 1;
+      playerMomentum = _nextMomentum(playerMomentum - 1);
+      rivalMomentum = _nextMomentum(rivalMomentum - 1);
       outcome = SignalRoundOutcome.draw;
     }
 
@@ -137,7 +216,11 @@ class SignalDeckController extends ChangeNotifier {
     ];
 
     final hasMoreRounds = _state.round < _state.maxRounds;
-    final isFinished = !hasMoreRounds || nextPlayerHand.isEmpty || nextRivalHand.isEmpty;
+    final isFinished =
+        !hasMoreRounds || nextPlayerHand.isEmpty || nextRivalHand.isEmpty;
+    final nextBattleSuit = isFinished
+        ? _state.battleSuit
+        : _nextBattleSuit(_state.battleSuit);
     final winner = _resolveWinner(
       playerScore: playerScore,
       rivalScore: rivalScore,
@@ -149,15 +232,18 @@ class SignalDeckController extends ChangeNotifier {
     _state = SignalDeckState(
       round: isFinished ? _state.round : _state.round + 1,
       maxRounds: _state.maxRounds,
+      battleSuit: nextBattleSuit,
       player: SignalPlayerState(
         score: playerScore,
         roundsWon: playerRoundsWon,
+        momentum: playerMomentum,
         hand: nextPlayerHand,
         playedCard: selectedCard,
       ),
       rival: SignalPlayerState(
         score: rivalScore,
         roundsWon: rivalRoundsWon,
+        momentum: rivalMomentum,
         hand: nextRivalHand,
         playedCard: rivalCard,
       ),
@@ -183,26 +269,33 @@ class SignalDeckController extends ChangeNotifier {
     required int opponentScore,
     required SignalCard? previousCard,
     required int round,
+    required SignalSuit battleSuit,
+    required int momentum,
   }) {
     final ranked = [...hand]
       ..sort(
-        (left, right) => _resolvePower(
-          card: right,
-          opponentCard: opponentCard,
-          previousCard: previousCard,
-          selfScore: selfScore,
-          opponentScore: opponentScore,
-          round: round,
-        ).compareTo(
-          _resolvePower(
-            card: left,
-            opponentCard: opponentCard,
-            previousCard: previousCard,
-            selfScore: selfScore,
-            opponentScore: opponentScore,
-            round: round,
-          ),
-        ),
+        (left, right) =>
+            _resolvePower(
+              card: right,
+              opponentCard: opponentCard,
+              previousCard: previousCard,
+              selfScore: selfScore,
+              opponentScore: opponentScore,
+              round: round,
+              battleSuit: battleSuit,
+              momentum: momentum,
+            ).compareTo(
+              _resolvePower(
+                card: left,
+                opponentCard: opponentCard,
+                previousCard: previousCard,
+                selfScore: selfScore,
+                opponentScore: opponentScore,
+                round: round,
+                battleSuit: battleSuit,
+                momentum: momentum,
+              ),
+            ),
       );
     return ranked.first;
   }
@@ -214,8 +307,14 @@ class SignalDeckController extends ChangeNotifier {
     required int selfScore,
     required int opponentScore,
     required int round,
+    required SignalSuit battleSuit,
+    required int momentum,
   }) {
     var score = card.power;
+    score += momentum;
+    if (card.suit == battleSuit) {
+      score += 1;
+    }
 
     switch (card.ability) {
       case SignalAbility.chain:
@@ -243,12 +342,31 @@ class SignalDeckController extends ChangeNotifier {
     return score;
   }
 
+  SignalSuit _nextBattleSuit(SignalSuit current) {
+    final options = SignalSuit.values
+        .where((suit) => suit != current)
+        .toList(growable: false);
+    return options[_random.nextInt(options.length)];
+  }
+
+  static int _nextMomentum(int value) {
+    if (value < 0) {
+      return 0;
+    }
+    if (value > 2) {
+      return 2;
+    }
+    return value;
+  }
+
   static List<SignalCard> _drawReplacement({
     required List<SignalCard> currentHand,
     required SignalCard usedCard,
     required List<SignalCard> deck,
   }) {
-    final updatedHand = currentHand.where((card) => card.id != usedCard.id).toList(growable: true);
+    final updatedHand = currentHand
+        .where((card) => card.id != usedCard.id)
+        .toList(growable: true);
     if (deck.isNotEmpty) {
       updatedHand.add(deck.removeAt(0));
     }

@@ -1,15 +1,6 @@
-﻿enum SignalSuit {
-  ember,
-  tide,
-  spark,
-}
+enum SignalSuit { ember, tide, spark }
 
-enum SignalAbility {
-  chain,
-  counter,
-  surge,
-  anchor,
-}
+enum SignalAbility { chain, counter, surge, anchor }
 
 class SignalCard {
   const SignalCard({

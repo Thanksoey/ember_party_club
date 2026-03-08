@@ -1,21 +1,24 @@
-﻿import 'signal_card.dart';
+import 'signal_card.dart';
 
 class SignalPlayerState {
   const SignalPlayerState({
     required this.score,
     required this.roundsWon,
+    required this.momentum,
     required this.hand,
     required this.playedCard,
   });
 
   final int score;
   final int roundsWon;
+  final int momentum;
   final List<SignalCard> hand;
   final SignalCard? playedCard;
 
   SignalPlayerState copyWith({
     int? score,
     int? roundsWon,
+    int? momentum,
     List<SignalCard>? hand,
     SignalCard? playedCard,
     bool clearPlayedCard = false,
@@ -23,23 +26,16 @@ class SignalPlayerState {
     return SignalPlayerState(
       score: score ?? this.score,
       roundsWon: roundsWon ?? this.roundsWon,
+      momentum: momentum ?? this.momentum,
       hand: hand ?? this.hand,
       playedCard: clearPlayedCard ? null : playedCard ?? this.playedCard,
     );
   }
 }
 
-enum SignalRoundOutcome {
-  playerWin,
-  rivalWin,
-  draw,
-}
+enum SignalRoundOutcome { playerWin, rivalWin, draw }
 
-enum SignalMatchWinner {
-  player,
-  rival,
-  draw,
-}
+enum SignalMatchWinner { player, rival, draw }
 
 class SignalRoundLog {
   const SignalRoundLog({
@@ -63,6 +59,7 @@ class SignalDeckState {
   const SignalDeckState({
     required this.round,
     required this.maxRounds,
+    required this.battleSuit,
     required this.player,
     required this.rival,
     required this.deck,
@@ -73,6 +70,7 @@ class SignalDeckState {
 
   final int round;
   final int maxRounds;
+  final SignalSuit battleSuit;
   final SignalPlayerState player;
   final SignalPlayerState rival;
   final List<SignalCard> deck;

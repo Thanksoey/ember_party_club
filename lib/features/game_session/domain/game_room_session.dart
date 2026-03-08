@@ -1,14 +1,6 @@
-﻿enum GameSessionPhase {
-  briefing,
-  playing,
-  finished,
-}
+enum GameSessionPhase { briefing, playing, finished }
 
-enum GameSessionSyncState {
-  localPreview,
-  roomBound,
-  multiplayerReady,
-}
+enum GameSessionSyncState { localPreview, roomBound, multiplayerReady }
 
 class GameSessionParticipant {
   const GameSessionParticipant({
@@ -75,7 +67,8 @@ class GameRoomSession {
       phase: phase ?? this.phase,
       syncState: syncState ?? this.syncState,
       participants: participants ?? this.participants,
-      highlightParticipantId: highlightParticipantId ?? this.highlightParticipantId,
+      highlightParticipantId:
+          highlightParticipantId ?? this.highlightParticipantId,
     );
   }
 }

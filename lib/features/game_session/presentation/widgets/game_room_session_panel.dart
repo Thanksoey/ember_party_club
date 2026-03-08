@@ -1,14 +1,12 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations.dart';
 import '../../application/game_room_session_controller.dart';
 import '../../domain/game_room_session.dart';
+import '../../domain/game_room_session_event.dart';
 
 class GameRoomSessionPanel extends StatelessWidget {
-  const GameRoomSessionPanel({
-    super.key,
-    required this.controller,
-  });
+  const GameRoomSessionPanel({super.key, required this.controller});
 
   final GameRoomSessionController controller;
 
@@ -24,7 +22,7 @@ class GameRoomSessionPanel extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: theme.colorScheme.surface.withValues(alpha: 0.94),
             borderRadius: BorderRadius.circular(24),
           ),
           child: Column(
@@ -36,19 +34,30 @@ class GameRoomSessionPanel extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(l10n.gameSessionRoomLabel, style: theme.textTheme.titleLarge),
+                        Text(
+                          l10n.gameSessionRoomLabel,
+                          style: theme.textTheme.titleLarge,
+                        ),
                         const SizedBox(height: 6),
                         Text(
-                          l10n.roomSessionTitle(session.roomTitle, session.moduleName),
+                          l10n.roomSessionTitle(
+                            session.roomTitle,
+                            session.moduleName,
+                          ),
                           style: theme.textTheme.bodyLarge,
                         ),
                       ],
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.secondary.withValues(alpha: 0.12),
+                      color: theme.colorScheme.secondary.withValues(
+                        alpha: 0.12,
+                      ),
                       borderRadius: BorderRadius.circular(999),
                     ),
                     child: Text(
@@ -66,23 +75,34 @@ class GameRoomSessionPanel extends StatelessWidget {
                 spacing: 10,
                 runSpacing: 10,
                 children: [
-                  _SessionPill(label: l10n.roomCodeLabel, value: session.roomId),
+                  _SessionPill(
+                    label: l10n.roomCodeLabel,
+                    value: session.roomId,
+                  ),
                   _SessionPill(
                     label: l10n.gameSessionSyncLabel,
                     value: l10n.gameSessionSyncStateLabel(session.syncState),
                   ),
                   _SessionPill(
                     label: l10n.roomCapacityFieldLabel,
-                    value: l10n.playersLabel(session.occupiedSeats, session.capacity),
+                    value: l10n.playersLabel(
+                      session.occupiedSeats,
+                      session.capacity,
+                    ),
                   ),
                   _SessionPill(
                     label: l10n.roomVoiceToggle,
-                    value: session.voiceEnabled ? l10n.voiceOn : l10n.roomVoiceOff,
+                    value: session.voiceEnabled
+                        ? l10n.voiceOn
+                        : l10n.roomVoiceOff,
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-              Text(l10n.gameSessionParticipantsLabel, style: theme.textTheme.titleMedium),
+              Text(
+                l10n.gameSessionParticipantsLabel,
+                style: theme.textTheme.titleMedium,
+              ),
               const SizedBox(height: 10),
               Wrap(
                 spacing: 10,
@@ -91,11 +111,32 @@ class GameRoomSessionPanel extends StatelessWidget {
                     .map(
                       (participant) => _ParticipantChip(
                         participant: participant,
-                        isHighlighted: participant.id == session.highlightParticipantId,
+                        isHighlighted:
+                            participant.id == session.highlightParticipantId,
                       ),
                     )
                     .toList(growable: false),
               ),
+              const SizedBox(height: 16),
+              Text(
+                l10n.gameSessionTimelineTitle,
+                style: theme.textTheme.titleMedium,
+              ),
+              const SizedBox(height: 10),
+              if (controller.timeline.isEmpty)
+                Text(
+                  l10n.gameSessionTimelineEmpty,
+                  style: theme.textTheme.bodyMedium,
+                )
+              else
+                ...controller.timeline
+                    .take(4)
+                    .map(
+                      (event) => Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: _TimelineTile(event: event),
+                      ),
+                    ),
             ],
           ),
         );
@@ -104,11 +145,39 @@ class GameRoomSessionPanel extends StatelessWidget {
   }
 }
 
+class _TimelineTile extends StatelessWidget {
+  const _TimelineTile({required this.event});
+
+  final GameRoomSessionEvent event;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = context.l10n;
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primary.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.bolt_outlined, size: 18, color: theme.colorScheme.primary),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              l10n.gameRoomEventLabel(event),
+              style: theme.textTheme.bodyLarge,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _SessionPill extends StatelessWidget {
-  const _SessionPill({
-    required this.label,
-    required this.value,
-  });
+  const _SessionPill({required this.label, required this.value});
 
   final String label;
   final String value;
@@ -147,7 +216,9 @@ class _ParticipantChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = context.l10n;
-    final color = isHighlighted ? theme.colorScheme.secondary : theme.colorScheme.primary;
+    final color = isHighlighted
+        ? theme.colorScheme.secondary
+        : theme.colorScheme.primary;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -171,7 +242,9 @@ class _ParticipantChip extends StatelessWidget {
           if (participant.isHost || participant.isLocal) ...[
             const SizedBox(height: 4),
             Text(
-              participant.isHost ? l10n.gameSessionHostTag : l10n.gameSessionLocalTag,
+              participant.isHost
+                  ? l10n.gameSessionHostTag
+                  : l10n.gameSessionLocalTag,
               style: theme.textTheme.bodySmall?.copyWith(color: color),
             ),
           ],

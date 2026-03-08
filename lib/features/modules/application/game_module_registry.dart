@@ -1,8 +1,8 @@
-﻿import '../../../core/models/game_module.dart';
+import '../../../core/models/game_module.dart';
 
 class GameModuleRegistry {
   GameModuleRegistry.seeded(List<GameModule> modules)
-      : _modules = List.unmodifiable(modules);
+    : _modules = List.unmodifiable(modules);
 
   final List<GameModule> _modules;
 
