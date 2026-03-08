@@ -6,10 +6,7 @@ import '../../../auth/application/auth_controller.dart';
 import '../../../auth/presentation/widgets/auth_gate.dart';
 
 class AdminConsolePage extends StatelessWidget {
-  const AdminConsolePage({
-    super.key,
-    required this.authController,
-  });
+  const AdminConsolePage({super.key, required this.authController});
 
   final AuthController authController;
 
@@ -31,7 +28,10 @@ class AdminConsolePage extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
               children: [
-                Text(l10n.adminConsoleTitle, style: theme.textTheme.displaySmall),
+                Text(
+                  l10n.adminConsoleTitle,
+                  style: theme.textTheme.displaySmall,
+                ),
                 const SizedBox(height: 10),
                 Text(l10n.adminConsoleBody, style: theme.textTheme.bodyLarge),
                 const SizedBox(height: 20),
@@ -169,7 +169,9 @@ class _AdminSection extends StatelessWidget {
                       child: Icon(Icons.fiber_manual_record, size: 10),
                     ),
                     const SizedBox(width: 10),
-                    Expanded(child: Text(item, style: theme.textTheme.bodyLarge)),
+                    Expanded(
+                      child: Text(item, style: theme.textTheme.bodyLarge),
+                    ),
                   ],
                 ),
               ),

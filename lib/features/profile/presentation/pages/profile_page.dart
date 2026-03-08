@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations.dart';
 import '../../../../app/widgets/app_backdrop.dart';
+import '../../../../app/widgets/app_fade_in_up.dart';
 import '../../../../app/widgets/avatar_badge.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../auth/domain/app_user.dart';
@@ -37,45 +38,76 @@ class ProfilePage extends StatelessWidget {
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
                 children: [
-                  Text(l10n.profileTitle, style: theme.textTheme.displaySmall),
+                  AppFadeInUp(
+                    child: Text(
+                      l10n.profileTitle,
+                      style: theme.textTheme.displaySmall,
+                    ),
+                  ),
                   const SizedBox(height: 10),
-                  Text(l10n.profileBody, style: theme.textTheme.bodyLarge),
+                  AppFadeInUp(
+                    order: 1,
+                    child: Text(
+                      l10n.profileBody,
+                      style: theme.textTheme.bodyLarge,
+                    ),
+                  ),
                   const SizedBox(height: 20),
-                  if (user != null) _ProfileHero(user: user, authController: authController),
+                  if (user != null)
+                    AppFadeInUp(
+                      order: 2,
+                      child: _ProfileHero(
+                        user: user,
+                        authController: authController,
+                      ),
+                    ),
                   const SizedBox(height: 18),
-                  _SettingsPanel(
-                    authController: authController,
-                    settingsController: settingsController,
+                  AppFadeInUp(
+                    order: 3,
+                    child: _SettingsPanel(
+                      settingsController: settingsController,
+                    ),
                   ),
                   const SizedBox(height: 18),
-                  _ActionPanel(
-                    authController: authController,
-                    onEditProfile: () => Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) => EditProfilePage(authController: authController),
+                  AppFadeInUp(
+                    order: 4,
+                    child: _ActionPanel(
+                      authController: authController,
+                      onEditProfile: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) =>
+                              EditProfilePage(authController: authController),
+                        ),
                       ),
-                    ),
-                    onSecurity: () => Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) => AccountSecurityPage(authController: authController),
+                      onSecurity: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => AccountSecurityPage(
+                            authController: authController,
+                          ),
+                        ),
                       ),
-                    ),
-                    onAdmin: authController.canAccessAdmin
-                        ? () => Navigator.of(context).push(
+                      onAdmin: authController.canAccessAdmin
+                          ? () => Navigator.of(context).push(
                               MaterialPageRoute<void>(
-                                builder: (_) => AdminConsolePage(authController: authController),
+                                builder: (_) => AdminConsolePage(
+                                  authController: authController,
+                                ),
                               ),
                             )
-                        : null,
+                          : null,
+                    ),
                   ),
                   const SizedBox(height: 18),
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton.tonalIcon(
-                      key: const ValueKey('logout-action'),
-                      onPressed: user == null ? null : authController.logout,
-                      icon: const Icon(Icons.logout_outlined),
-                      label: Text(l10n.logoutAction),
+                  AppFadeInUp(
+                    order: 5,
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: FilledButton.tonalIcon(
+                        key: const ValueKey('logout-action'),
+                        onPressed: user == null ? null : authController.logout,
+                        icon: const Icon(Icons.logout_outlined),
+                        label: Text(l10n.logoutAction),
+                      ),
                     ),
                   ),
                 ],
@@ -89,10 +121,7 @@ class ProfilePage extends StatelessWidget {
 }
 
 class _ProfileHero extends StatelessWidget {
-  const _ProfileHero({
-    required this.user,
-    required this.authController,
-  });
+  const _ProfileHero({required this.user, required this.authController});
 
   final AppUser user;
   final AuthController authController;
@@ -121,6 +150,7 @@ class _ProfileHero extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AvatarBadge(user: user, size: 78),
                 const SizedBox(width: 16),
@@ -130,12 +160,22 @@ class _ProfileHero extends StatelessWidget {
                     children: [
                       Text(
                         user.displayName,
-                        style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white),
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          color: theme.colorScheme.onPrimary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        '@${user.username} · ${user.uid}',
-                        style: theme.textTheme.bodyLarge?.copyWith(color: Colors.white.withValues(alpha: 0.88)),
+                        '@${user.username} / ${user.uid}',
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: theme.colorScheme.onPrimary.withValues(
+                            alpha: 0.88,
+                          ),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 10),
                       Wrap(
@@ -143,10 +183,14 @@ class _ProfileHero extends StatelessWidget {
                         runSpacing: 10,
                         children: [
                           _HeroPill(
-                            label: user.isAdmin ? l10n.profileRoleAdmin : l10n.profileRolePlayer,
+                            label: user.isAdmin
+                                ? l10n.profileRoleAdmin
+                                : l10n.profileRolePlayer,
                           ),
                           _HeroPill(label: l10n.profileLevel(user.level)),
-                          _HeroPill(label: l10n.authProviderLabel(user.provider)),
+                          _HeroPill(
+                            label: l10n.authProviderLabel(user.provider),
+                          ),
                         ],
                       ),
                     ],
@@ -157,7 +201,11 @@ class _ProfileHero extends StatelessWidget {
             const SizedBox(height: 18),
             Text(
               user.bio,
-              style: theme.textTheme.bodyLarge?.copyWith(color: Colors.white.withValues(alpha: 0.9)),
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: theme.colorScheme.onPrimary.withValues(alpha: 0.9),
+              ),
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 18),
             Row(
@@ -167,7 +215,13 @@ class _ProfileHero extends StatelessWidget {
                     label: l10n.profileSignedInAt,
                     value: session == null
                         ? '--'
-                        : l10n.shortDateTime(session.signedInAt.year, session.signedInAt.month, session.signedInAt.day, session.signedInAt.hour, session.signedInAt.minute),
+                        : l10n.shortDateTime(
+                            session.signedInAt.year,
+                            session.signedInAt.month,
+                            session.signedInAt.day,
+                            session.signedInAt.hour,
+                            session.signedInAt.minute,
+                          ),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -176,7 +230,13 @@ class _ProfileHero extends StatelessWidget {
                     label: l10n.profileSessionExpiry,
                     value: session == null
                         ? '--'
-                        : l10n.shortDateTime(session.tokens.expiresAt.year, session.tokens.expiresAt.month, session.tokens.expiresAt.day, session.tokens.expiresAt.hour, session.tokens.expiresAt.minute),
+                        : l10n.shortDateTime(
+                            session.tokens.expiresAt.year,
+                            session.tokens.expiresAt.month,
+                            session.tokens.expiresAt.day,
+                            session.tokens.expiresAt.hour,
+                            session.tokens.expiresAt.minute,
+                          ),
                   ),
                 ),
               ],
@@ -189,10 +249,7 @@ class _ProfileHero extends StatelessWidget {
 }
 
 class _MetricTile extends StatelessWidget {
-  const _MetricTile({
-    required this.label,
-    required this.value,
-  });
+  const _MetricTile({required this.label, required this.value});
 
   final String label;
   final String value;
@@ -200,18 +257,31 @@ class _MetricTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final onPrimary = theme.colorScheme.onPrimary;
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.14),
+        color: onPrimary.withValues(alpha: 0.14),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white.withValues(alpha: 0.72))),
+          Text(
+            label,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: onPrimary.withValues(alpha: 0.72),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           const SizedBox(height: 6),
-          Text(value, style: theme.textTheme.titleMedium?.copyWith(color: Colors.white)),
+          Text(
+            value,
+            style: theme.textTheme.titleMedium?.copyWith(color: onPrimary),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ],
       ),
     );
@@ -225,30 +295,29 @@ class _HeroPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final onPrimary = theme.colorScheme.onPrimary;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.14),
+        color: onPrimary.withValues(alpha: 0.14),
         borderRadius: BorderRadius.circular(999),
       ),
       child: Text(
         label,
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-            ),
+        style: theme.textTheme.bodyMedium?.copyWith(
+          color: onPrimary,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }
 }
 
 class _SettingsPanel extends StatelessWidget {
-  const _SettingsPanel({
-    required this.authController,
-    required this.settingsController,
-  });
+  const _SettingsPanel({required this.settingsController});
 
-  final AuthController authController;
   final SettingsController settingsController;
 
   @override
@@ -270,9 +339,18 @@ class _SettingsPanel extends StatelessWidget {
             const SizedBox(height: 12),
             SegmentedButton<ThemeMode>(
               segments: [
-                ButtonSegment(value: ThemeMode.system, label: Text(l10n.themeSystem)),
-                ButtonSegment(value: ThemeMode.light, label: Text(l10n.themeLight)),
-                ButtonSegment(value: ThemeMode.dark, label: Text(l10n.themeDark)),
+                ButtonSegment(
+                  value: ThemeMode.system,
+                  label: Text(l10n.themeSystem),
+                ),
+                ButtonSegment(
+                  value: ThemeMode.light,
+                  label: Text(l10n.themeLight),
+                ),
+                ButtonSegment(
+                  value: ThemeMode.dark,
+                  label: Text(l10n.themeDark),
+                ),
               ],
               selected: {settingsController.themeMode},
               onSelectionChanged: (selection) {
@@ -284,9 +362,18 @@ class _SettingsPanel extends StatelessWidget {
             const SizedBox(height: 12),
             SegmentedButton<AppLocaleMode>(
               segments: [
-                ButtonSegment(value: AppLocaleMode.system, label: Text(l10n.localeModeSystem)),
-                ButtonSegment(value: AppLocaleMode.chinese, label: Text(l10n.localeModeChinese)),
-                ButtonSegment(value: AppLocaleMode.english, label: Text(l10n.localeModeEnglish)),
+                ButtonSegment(
+                  value: AppLocaleMode.system,
+                  label: Text(l10n.localeModeSystem),
+                ),
+                ButtonSegment(
+                  value: AppLocaleMode.chinese,
+                  label: Text(l10n.localeModeChinese),
+                ),
+                ButtonSegment(
+                  value: AppLocaleMode.english,
+                  label: Text(l10n.localeModeEnglish),
+                ),
               ],
               selected: {settingsController.localeMode},
               onSelectionChanged: (selection) {
@@ -298,13 +385,44 @@ class _SettingsPanel extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.language_outlined),
               title: Text(l10n.localeTitle),
-              subtitle: Text(l10n.localeModeDescriptionValue(settingsController.localeMode)),
+              subtitle: Text(
+                l10n.localeModeDescriptionValue(settingsController.localeMode),
+              ),
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.brightness_6_outlined),
               title: Text(l10n.themeTitle),
-              subtitle: Text(l10n.themeModeDescriptionValue(settingsController.themeMode)),
+              subtitle: Text(
+                l10n.themeModeDescriptionValue(settingsController.themeMode),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(l10n.feedbackTitle, style: theme.textTheme.titleLarge),
+            const SizedBox(height: 8),
+            SwitchListTile.adaptive(
+              contentPadding: EdgeInsets.zero,
+              secondary: const Icon(Icons.volume_up_outlined),
+              title: Text(l10n.feedbackSoundEffects),
+              subtitle: Text(
+                settingsController.soundEffectsEnabled
+                    ? l10n.feedbackOn
+                    : l10n.feedbackOff,
+              ),
+              value: settingsController.soundEffectsEnabled,
+              onChanged: settingsController.updateSoundEffectsEnabled,
+            ),
+            SwitchListTile.adaptive(
+              contentPadding: EdgeInsets.zero,
+              secondary: const Icon(Icons.vibration_outlined),
+              title: Text(l10n.feedbackHaptics),
+              subtitle: Text(
+                settingsController.hapticsEnabled
+                    ? l10n.feedbackOn
+                    : l10n.feedbackOff,
+              ),
+              value: settingsController.hapticsEnabled,
+              onChanged: settingsController.updateHapticsEnabled,
             ),
           ],
         ),
@@ -354,7 +472,10 @@ class _ActionPanel extends StatelessWidget {
                 title: l10n.adminConsoleTitle,
                 subtitle: l10n.adminConsoleBody,
                 trailing: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.secondary.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(999),
@@ -403,10 +524,20 @@ class _ActionTile extends StatelessWidget {
         foregroundColor: theme.colorScheme.primary,
         child: Icon(icon),
       ),
-      title: Text(title, style: theme.textTheme.titleMedium),
+      title: Text(
+        title,
+        style: theme.textTheme.titleMedium,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
       subtitle: Padding(
         padding: const EdgeInsets.only(top: 4),
-        child: Text(subtitle, style: theme.textTheme.bodyMedium),
+        child: Text(
+          subtitle,
+          style: theme.textTheme.bodyMedium,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
       trailing: trailing ?? const Icon(Icons.chevron_right_rounded),
       onTap: onTap,

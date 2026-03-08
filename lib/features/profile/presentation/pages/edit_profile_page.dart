@@ -6,10 +6,7 @@ import '../../../../app/widgets/avatar_badge.dart';
 import '../../../auth/application/auth_controller.dart';
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({
-    super.key,
-    required this.authController,
-  });
+  const EditProfilePage({super.key, required this.authController});
 
   final AuthController authController;
 
@@ -51,7 +48,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
           displayName: _displayNameController.text.trim().isEmpty
               ? user.displayName
               : _displayNameController.text.trim(),
-          bio: _bioController.text.trim().isEmpty ? user.bio : _bioController.text.trim(),
+          bio: _bioController.text.trim().isEmpty
+              ? user.bio
+              : _bioController.text.trim(),
           avatarSeed: _avatarSeed,
         );
 
@@ -76,9 +75,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(previewUser.displayName, style: theme.textTheme.headlineSmall),
+                                Text(
+                                  previewUser.displayName,
+                                  style: theme.textTheme.headlineSmall,
+                                ),
                                 const SizedBox(height: 6),
-                                Text(previewUser.bio, style: theme.textTheme.bodyLarge),
+                                Text(
+                                  previewUser.bio,
+                                  style: theme.textTheme.bodyLarge,
+                                ),
                               ],
                             ),
                           ),
@@ -93,14 +98,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(l10n.profileEditTitle, style: theme.textTheme.headlineSmall),
+                          Text(
+                            l10n.profileEditTitle,
+                            style: theme.textTheme.headlineSmall,
+                          ),
                           const SizedBox(height: 8),
-                          Text(l10n.profileEditBody, style: theme.textTheme.bodyLarge),
+                          Text(
+                            l10n.profileEditBody,
+                            style: theme.textTheme.bodyLarge,
+                          ),
                           const SizedBox(height: 18),
                           TextField(
                             key: const ValueKey('profile-display-name'),
                             controller: _displayNameController,
-                            decoration: InputDecoration(labelText: l10n.profileDisplayNameField),
+                            decoration: InputDecoration(
+                              labelText: l10n.profileDisplayNameField,
+                            ),
                             onChanged: (_) => setState(() {}),
                           ),
                           const SizedBox(height: 14),
@@ -108,11 +121,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             key: const ValueKey('profile-bio'),
                             controller: _bioController,
                             maxLines: 3,
-                            decoration: InputDecoration(labelText: l10n.profileBioField),
+                            decoration: InputDecoration(
+                              labelText: l10n.profileBioField,
+                            ),
                             onChanged: (_) => setState(() {}),
                           ),
                           const SizedBox(height: 18),
-                          Text(l10n.profileAvatarField, style: theme.textTheme.titleLarge),
+                          Text(
+                            l10n.profileAvatarField,
+                            style: theme.textTheme.titleLarge,
+                          ),
                           const SizedBox(height: 10),
                           Wrap(
                             spacing: 10,
@@ -120,7 +138,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             children: List<Widget>.generate(8, (index) {
                               final candidate = user.copyWith(
                                 avatarSeed: index,
-                                displayName: _displayNameController.text.trim().isEmpty
+                                displayName:
+                                    _displayNameController.text.trim().isEmpty
                                     ? user.displayName
                                     : _displayNameController.text.trim(),
                               );
@@ -156,16 +175,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               onPressed: widget.authController.isUpdatingProfile
                                   ? null
                                   : () async {
-                                      final success = await widget.authController.updateProfile(
-                                        displayName: _displayNameController.text.trim(),
-                                        bio: _bioController.text.trim(),
-                                        avatarSeed: _avatarSeed,
-                                      );
+                                      final success = await widget
+                                          .authController
+                                          .updateProfile(
+                                            displayName: _displayNameController
+                                                .text
+                                                .trim(),
+                                            bio: _bioController.text.trim(),
+                                            avatarSeed: _avatarSeed,
+                                          );
                                       if (!context.mounted || !success) {
                                         return;
                                       }
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text(l10n.profileSavedMessage)),
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            l10n.profileSavedMessage,
+                                          ),
+                                        ),
                                       );
                                       Navigator.of(context).pop();
                                     },
@@ -173,7 +202,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   ? const SizedBox(
                                       width: 20,
                                       height: 20,
-                                      child: CircularProgressIndicator(strokeWidth: 2),
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
                                     )
                                   : Text(l10n.profileSaveAction),
                             ),
